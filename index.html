@@ -1,1 +1,526 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Architect: An Interactive Report on Peter Thiel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is designed as a single-page scrolling dashboard. This structure allows the user to either get a quick overview from the top-level charts and stats or to dive deeper into specific themes (Founder, Investor, Builder, Operator) via the sticky navigation. This non-linear exploration path is more user-friendly than a rigid, chapter-by-chapter report. Key interactions include hover-to-reveal tooltips on charts, clickable nodes to explore his core ventures, and toggleable content to compare opposing viewpoints (e.g., the success vs. criticism of the Thiel Fellowship), facilitating a more active and engaging learning experience. The goal is to let the user construct their own understanding by exploring the data and narratives that interest them most. -->
+    <!-- Visualization & Content Choices:
+        - Net Worth (Data) -> Goal: Show Change -> Viz: Line Chart (Chart.js) -> Interaction: Hover Tooltip -> Justification: Best for time-series data, shows dramatic growth.
+        - Core Ventures (Info) -> Goal: Organize -> Viz: HTML/CSS Node Diagram -> Interaction: Click to Reveal Text -> Justification: Provides a high-level, interactive map of his empire.
+        - PayPal Mafia (Info) -> Goal: Show Relationships -> Viz: HTML/CSS Grid -> Interaction: Hover Effect -> Justification: Visualizes the network effect more effectively than a list.
+        - Zero to One (Info) -> Goal: Organize -> Viz: Accordion -> Interaction: Click to Expand -> Justification: Breaks down complex philosophy into digestible, user-controlled chunks.
+        - Palantir Paradox (Info) -> Goal: Compare -> Viz: Side-by-Side Text Columns -> Interaction: None (Visual Juxtaposition) -> Justification: Starkly highlights the core contradiction of his career.
+        - Thiel Fellowship (Info) -> Goal: Compare -> Viz: Toggleable Views -> Interaction: Click to Switch -> Justification: Actively engages the user in exploring both sides of the debate.
+        - Political Spending (Data) -> Goal: Compare/Inform -> Viz: Bar Chart (Chart.js) -> Interaction: Hover Tooltip -> Justification: Clearly shows the scale of his targeted political investments. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f3f1;
+            color: #1f2937;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link {
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-link.active {
+            color: #1d4ed8;
+            border-bottom-color: #1d4ed8;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .accordion-content.open {
+            max-height: 500px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .pillar:hover .pillar-icon {
+            transform: scale(1.1);
+        }
+        .pillar-icon {
+            transition: transform 0.2s ease-in-out;
+        }
+        .fellowship-content {
+            display: none;
+        }
+        .fellowship-content.active {
+            display: grid;
+        }
+        .mafia-member {
+            transition: all 0.2s ease-in-out;
+        }
+        .mafia-member:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .gemini-loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .gemini-output {
+            display: none;
+            background-color: #eef2ff;
+            border-left: 4px solid #4f46e5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Nav -->
+    <header id="header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4 border-b border-gray-200">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">The Thiel Architect</h1>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#overview" class="nav-link text-gray-600 hover:text-blue-700 border-b-2 border-transparent pb-1">Overview</a>
+                    <a href="#founder" class="nav-link text-gray-600 hover:text-blue-700 border-b-2 border-transparent pb-1">The Founder</a>
+                    <a href="#investor" class="nav-link text-gray-600 hover:text-blue-700 border-b-2 border-transparent pb-1">The Investor</a>
+                    <a href="#builder" class="nav-link text-gray-600 hover:text-blue-700 border-b-2 border-transparent pb-1">The Builder</a>
+                    <a href="#operator" class="nav-link text-gray-600 hover:text-blue-700 border-b-2 border-transparent pb-1">The Operator</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section: Overview -->
+        <section id="overview" class="scroll-mt-20 mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">An Interactive Report on Peter Thiel</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Entrepreneur, investor, philosopher, and political operator. Explore the data and doctrines of one of the most influential and paradoxical figures of our time.</p>
+            </div>
+
+            <div class="grid md:grid-cols-5 gap-8 items-start">
+                <div class="md:col-span-3 bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-1 text-gray-800">Net Worth Growth</h3>
+                    <p class="text-sm text-gray-500 mb-4">A visualization of Peter Thiel's estimated net worth, showcasing his meteoric rise over the past decade.</p>
+                    <div class="chart-container">
+                        <canvas id="netWorthChart"></canvas>
+                    </div>
+                </div>
+                <div class="md:col-span-2 space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <h4 class="text-lg font-semibold text-gray-600">Est. Net Worth (July 2025)</h4>
+                        <p class="text-5xl font-extrabold text-blue-800 my-2">$22.7B</p>
+                        <p class="text-sm text-gray-500">Source: Forbes Real-Time</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h4 class="text-lg font-bold mb-3 text-gray-800">Core Paradoxes</h4>
+                        <ul class="space-y-3">
+                            <li class="paradox-item">
+                                <div class="flex items-start">
+                                    <span class="text-blue-600 mr-3 mt-1">●</span>
+                                    <div><span class="font-semibold">The Libertarian Statist:</span> Espouses freedom from government while building Palantir, a key tool for state surveillance.</div>
+                                </div>
+                                <button class="deconstruct-paradox-btn text-xs text-blue-600 hover:underline mt-1 ml-5">✨ Deconstruct this Paradox</button>
+                            </li>
+                             <li class="paradox-item">
+                                <div class="flex items-start">
+                                    <span class="text-blue-600 mr-3 mt-1">●</span>
+                                    <div><span class="font-semibold">The Anti-Education Elitist:</span> Criticizes universities while running the highly exclusive Thiel Fellowship.</div>
+                                </div>
+                                <button class="deconstruct-paradox-btn text-xs text-blue-600 hover:underline mt-1 ml-5">✨ Deconstruct this Paradox</button>
+                            </li>
+                             <li class="paradox-item">
+                                <div class="flex items-start">
+                                    <span class="text-blue-600 mr-3 mt-1">●</span>
+                                    <div><span class="font-semibold">The Anti-Politics Operator:</span> Declares democracy incompatible with freedom while becoming a master political kingmaker.</div>
+                                </div>
+                                <button class="deconstruct-paradox-btn text-xs text-blue-600 hover:underline mt-1 ml-5">✨ Deconstruct this Paradox</button>
+                            </li>
+                        </ul>
+                        <div class="gemini-loader mt-4 mx-auto" id="paradox-loader"></div>
+                        <div class="gemini-output" id="paradox-output"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Founder -->
+        <section id="founder" class="scroll-mt-20 mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">The Founder</h2>
+                <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">This section explores Thiel's origins, from his early intellectual development at Stanford to the creation of PayPal and the influential "PayPal Mafia" network.</p>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">The PayPal Genesis & The 'Mafia'</h3>
+                <p class="mb-8 text-gray-600 max-w-3xl">In 1998, Thiel co-founded PayPal, a venture that not only revolutionized online payments but also assembled one of the most potent networks of talent in Silicon Valley history. After its $1.5 billion sale to eBay, this "PayPal Mafia" went on to create and fund the next generation of tech giants. Below are some of the key members and the companies they helped build, showcasing the network's immense impact.</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 text-center">
+                    <div class="mafia-member bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <p class="font-bold text-blue-900">Peter Thiel</p>
+                        <p class="text-sm text-blue-700">Palantir, Founders Fund</p>
+                    </div>
+                    <div class="mafia-member bg-gray-50 p-4 rounded-lg border">
+                        <p class="font-bold">Elon Musk</p>
+                        <p class="text-sm text-gray-600">Tesla, SpaceX</p>
+                    </div>
+                    <div class="mafia-member bg-gray-50 p-4 rounded-lg border">
+                        <p class="font-bold">Reid Hoffman</p>
+                        <p class="text-sm text-gray-600">LinkedIn</p>
+                    </div>
+                    <div class="mafia-member bg-gray-50 p-4 rounded-lg border">
+                        <p class="font-bold">David Sacks</p>
+                        <p class="text-sm text-gray-600">Yammer, Craft Ventures</p>
+                    </div>
+                    <div class="mafia-member bg-gray-50 p-4 rounded-lg border">
+                        <p class="font-bold">Keith Rabois</p>
+                        <p class="text-sm text-gray-600">Square, Founders Fund</p>
+                    </div>
+                     <div class="mafia-member bg-gray-50 p-4 rounded-lg border">
+                        <p class="font-bold">Jeremy Stoppelman</p>
+                        <p class="text-sm text-gray-600">Yelp</p>
+                    </div>
+                    <div class="mafia-member bg-gray-50 p-4 rounded-lg border col-span-1">
+                        <p class="font-bold">YouTube Founders</p>
+                        <p class="text-sm text-gray-600">Chen, Hurley, Karim</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Investor -->
+        <section id="investor" class="scroll-mt-20 mb-16">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">The Investor</h2>
+                <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">As an investor, Thiel's strategy is defined by contrarian thinking. This section details his legendary Facebook investment and breaks down the core tenets of his influential philosophy, "Zero to One."</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg flex flex-col justify-center items-center text-center">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">The Facebook Bet</h3>
+                    <p class="text-gray-600 mb-4">In 2004, Thiel became Facebook's first outside investor.</p>
+                    <p class="text-lg text-gray-700">Initial Investment: <span class="font-bold text-blue-800">$500,000</span></p>
+                    <p class="text-lg text-gray-700">Initial Stake: <span class="font-bold text-blue-800">10.2%</span></p>
+                    <p class="mt-4 text-xl font-semibold text-gray-800">Total Return on Sales:</p>
+                    <p class="text-6xl font-extrabold text-blue-800 my-2">&gt; $1 Billion</p>
+                    <p class="text-2xl font-bold text-gray-700">(~200,000% ROI)</p>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">The 'Zero to One' Doctrine</h3>
+                     <p class="mb-6 text-gray-600">Thiel's book, *Zero to One*, is more than a business manual; it's a philosophical guide. Explore its core ideas below, or generate your own contrarian take.</p>
+                    <div id="accordion" class="space-y-2">
+                        <div class="accordion-item border rounded-lg overflow-hidden">
+                            <button class="accordion-header w-full text-left p-4 font-semibold bg-gray-50 hover:bg-gray-100 flex justify-between items-center">
+                                The Contrarian Question
+                                <span>+</span>
+                            </button>
+                            <div class="accordion-content px-4 bg-white">
+                                <p>A great business is built on a "secret"—an important truth that few people agree with you on. Founders must ask: "What important truth do very few people agree with you on?"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 border-t pt-6">
+                        <h4 class="text-lg font-bold text-gray-800">✨ Contrarian Idea Generator</h4>
+                        <p class="text-sm text-gray-600 mt-1 mb-3">Enter a common belief and let AI generate a Thiel-esque contrarian argument.</p>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="common-belief-input" placeholder="e.g., 'AI will take all our jobs'" class="flex-grow p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <button id="generate-idea-btn" class="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-indigo-700 transition">Generate Idea</button>
+                        </div>
+                         <div class="gemini-loader mt-4 mx-auto" id="idea-loader"></div>
+                         <div class="gemini-output" id="idea-output"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Builder -->
+        <section id="builder" class="scroll-mt-20 mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">The Builder</h2>
+                <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">This section examines two of Thiel's most ambitious and controversial system-building projects: the state-serving data firm Palantir and the anti-university Thiel Fellowship.</p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">The Palantir Paradox</h3>
+                    <p class="mb-6 text-gray-600">Founded by Thiel and backed by the CIA's venture arm, Palantir provides data analysis tools to intelligence, defense, and law enforcement agencies. This creates a fundamental conflict with Thiel's libertarian ideals.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2">The Ideology</h4>
+                            <p class="italic">"I no longer believe that freedom and democracy are compatible."</p>
+                            <span class="text-sm text-gray-500 block mt-2">- 2009 Essay</span>
+                            <p class="mt-4">Advocates for "exit" from politics via technology, cyberspace, and seasteading.</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-lg mb-2 text-red-900">The Reality</h4>
+                            <p class="font-semibold">Key Government Clients:</p>
+                             <ul class="list-disc list-inside text-red-800 mt-2 space-y-1">
+                                <li>CIA, NSA, FBI</li>
+                                <li>Dept. of Defense (DOD)</li>
+                                <li>Immigration & Customs (ICE)</li>
+                                <li>Ukrainian & Israeli Militaries</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">The Thiel Fellowship</h3>
+                    <p class="mb-4 text-gray-600">Launched in 2011, the fellowship gives $100,000 to young people to drop out of college and build things. It's both a stunning success and a subject of fierce debate. Use the toggle to explore both sides.</p>
+                    <div class="flex justify-center mb-6">
+                        <div class="inline-flex rounded-md shadow-sm">
+                            <button id="show-success" class="fellowship-toggle active bg-blue-600 text-white px-4 py-2 rounded-l-lg">Success Stories</button>
+                            <button id="show-critique" class="fellowship-toggle bg-white text-gray-700 px-4 py-2 rounded-r-lg">The Critique</button>
+                        </div>
+                    </div>
+                    <div id="fellowship-success" class="fellowship-content active grid-cols-2 gap-4">
+                        <div class="bg-green-50 p-3 rounded-lg text-center">
+                            <p class="font-bold">Vitalik Buterin</p>
+                            <p class="text-sm text-green-800">Co-creator of Ethereum</p>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded-lg text-center">
+                            <p class="font-bold">Dylan Field</p>
+                            <p class="text-sm text-green-800">Co-founder of Figma</p>
+                        </div>
+                         <div class="bg-green-50 p-3 rounded-lg text-center">
+                            <p class="font-bold">Austin Russell</p>
+                            <p class="text-sm text-green-800">Founder of Luminar</p>
+                        </div>
+                         <div class="bg-green-50 p-3 rounded-lg text-center">
+                            <p class="font-bold">Ritesh Agarwal</p>
+                            <p class="text-sm text-green-800">Founder of OYO Rooms</p>
+                        </div>
+                    </div>
+                     <div id="fellowship-critique" class="fellowship-content grid-cols-1 gap-4">
+                         <blockquote class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                             <p class="italic text-gray-800">"The single most misdirected bit of philanthropy in this decade."</p>
+                             <footer class="text-right text-sm text-gray-600 mt-2">— Larry Summers, Fmr. Harvard President</footer>
+                         </blockquote>
+                         <ul class="list-disc list-inside text-gray-700 space-y-2">
+                             <li><span class="font-semibold">Extreme Selectivity:</span> Accepts <0.1% of applicants, selecting for talent that would succeed anyway.</li>
+                             <li><span class="font-semibold">Limited Impact:</span> Has not "burst the bubble" of higher education as college costs continue to rise.</li>
+                             <li><span class="font-semibold">Talent Pipeline:</span> Functions as a recruiting tool for Thiel's own network and companies.</li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Operator -->
+        <section id="operator" class="scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">The Political Operator</h2>
+                <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">This section charts Thiel's evolution from a libertarian idealist advocating for "exit" to a pragmatic and powerful political operator, using his vast wealth to "capture" the state by installing his own protégés in power.</p>
+            </div>
+             <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                 <h3 class="text-2xl font-bold text-gray-800 mb-1">Political Mega-Donor</h3>
+                 <p class="text-sm text-gray-500 mb-4">A look at Thiel's targeted spending in key political cycles, showcasing his model of high-investment patronage.</p>
+                 <div class="chart-container h-80 md:h-96">
+                     <canvas id="politicalSpendingChart"></canvas>
+                 </div>
+             </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm">
+        <p>Interactive report generated based on public data up to July 2025.</p>
+        <p>This is a conceptual visualization and not a comprehensive financial or political analysis.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Gemini API Helper Function ---
+            async function callGemini(prompt, loaderElement, outputElement) {
+                loaderElement.style.display = 'block';
+                outputElement.style.display = 'none';
+                outputElement.textContent = '';
+
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                     if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        outputElement.textContent = text;
+                    } else {
+                        outputElement.textContent = 'Error: Could not retrieve a valid response from the API.';
+                    }
+                } catch (error) {
+                    console.error("API Call Error:", error);
+                    outputElement.textContent = 'An error occurred while contacting the API. Please check the console for details.';
+                } finally {
+                    loaderElement.style.display = 'none';
+                    outputElement.style.display = 'block';
+                }
+            }
+
+            // --- Chart.js Initializations ---
+            const netWorthCtx = document.getElementById('netWorthChart').getContext('2d');
+            new Chart(netWorthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2014', 'May 2025', 'July 2025'],
+                    datasets: [{
+                        label: 'Estimated Net Worth (in Billions USD)',
+                        data: [3.2, 20.8, 22.7],
+                        backgroundColor: 'rgba(29, 78, 216, 0.1)',
+                        borderColor: 'rgba(29, 78, 216, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(29, 78, 216, 1)',
+                        pointRadius: 5,
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, ticks: { callback: (value) => '$' + value + 'B' } } },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `Est. Net Worth: $${context.raw} Billion` } } }
+                }
+            });
+
+            const politicalSpendingCtx = document.getElementById('politicalSpendingChart').getContext('2d');
+            new Chart(politicalSpendingCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Trump Campaign (2016)', 'Blake Masters (2022)', 'J.D. Vance (2022)'],
+                    datasets: [{
+                        label: 'Donation Amount (in Millions USD)',
+                        data: [1.25, 20, 15],
+                        backgroundColor: ['rgba(219, 39, 119, 0.7)', 'rgba(29, 78, 216, 0.7)', 'rgba(29, 78, 216, 0.7)'],
+                        borderColor: ['rgba(219, 39, 119, 1)', 'rgba(29, 78, 216, 1)', 'rgba(29, 78, 216, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { x: { beginAtZero: true, ticks: { callback: (value) => '$' + value + 'M' } } },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => `Approx. Spending: $${context.raw} Million` } } }
+                }
+            });
+            
+            // --- Interactive Elements ---
+
+            // Paradox Deconstructor
+            document.querySelectorAll('.deconstruct-paradox-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const paradoxText = e.target.closest('.paradox-item').querySelector('div').textContent.trim();
+                    const prompt = `Peter Thiel is known for his paradoxes. Please deconstruct the following paradox: "${paradoxText}". Explain the core arguments of each side of the contradiction and synthesize why this represents a fundamental tension in his ideology and career. Keep the tone analytical and concise.`;
+                    const loader = document.getElementById('paradox-loader');
+                    const output = document.getElementById('paradox-output');
+                    callGemini(prompt, loader, output);
+                });
+            });
+
+            // Contrarian Idea Generator
+            document.getElementById('generate-idea-btn').addEventListener('click', () => {
+                const belief = document.getElementById('common-belief-input').value;
+                if (!belief) {
+                    alert('Please enter a common belief.');
+                    return;
+                }
+                const prompt = `Based on Peter Thiel's "Zero to One" philosophy, generate a contrarian argument against the common belief that "${belief}". The argument should identify a "secret" or non-obvious truth. Frame it as a short, thought-provoking paragraph.`;
+                const loader = document.getElementById('idea-loader');
+                const output = document.getElementById('idea-output');
+                callGemini(prompt, loader, output);
+            });
+
+            // Accordion Logic
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const isOpen = content.classList.contains('open');
+                    document.querySelectorAll('.accordion-content.open').forEach(openContent => {
+                        openContent.classList.remove('open');
+                        openContent.previousElementSibling.querySelector('span').textContent = '+';
+                    });
+                    if (!isOpen) {
+                        content.classList.add('open');
+                        header.querySelector('span').textContent = '-';
+                    }
+                });
+            });
+
+            // Fellowship Toggle Logic
+            const successBtn = document.getElementById('show-success');
+            const critiqueBtn = document.getElementById('show-critique');
+            const successContent = document.getElementById('fellowship-success');
+            const critiqueContent = document.getElementById('fellowship-critique');
+            successBtn.addEventListener('click', () => {
+                critiqueContent.classList.remove('active');
+                successContent.classList.add('active');
+                successBtn.classList.add('active', 'bg-blue-600', 'text-white');
+                critiqueBtn.classList.remove('active', 'bg-blue-600', 'text-white');
+                critiqueBtn.classList.add('bg-white', 'text-gray-700');
+            });
+            critiqueBtn.addEventListener('click', () => {
+                successContent.classList.remove('active');
+                critiqueContent.classList.add('active');
+                critiqueBtn.classList.add('active', 'bg-blue-600', 'text-white');
+                successBtn.classList.remove('active', 'bg-blue-600', 'text-white');
+                successBtn.classList.add('bg-white', 'text-gray-700');
+            });
+
+            // Smooth Scrolling & Active Nav Link
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+
+</body>
+</html>
