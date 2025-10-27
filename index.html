@@ -57,9 +57,18 @@
             <table class="w-full min-w-[1000px] divide-y divide-gray-200">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">STT</th>
-                        <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Xã/Phường mới</th>
-                        <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Loại đơn vị</th>
+                        <th id="sortBySTT" class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors">
+                            STT<span class="sort-indicator ml-1 text-blue-500"></span>
+                        </th>
+                        <th id="sortByName" class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors">
+                            Xã/Phường mới<span class="sort-indicator ml-1 text-blue-500"></span>
+                        </th>
+                        <th id="sortByLoaiDonVi" class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors">
+                            Loại đơn vị<span class="sort-indicator ml-1 text-blue-500"></span>
+                        </th>
+                        <th id="sortByArea" class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors">
+                            Diện Tích (km²)<span class="sort-indicator ml-1 text-blue-500"></span>
+                        </th>
                         <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Đơn Vị Cũ</th>
                         <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Xã phường trước sáp nhập</th>
                         <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Tỉnh, TP cũ</th>
@@ -75,7 +84,7 @@
 
     <script>
         // Dữ liệu CSV được chuyển thành mảng JavaScript
-        const data = [
+        let data = [
             { "STT": 1, "XaPhuongMoi": "Sài Gòn", "LoaiDonVi": "Phường", "DonViCu": "Quận 1", "XaPhuongTruocSapNhap": "Phường Bến Nghé, một phần phường Đa Kao và Nguyễn Thái Bình", "TinhTPCu": "TP.HCM" },
             { "STT": 2, "XaPhuongMoi": "Tân Định", "LoaiDonVi": "Phường", "DonViCu": "Quận 1", "XaPhuongTruocSapNhap": "Phường Tân Định và một phần phường Đa Kao", "TinhTPCu": "TP.HCM" },
             { "STT": 3, "XaPhuongMoi": "Bến Thành", "LoaiDonVi": "Phường", "DonViCu": "Quận 1", "XaPhuongTruocSapNhap": "Các phường Bến Thành, Phạm Ngũ Lão, một phần phường Cầu Ông Lãnh và Nguyễn Thái Bình", "TinhTPCu": "TP.HCM" },
@@ -246,6 +255,215 @@
             { "STT": 168, "XaPhuongMoi": "Thới Hòa", "LoaiDonVi": "Phường", "DonViCu": "TP. Bến Cát", "XaPhuongTruocSapNhap": "Không sáp nhập", "TinhTPCu": "Bình Dương" }
         ];
 
+        // --- DỮ LIỆU MỚI ĐỂ HỢP NHẤT ---
+
+        // Dữ liệu về diện tích và đơn vị gốc mới
+        const sizeDataMap = {
+            "an đông": { origin: "Phường 5, Phường 7, Phường 9 (Quận 5)", size: 1.32, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-dong" },
+            "an hội đông": { origin: "Phường 15, Phường 16 (quận Gò Vấp)", size: 3.29, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-hoi-dong" },
+            "an hội tây": { origin: "Phường 12, Phường 14 (quận Gò Vấp)", size: 3.81, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-hoi-tay" },
+            "an khánh": { origin: "Phường Thủ Thiêm, Phường An Lợi Đông, Phường Thảo Điền, Phường An Khánh, Phường An Phú (thành phố Thủ Đức)", size: 15.33, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-khanh" },
+            "an lạc": { origin: "Phường Bình Trị Đông B, Phường An Lạc A, Phường An Lạc", size: 10.47, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-lac" },
+            "an long": { origin: "Xã An Linh, Xã Tân Long, Xã An Long", size: 72.2, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-long" },
+            "an nhơn": { origin: "Phường 5, Phường 6 (quận Gò Vấp)", size: 3.23, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-nhon" },
+            "an nhơn tây": { origin: "Xã Phú Mỹ Hưng, Xã An Phú, Xã An Nhơn Tây", size: 77.7, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-nhon-tay" },
+            "an phú": { origin: "Phường An Phú (thành phố Thuận An), Phường Bình Chuẩn", size: 16.85, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-phu" },
+            "an phú đông": { origin: "Phường Thạnh Lộc, Phường An Phú Đông", size: 14.59, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-phu-dong" },
+            "an thới đông": { origin: "Xã Lý Nhơn, Xã An Thới Đông", size: 257.85, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/an-thoi-dong" },
+            "bà điểm": { origin: "Xã Xuân Thới Thượng, Xã Trung Chánh, Xã Bà Điểm", size: 27.36, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/ba-diem" },
+            "bà rịa": { origin: "Phường Phước Trung, Phường Phước Nguyên, Phường Long Toàn, Phường Phước Hưng", size: 15.55, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/ba-ria" },
+            "bàn cờ": { origin: "Phường 1, Phường 2, Phường 3, Phường 5, Phường 4 (Quận 3)", size: 0.99, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/ban-co" },
+            "bàu bàng": { origin: "Thị trấn Lai Uyên", size: 84.09, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/bau-bang" },
+            "bàu lâm": { origin: "Xã Tân Lâm, Xã Bàu Lâm", size: 123.83, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/bau-lam" },
+            "bảy hiền": { origin: "Phường 10, Phường 11, Phường 12 (quận Tân Bình)", size: 2.86, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/bay-hien" },
+            "bắc tân uyên": { origin: "Thị trấn Tân Thành, Xã Đất Cuốc, Xã Tân Định", size: 143.69, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/bac-tan-uyen" },
+            "bến cát": { origin: "Xã Tân Hưng (huyện Bàu Bàng), Xã Lai Hưng, Phường Mỹ Phước", size: 100.89, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/ben-cat" },
+            "bến thành": { origin: "Phường Bến Thành, Phường Phạm Ngũ Lão, Phường Cầu Ông Lãnh, Phường Nguyễn Thái Bình", size: 1.85, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/ben-thanh" },
+            "bình chánh": { origin: "Xã Tân Quý Tây, Xã Bình Chánh, Xã An Phú Tây", size: 21.33, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-chanh" },
+            "bình châu": { origin: "Không sáp nhập", size: 87.06, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-chau" },
+            "bình cơ": { origin: "Xã Bình Mỹ (huyện Bắc Tân Uyên), Phường Hội Nghĩa", size: 73.69, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-co" },
+            "bình dương": { origin: "Phường Phú Mỹ (thành phố Thủ Dầu Một), Phường Hòa Phú, Phường Phú Tân, Phường Phú Chánh", size: 58.16, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-duong" },
+            "bình đông": { origin: "Phường 6 (Quận 8), Phường 7 (Quận 8), Xã An Phú Tây, Phường 5 (Quận 8)", size: 8.93, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-dong" },
+            "bình giã": { origin: "Xã Bình Trung, Xã Quảng Thành, Xã Bình Giã", size: 66.96, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-gia" },
+            "bình hòa": { origin: "Phường Bình Hòa, Phường Vĩnh Phú", size: 18.49, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-hoa" },
+            "bình hưng": { origin: "Xã Phong Phú, Xã Bình Hưng, Phường 7 (Quận 8)", size: 32.63, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-hung" },
+            "bình hưng hòa": { origin: "Phường Bình Hưng Hòa, Phường Sơn Kỳ, Phường Bình Hưng Hòa A", size: 8.47, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-hung-hoa" },
+            "bình khánh": { origin: "Xã Tam Thôn Hiệp, Xã Bình Khánh, Xã An Thới Đông", size: 158.28, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-khanh" },
+            "bình lợi": { origin: "Xã Lê Minh Xuân, Xã Bình Lợi", size: 54.18, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-loi" },
+            "bình lợi trung": { origin: "Phường 5, Phường 11, Phường 13 (quận Bình Thạnh)", size: 3.89, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-loi-trung" },
+            "bình mỹ": { origin: "Xã Bình Mỹ (huyện Củ Chi), Xã Hòa Phú, Xã Trung An", size: 82.62, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-my" },
+            "bình phú": { origin: "Phường 10, Phường 11 (Quận 6), Phường 16 (Quận 8)", size: 2.86, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-phu" },
+            "bình quới": { origin: "Phường 27, Phường 28", size: 6.34, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-quoi" },
+            "bình tân": { origin: "Phường Bình Hưng Hòa B, Phường Bình Trị Đông A, Phường Tân Tạo", size: 11.25, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-tan" },
+            "bình tây": { origin: "Phường 2, Phường 9 (Quận 6)", size: 1.05, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-tay" },
+            "bình thạnh": { origin: "Phường 12, Phường 14 (quận Bình Thạnh), Phường 26", size: 3.32, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-thanh" },
+            "bình thới": { origin: "Phường 3, Phường 10 (Quận 11), Phường 8 (Quận 11)", size: 1.52, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-thoi" },
+            "bình tiên": { origin: "Phường 1, Phường 7, Phường 8 (Quận 6)", size: 1.61, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-tien" },
+            "bình trị đông": { origin: "Phường Bình Trị Đông, Phường Bình Hưng Hòa A, Phường Bình Trị Đông A", size: 7.15, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-tri-dong" },
+            "bình trưng": { origin: "Phường Bình Trưng Đông, Phường Bình Trưng Tây, Phường An Phú (thành phố Thủ Đức)", size: 14.82, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/binh-trung" },
+            "cát lái": { origin: "Phường Thạnh Mỹ Lợi, Phường Cát Lái", size: 19.65, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/cat-lai" },
+            "cần giờ": { origin: "Xã Long Hòa (huyện Cần Giờ), Thị trấn Cần Thạnh", size: 157.01, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/can-gio" },
+            "cầu kiệu": { origin: "Phường 1, Phường 2, Phường 7 (quận Phú Nhuận), Phường 15 (quận Phú Nhuận)", size: 1.23, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/cau-kieu" },
+            "cầu ông lãnh": { origin: "Phường Nguyễn Cư Trinh, Phường Cầu Kho, Phường Cô Giang, Phường Cầu Ông Lãnh", size: 1.6, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/cau-ong-lanh" },
+            "chánh hiệp": { origin: "Phường Định Hòa, Phường Tương Bình Hiệp, Phường Hiệp An, Phường Chánh Mỹ", size: 19.89, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/chanh-hiep" },
+            "chánh hưng": { origin: "Phường 4 (Quận 8), Rạch Ông, Phường Hưng Phú, Phường 5 (Quận 8)", size: 4.61, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/chanh-hung" },
+            "chánh phú hòa": { origin: "Phường Chánh Phú Hòa, Xã Hưng Hòa", size: 69.54, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/chanh-phu-hoa" },
+            "châu đức": { origin: "Xã Cù Bị, Xã Xà Bang", size: 84.66, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/chau-duc" },
+            "châu pha": { origin: "Xã Tóc Tiên, Xã Châu Pha", size: 65.64, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/chau-pha" },
+            "chợ lớn": { origin: "Phường 11, Phường 12, Phường 13, Phường 14 (Quận 5)", size: 1.67, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/cho-lon" },
+            "chợ quán": { origin: "Phường 1, Phường 2, Phường 4 (Quận 5)", size: 1.28, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/cho-quan" },
+            "côn đảo": { origin: "Huyện Côn Đảo", size: "", href: "https://www.tinhthanhvn.com/province/ho-chi-minh/con-dao" },
+            "củ chi": { origin: "Xã Tân Phú Trung, Xã Tân Thông Hội, Xã Phước Vĩnh An", size: 64.88, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/cu-chi" },
+            "dầu tiếng": { origin: "Thị trấn Dầu Tiếng, Xã Định An, Xã Định Thành, Xã Định Hiệp", size: 182.69, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/dau-tieng" },
+            "dĩ an": { origin: "Phường An Bình, Phường Dĩ An, Phường Tân Đông Hiệp", size: 21.38, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/di-an" },
+            "diên hồng": { origin: "Phường 6, Phường 8 (Quận 10), Phường 14 (Quận 10)", size: 1.86, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/dien-hong" },
+            "đất đỏ": { origin: "Thị trấn Đất Đỏ, Xã Long Tân (huyện Long Đất), Xã Láng Dài, Xã Phước Long Thọ", size: 119.759, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/dat-do" },
+            "đông hòa": { origin: "Phường Bình An, Phường Bình Thắng, Phường Đông Hòa", size: 21.89, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/dong-hoa" },
+            "đông hưng thuận": { origin: "Phường Tân Thới Nhất, Phường Tân Hưng Thuận, Phường Đông Hưng Thuận", size: 8.26, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/dong-hung-thuan" },
+            "đông thạnh": { origin: "Xã Thới Tam Thôn, Xã Nhị Bình, Xã Đông Thạnh", size: 30.16, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/dong-thanh" },
+            "đức nhuận": { origin: "Phường 4, Phường 5, Phường 9 (quận Phú Nhuận)", size: 2.17, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/duc-nhuan" },
+            "gia định": { origin: "Phường 1, Phường 2, Phường 7, Phường 17 (quận Bình Thạnh)", size: 2.76, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/gia-dinh" },
+            "gò vấp": { origin: "Phường 10, Phường 17 (quận Gò Vấp)", size: 2.81, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/go-vap" },
+            "hạnh thông": { origin: "Phường 1, Phường 3 (quận Gò Vấp)", size: 3.37, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hanh-thong" },
+            "hiệp bình": { origin: "Phường Hiệp Bình Chánh, Phường Hiệp Bình Phước, Phường Linh Đông", size: 16.01, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hiep-binh" },
+            "hiệp phước": { origin: "Xã Nhơn Đức, Xã Long Thới, Xã Hiệp Phước", size: 63.33, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hiep-phuoc" },
+            "hòa bình": { origin: "Phường 5, Phường 14 (Quận 11)", size: 0.98, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hoa-binh" },
+            "hòa hiệp": { origin: "Không sáp nhập", size: 44.1, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hoa-hiep" },
+            "hòa hội": { origin: "Xã Hòa Hưng, Xã Hòa Bình, Xã Hòa Hội", size: 136.27, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hoa-hoi" },
+            "hòa hưng": { origin: "Phường 12, Phường 13, Phường 15 (Quận 10), Phường 14 (Quận 10)", size: 2.59, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hoa-hung" },
+            "hòa lợi": { origin: "Phường Tân Định (thành phố Bến Cát), Phường Hòa Lợi", size: 342.361, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hoa-loi" },
+            "hóc môn": { origin: "Xã Tân Hiệp (huyện Hóc Môn), Xã Tân Xuân, Thị trấn Hóc Môn", size: 16.43, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hoc-mon" },
+            "hồ tràm": { origin: "Thị trấn Phước Bửu, Xã Phước Tân, Xã Phước Thuận", size: 94.51, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/ho-tram" },
+            "hưng long": { origin: "Xã Đa Phước, Xã Qui Đức, Xã Hưng Long", size: 35.54, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/hung-long" },
+            "khánh hội": { origin: "Phường 8, Phường 9 (Quận 4), Phường 2, Phường 4 (Quận 4), Phường 15 (Quận 4)", size: 1.07, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/khanh-hoi" },
+            "kim long": { origin: "Thị trấn Kim Long, Xã Bàu Chinh, Xã Láng Lớn", size: 63.92, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/kim-long" },
+            "lái thiêu": { origin: "Phường Bình Nhâm, Phường Lái Thiêu, Phường Vĩnh Phú", size: 15.46, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/lai-thieu" },
+            "linh xuân": { origin: "Phường Linh Trung, Phường Linh Xuân, Phường Linh Tây", size: 12.29, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/linh-xuan" },
+            "long bình": { origin: "Phường Long Bình, Phường Long Thạnh Mỹ", size: 245.575, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-binh" },
+            "long điền": { origin: "Thị trấn Long Điền, Xã Tam An", size: 87.72, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-dien" },
+            "long hải": { origin: "Thị trấn Long Hải, Xã Phước Tỉnh, Xã Phước Hưng", size: 27.93, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-hai" },
+            "long hòa": { origin: "Xã Long Tân, Xã Long Hòa (huyện Dầu Tiếng), Xã Minh Tân, Xã Minh Thạnh", size: 52.67, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-hoa" },
+            "long hương": { origin: "Xã Tân Hưng (thành phố Bà Rịa), Phường Kim Dinh, Phường Long Hương", size: 41.22, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-huong" },
+            "long nguyên": { origin: "Phường An Điền, Xã Long Nguyên, Phường Mỹ Phước", size: 108.0, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-nguyen" },
+            "long phước": { origin: "Phường Trường Thạnh, Phường Long Phước", size: 34.29, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-phuoc" },
+            "long sơn": { origin: "Không sáp nhập", size: 56.5, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-son" },
+            "long trường": { origin: "Phường Phú Hữu, Phường Long Trường", size: 24.49, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/long-truong" },
+            "minh phụng": { origin: "Phường 1, Phường 7, Phường 16 (Quận 11)", size: 1.27, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/minh-phung" },
+            "minh thạnh": { origin: "Xã Minh Hòa, Xã Minh Tân, Xã Minh Thạnh", size: 159.06, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/minh-thanh" },
+            "ngãi giao": { origin: "Thị trấn Ngãi Giao, Xã Bình Ba, Xã Suối Nghệ", size: 69.3, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/ngai-giao" },
+            "nghĩa thành": { origin: "Xã Đá Bạc, Xã Nghĩa Thành", size: 65.67, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/nghia-thanh" },
+            "nhà bè": { origin: "Thị trấn Nhà Bè, Xã Phú Xuân, Xã Phước Kiển, Xã Phước Lộc", size: 37.1, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/nha-be" },
+            "nhiêu lộc": { origin: "Phường 9, Phường 11, Phường 12, Phường 14 (Quận 3)", size: 1.71, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/nhieu-loc" },
+            "nhuận đức": { origin: "Xã Phạm Văn Cội, Xã Trung Lập Hạ, Xã Nhuận Đức", size: 62.06, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/nhuan-duc" },
+            "phú an": { origin: "Phường Tân An, Xã Phú An, Phường Hiệp An", size: 34.97, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-an" },
+            "phú định": { origin: "Phường 14, Phường 15 (Quận 8), Phường Xóm Củi, Phường 16 (Quận 8)", size: 5.85, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-dinh" },
+            "phú giáo": { origin: "Thị trấn Phước Vĩnh, Xã An Bình, Xã Tam Lập", size: 192.83, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-giao" },
+            "phú hòa đông": { origin: "Xã Tân Thạnh Tây, Xã Tân Thạnh Đông, Xã Phú Hòa Đông", size: 59.75, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-hoa-dong" },
+            "phú lâm": { origin: "Phường 12, Phường 13, Phường 14 (Quận 6)", size: 2.0, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-lam" },
+            "phú lợi": { origin: "Phường Phú Hòa, Phường Phú Lợi, Phường Hiệp Thành (thành phố Thủ Dầu Một)", size: 26.79, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-loi" },
+            "phú mỹ": { origin: "Phường Phú Mỹ (thành phố Phú Mỹ), Phường Mỹ Xuân", size: 70.92, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-my" },
+            "phú nhuận": { origin: "Phường 8, Phường 10, Phường 11, Phường 13 (quận Phú Nhuận), Phường 15 (quận Phú Nhuận)", size: 1.46, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-nhuan" },
+            "phú thạnh": { origin: "Phường Hiệp Tân, Phường Phú Thạnh, Phường Tân Thới Hòa", size: 2.99, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-thanh" },
+            "phú thọ": { origin: "Phường 11, Phường 15 (Quận 11), Phường 8 (Quận 11)", size: 1.37, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-tho" },
+            "phú thọ hòa": { origin: "Phường Phú Thọ Hòa, Phường Tân Thành, Phường Tân Quý", size: 3.02, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-tho-hoa" },
+            "phú thuận": { origin: "Phường Phú Thuận, Phường Phú Mỹ (Quận 7)", size: 10.55, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phu-thuan" },
+            "phước hải": { origin: "Thị trấn Phước Hải, Xã Phước Hội", size: 70.04, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phuoc-hai" },
+            "phước hòa": { origin: "Xã Vĩnh Hòa, Xã Phước Hòa, Xã Tam Lập", size: 128.07, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phuoc-hoa" },
+            "phước long": { origin: "Phường Phước Bình, Phường Phước Long A, Phường Phước Long B", size: 9.23, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phuoc-long" },
+            "phước thành": { origin: "Xã Tân Hiệp (huyện Phú Giáo), Xã An Thái, Xã Phước Sang", size: 123.49, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phuoc-thanh" },
+            "phước thắng": { origin: "Phường 11, Phường 12 (thành phố Vũng Tàu)", size: 47.35, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/phuoc-thang" },
+            "rạch dừa": { origin: "Phường 10 (thành phố Vũng Tàu), Phường Thắng Nhất, Phường Rạch Dừa", size: 19.7, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/rach-dua" },
+            "sài gòn": { origin: "Phường Bến Nghé, Phường Đa Kao, Phường Nguyễn Thái Bình", size: 3.04, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/sai-gon" },
+            "tam bình": { origin: "Phường Bình Chiểu, Phường Tam Phú, Phường Tam Bình", size: 10.71, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tam-binh" },
+            "tam long": { origin: "Phường Long Tâm, Xã Hòa Long, Xã Long Phước", size: 34.7, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tam-long" },
+            "tam thắng": { origin: "Phường 7, Phường 8, Phường 9 (thành phố Vũng Tàu), Phường Nguyễn An Ninh", size: 11.76, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tam-thang" },
+            "tăng nhơn phú": { origin: "Phường Tân Phú (thành phố Thủ Đức), Phường Hiệp Phú, Phường Tăng Nhơn Phú A, Phường Tăng Nhơn Phú B, Phường Long Thạnh Mỹ", size: 16.51, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tang-nhon-phu" },
+            "tân an hội": { origin: "Thị trấn Củ Chi, Xã Phước Hiệp, Xã Tân An Hội", size: 53.51, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-an-hoi" },
+            "tân bình": { origin: "Phường 13, Phường 14 (quận Tân Bình), Phường 15 (quận Tân Bình)", size: 2.12, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-binh" },
+            "tân định": { origin: "Phường Tân Định (Quận 1), Phường Đa Kao", size: 1.23, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-dinh" },
+            "tân đông hiệp": { origin: "Phường Tân Bình, Phường Thái Hòa, Phường Tân Đông Hiệp", size: 21.47, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-dong-hiep" },
+            "tân hải": { origin: "Phường Tân Hòa, Phường Tân Hải", size: 51.86, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-hai" },
+            "tân hiệp": { origin: "Phường Khánh Bình, Phường Tân Hiệp", size: 47.06, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-hiep" },
+            "tân hòa": { origin: "Phường 6, Phường 8, Phường 9 (quận Tân Bình)", size: 1.47, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-hoa" },
+            "tân hưng": { origin: "Phường Tân Phong, Phường Tân Quy, Phường Tân Kiểng, Phường Tân Hưng", size: 8.54, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-hung" },
+            "tân khánh": { origin: "Phường Thạnh Phước, Phường Tân Phước Khánh, Phường Tân Vĩnh Hiệp, Xã Thạnh Hội, Phường Thái Hòa", size: 38.23, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-khanh" },
+            "tân mỹ": { origin: "Phường Tân Phú (Quận 7), Phường Phú Mỹ (Quận 7)", size: 6.45, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-my" },
+            "tân nhựt": { origin: "Thị trấn Tân Túc, Xã Tân Nhựt, Phường Tân Tạo A, Xã Tân Kiên, Phường 16 (Quận 8)", size: 43.67, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-nhut" },
+            "tân phú": { origin: "Phường Phú Trung, Phường Hòa Thạnh, Phường Tân Thới Hòa, Phường Tân Thành", size: 2.52, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-phu" },
+            "tân phước": { origin: "Phường Phước Hòa, Phường Tân Phước", size: 83.62, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-phuoc" },
+            "tân sơn": { origin: "Phường 15 (quận Tân Bình)", size: 10.12, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-son" },
+            "tân sơn hòa": { origin: "Phường 1, Phường 2, Phường 3 (quận Tân Bình)", size: 2.62, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-son-hoa" },
+            "tân sơn nhất": { origin: "Phường 4, Phường 5, Phường 7 (quận Tân Bình)", size: 3.19, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-son-nhat" },
+            "tân sơn nhì": { origin: "Phường Tân Sơn Nhì, Phường Sơn Kỳ, Phường Tân Quý, Phường Tân Thành", size: 3.46, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-son-nhi" },
+            "tân tạo": { origin: "Xã Tân Kiên, Phường Tân Tạo A, Phường Tân Tạo", size: 14.71, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-tao" },
+            "tân thành": { origin: "Phường Hắc Dịch, Xã Sông Xoài", size: 48.42, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-thanh" },
+            "tân thới hiệp": { origin: "Phường Hiệp Thành (Quận 12), Phường Tân Thới Hiệp", size: 8.06, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-thoi-hiep" },
+            "tân thuận": { origin: "Phường Bình Thuận, Phường Tân Thuận Đông, Phường Tân Thuận Tây", size: 10.16, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-thuan" },
+            "tân uyên": { origin: "Phường Uyên Hưng, Xã Bạch Đằng, Xã Tân Lập, Xã Tân Mỹ", size: 94.67, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-uyen" },
+            "tân vĩnh lộc": { origin: "Xã Vĩnh Lộc B, Xã Phạm Văn Hai, Phường Tân Tạo", size: 34.05, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tan-vinh-loc" },
+            "tây nam": { origin: "Phường An Tây, Xã Thanh Tuyền, Xã An Lập", size: 119.8, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tay-nam" },
+            "tây thạnh": { origin: "Phường Tây Thạnh, Phường Sơn Kỳ", size: 3.95, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tay-thanh" },
+            "thái mỹ": { origin: "Xã Trung Lập Thượng, Xã Phước Thạnh, Xã Thái Mỹ", size: 62.44, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thai-my" },
+            "thanh an": { origin: "Xã Thanh An, Xã Định Hiệp, Xã Thanh Tuyền, Xã An Lập", size: 136.72, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thanh-an" },
+            "thạnh an": { origin: "Không sáp nhập", size: 136.72, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thanh-an" },
+            "thạnh mỹ tây": { origin: "Phường 19, Phường 22, Phường 25", size: 4.4, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thanh-my-tay" },
+            "thông tây hội": { origin: "Phường 8, Phường 11 (quận Gò Vấp)", size: 3.24, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thong-tay-hoi" },
+            "thới an": { origin: "Phường Thạnh Xuân, Phường Thới An", size: 14.9, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thoi-an" },
+            "thới hòa": { origin: "Không sáp nhập", size: 37.93, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thoi-hoa" },
+            "thủ dầu một": { origin: "Phường Phú Cường, Phường Phú Thọ, Phường Chánh Nghĩa, Phường Hiệp Thành (thành phố Thủ Dầu Một), Phường Chánh Mỹ", size: 15.68, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thu-dau-mot" },
+            "thủ đức": { origin: "Phường Bình Thọ, Phường Linh Chiểu, Phường Trường Thọ, Phường Linh Tây, Phường Linh Đông", size: 8.81, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thu-duc" },
+            "thuận an": { origin: "Phường Hưng Định, Phường An Thạnh, Xã An Sơn", size: 16.11, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thuan-an" },
+            "thuận giao": { origin: "Phường Thuận Giao, Phường Bình Chuẩn", size: 16.81, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thuan-giao" },
+            "thường tân": { origin: "Xã Lạc An, Xã Hiếu Liêm, Xã Thường Tân, Xã Tân Mỹ", size: 120.7, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/thuong-tan" },
+            "trung mỹ tây": { origin: "Phường Tân Chánh Hiệp, Phường Trung Mỹ Tây", size: 6.93, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/trung-my-tay" },
+            "trừ văn thố": { origin: "Xã Trừ Văn Thố, Xã Cây Trường II, Thị trấn Lai Uyên", size: 76.56, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/tru-van-tho" },
+            "vĩnh hội": { origin: "Phường 1, Phường 3 (Quận 4), Phường 2, Phường 4 (Quận 4)", size: 1.17, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/vinh-hoi" },
+            "vĩnh lộc": { origin: "Xã Vĩnh Lộc A, Xã Phạm Văn Hai", size: 48.47, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/vinh-loc" },
+            "vĩnh tân": { origin: "Phường Vĩnh Tân, Thị trấn Tân Bình", size: 61.35, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/vinh-tan" },
+            "vũng tàu": { origin: "Phường 1, Phường 2, Phường 3, Phường 4, Phường 5 (thành phố Vũng Tàu), Phường Thắng Nhì, Phường Thắng Tam", size: 16.86, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/vung-tau" },
+            "vườn lài": { origin: "Phường 1, Phường 2, Phường 4, Phường 9, Phường 10 (Quận 10)", size: 1.28, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/vuon-lai" },
+            "xóm chiếu": { origin: "Phường 13, Phường 16, Phường 18, Phường 15 (Quận 4)", size: 1.94, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/xom-chieu" },
+            "xuân hòa": { origin: "Phường Võ Thị Sáu, Phường 4 (Quận 3)", size: 2.22, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/xuan-hoa" },
+            "xuân sơn": { origin: "Xã Suối Rao, Xã Sơn Bình, Xã Xuân Sơn", size: 73.81, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/xuan-son" },
+            "xuân thới sơn": { origin: "Xã Tân Thới Nhì, Xã Xuân Thới Đông, Xã Xuân Thới Sơn", size: 35.21, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/xuan-thoi-son" },
+            "xuyên mộc": { origin: "Xã Bông Trang, Xã Bưng Riềng, Xã Xuyên Mộc", size: 102.96, href: "https://www.tinhthanhvn.com/province/ho-chi-minh/xuyen-moc" }
+        };
+
+        /**
+         * Chuẩn hóa tên để tra cứu
+         * @param {string} name - Tên gốc (ví dụ: 'Phường An Đông', 'Sài Gòn')
+         * @returns {string} - Tên đã chuẩn hóa (ví dụ: 'an đông', 'sài gòn')
+         */
+        function normalizeName(name) {
+            if (typeof name !== 'string') return '';
+            return name.toLowerCase()
+                .replace('phường ', '')
+                .replace('xã ', '')
+                .replace('đặc khu ', '')
+                .trim();
+        }
+
+        // Hợp nhất dữ liệu mới vào mảng 'data'
+        data.forEach(item => {
+            const normalizedKey = normalizeName(item.XaPhuongMoi);
+            const newData = sizeDataMap[normalizedKey];
+
+            if (newData) {
+                // Sửa cột "Xã phường trước sáp nhập"
+                item.XaPhuongTruocSapNhap = newData.origin;
+                // Thêm cột Size
+                item.Size = newData.size;
+                // Thêm cột Href
+                item.Href = newData.href;
+            } else {
+                item.Size = null; // Đặt là null nếu không tìm thấy dữ liệu mới
+                item.Href = null;
+            }
+        });
+
+        // --- KẾT THÚC HỢP NHẤT DỮ LIỆU ---
+
+
         const tableBody = document.getElementById('dataTableBody');
         const noResults = document.getElementById('noResults');
         
@@ -254,36 +472,143 @@
         const filterDonViCu = document.getElementById('filterDonViCu');
         const filterTinhTP = document.getElementById('filterTinhTP');
 
+        // Biến trạng thái sắp xếp
+        let currentSortKey = 'STT';
+        let currentSortDirection = 'asc';
+
 
         /**
-         * Hiển thị dữ liệu lên bảng
-         * @param {Array} dataToRender - Mảng dữ liệu cần hiển thị
+         * Hiển thị dữ liệu đã lọc và sắp xếp lên bảng
+         * @param {Array} dataToRender - Mảng dữ liệu để hiển thị
          */
         function renderTable(dataToRender) {
-            // Xóa nội dung cũ của bảng
+            // Xóa nội dung cũ
             tableBody.innerHTML = '';
 
+            // Kiểm tra nếu không có dữ liệu
             if (dataToRender.length === 0) {
-                noResults.classList.remove('hidden');
-            } else {
-                noResults.classList.add('hidden');
+                noResults.classList.remove('hidden'); // Hiển thị thông báo "Không tìm thấy"
+                return;
             }
 
-            // Tạo từng hàng (row) cho mỗi mục dữ liệu
+            noResults.classList.add('hidden'); // Ẩn thông báo
+
+            // Thêm hàng mới
             dataToRender.forEach(item => {
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50';
 
+                // Tạo nội dung cho ô Xã/Phường Mới (có link nếu Href tồn tại)
+                const tenCell = item.Href 
+                    ? `<a href="${item.Href}" target="_blank" class="text-blue-600 hover:underline font-medium">${item.XaPhuongMoi}</a>` 
+                    : `<span class="text-gray-900 font-medium">${item.XaPhuongMoi}</span>`;
+
                 row.innerHTML = `
                     <td class="p-3 text-sm text-gray-700">${item.STT}</td>
-                    <td class="p-3 text-sm text-gray-900 font-medium">${item.XaPhuongMoi}</td>
+                    <td class="p-3 text-sm">${tenCell}</td>
                     <td class="p-3 text-sm text-gray-700">${item.LoaiDonVi}</td>
+                    <td class="p-3 text-sm text-gray-700">${item.Size || 'N/A'}</td>
                     <td class="p-3 text-sm text-gray-700">${item.DonViCu}</td>
                     <td class="p-3 text-sm text-gray-700">${item.XaPhuongTruocSapNhap}</td>
                     <td class="p-3 text-sm text-gray-700">${item.TinhTPCu}</td>
                 `;
                 tableBody.appendChild(row);
             });
+        }
+
+        /**
+         * Cập nhật giao diện các chỉ báo sắp xếp
+         */
+        function updateSortIndicators() {
+            // Xóa tất cả chỉ báo
+            document.querySelectorAll('.sort-indicator').forEach(span => {
+                span.textContent = '';
+            });
+
+            const indicatorMap = {
+                'STT': 'sortBySTT',
+                'XaPhuongMoi': 'sortByName',
+                'LoaiDonVi': 'sortByLoaiDonVi',
+                'Size': 'sortByArea'
+            };
+ 
+            const activeThId = indicatorMap[currentSortKey];
+            if (activeThId) {
+                const thElement = document.getElementById(activeThId);
+                const indicator = thElement.querySelector('.sort-indicator');
+                if (indicator) {
+                    indicator.textContent = currentSortDirection === 'asc' ? ' ▲' : ' ▼';
+                }
+            }
+        }
+        
+        /**
+         * Sắp xếp dữ liệu và render lại bảng
+         */
+        function sortAndRender() {
+            const direction = currentSortDirection;
+            const key = currentSortKey;
+
+            // Sắp xếp mảng 'data'
+            data.sort((a, b) => {
+                let valA, valB;
+                
+                if (key === 'XaPhuongMoi') {
+                    valA = a.XaPhuongMoi || '';
+                    valB = b.XaPhuongMoi || '';
+                    // Sử dụng 'vi' cho tiếng Việt
+                    return direction === 'asc' 
+                        ? valA.localeCompare(valB, 'vi') 
+                        : valB.localeCompare(valA, 'vi');
+                
+                } else if (key === 'LoaiDonVi') {
+                    valA = a.LoaiDonVi || '';
+                    valB = b.LoaiDonVi || '';
+                    // Sử dụng 'vi' cho tiếng Việt
+                    return direction === 'asc' 
+                        ? valA.localeCompare(valB, 'vi') 
+                        : valB.localeCompare(valA, 'vi');
+
+                } else if (key === 'Size') {
+                    // Coi N/A hoặc null là 0
+                    valA = parseFloat(a.Size) || 0; 
+                    valB = parseFloat(b.Size) || 0;
+                    return direction === 'asc' 
+                        ? valA - valB 
+                        : valB - valA;
+
+                } else if (key === 'STT') {
+                    // Sắp xếp mặc định
+                    valA = a.STT || 0;
+                    valB = b.STT || 0;
+                        return direction === 'asc' 
+                        ? valA - valB 
+                        : valB - valA;
+                }
+                return 0;
+            });
+
+            // Sau khi sắp xếp, áp dụng bộ lọc và render lại
+            filterTable();
+            // Cập nhật chỉ báo UI
+            updateSortIndicators();
+        }
+
+        /**
+         * Xử lý sự kiện click vào header
+         * @param {string} key - Khóa để sắp xếp (ví dụ: 'XaPhuongMoi')
+         */
+        function handleSort(key) {
+            if (currentSortKey === key) {
+                // Đảo chiều
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                // Đặt cột mới, mặc định là 'asc'
+                currentSortKey = key;
+                currentSortDirection = 'asc';
+            }
+            
+            sortAndRender();
         }
 
         /**
@@ -336,6 +661,12 @@
         filterDonViCu.addEventListener('change', filterTable);
         filterTinhTP.addEventListener('change', filterTable);
 
+        // Thêm sự kiện click cho các header có thể sắp xếp
+        document.getElementById('sortByName').addEventListener('click', () => handleSort('XaPhuongMoi'));
+        document.getElementById('sortByLoaiDonVi').addEventListener('click', () => handleSort('LoaiDonVi'));
+        document.getElementById('sortByArea').addEventListener('click', () => handleSort('Size'));
+        document.getElementById('sortBySTT').addEventListener('click', () => handleSort('STT'));
+ 
         // Hiển thị toàn bộ dữ liệu khi tải trang lần đầu
         document.addEventListener('DOMContentLoaded', () => {
             // Điền dữ liệu vào các bộ lọc
@@ -343,10 +674,9 @@
             populateFilter(filterDonViCu, 'DonViCu', 'Tất cả Đơn vị cũ');
             populateFilter(filterTinhTP, 'TinhTPCu', 'Tất cả Tỉnh/TP');
 
-            // Hiển thị bảng
-            renderTable(data);
+            // Hiển thị bảng (đã sắp xếp theo STT mặc định)
+            sortAndRender();
         });
     </script>
 </body>
 </html>
-
