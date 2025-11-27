@@ -79,7 +79,7 @@
                             <label for="github-token" class="block text-sm font-medium text-gray-700 mb-1">GitHub
                                 Personal Access Token (PAT)</label>
                             <input type="password" id="github-token" placeholder="ghp_..."
-                                class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm transition duration-150 ease-in-out">
+                                class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm transition duration-150 ease-in-out" />
                             <p class="mt-1 text-xs text-gray-500">Requires 'repo' and 'workflow' scopes.</p>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -87,13 +87,13 @@
                                 <label for="github-owner" class="block text-sm font-medium text-gray-700 mb-1">Owner
                                     (User/Org)</label>
                                 <input type="text" id="github-owner" placeholder="username"
-                                    class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm">
+                                    class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm" />
                             </div>
                             <div>
                                 <label for="github-repo" class="block text-sm font-medium text-gray-700 mb-1">Repository
                                     Name</label>
                                 <input type="text" id="github-repo" placeholder="repo-name"
-                                    class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm">
+                                    class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm" />
                             </div>
                         </div>
                     </div>
@@ -105,14 +105,14 @@
                         <div>
                             <label for="config-url"
                                 class="block text-sm font-medium text-gray-700 mb-1">BOOK_SOURCE_URL</label>
-                            <input type="text" id="config-url" placeholder="https://www.52shuku.net/..."
-                                class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm">
+                            <input type="text" id="config-url" placeholder="https://www.52shuku.net/"
+                                class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm" />
                         </div>
                         <div>
                             <label for="config-base-dir"
                                 class="block text-sm font-medium text-gray-700 mb-1">BOOK_BASE_DIR</label>
-                            <input type="text" id="config-base-dir" placeholder="bjXRF"
-                                class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm">
+                            <input type="text" id="config-base-dir" placeholder=""
+                                class="block w-full rounded-lg border-gray-300 border px-4 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm" />
                         </div>
                     </div>
                 </div>
@@ -128,12 +128,14 @@
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Step
                                 1</span>
                             <h3 class="text-lg font-bold text-gray-900 mt-2">Chapter Scraper</h3>
-                            <p class="text-sm text-gray-500 mt-1">Scrapes chapters from the source URL.</p>
+                            <p class="text-sm text-gray-500 mt-1">Scrapes chapters from the
+                                <strong>BOOK_SOURCE_URL</strong>
+                                configured in the Configuration tab.
+                            </p>
                         </div>
                         <div class="flex-grow">
                             <p class="text-sm text-gray-600 mb-4">
-                                The scraper will automatically fetch chapters from the <strong>BOOK_SOURCE_URL</strong>
-                                configured in the Configuration tab.
+                                The scraper will automatically fetch chapters from the configured source.
                             </p>
                         </div>
                         <div class="mt-6">
@@ -158,11 +160,11 @@
                                 <label for="batch-size" class="block text-sm font-medium text-gray-700 mb-1">Batch Size
                                     (1-10)</label>
                                 <input type="number" id="batch-size" value="5" min="1" max="10"
-                                    class="block w-full rounded-lg border-gray-300 border px-3 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm">
+                                    class="block w-full rounded-lg border-gray-300 border px-3 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm" />
                             </div>
                             <div class="flex items-center">
                                 <input id="force-translate" type="checkbox"
-                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
                                 <label for="force-translate" class="ml-2 block text-sm text-gray-900">Force
                                     Re-translation</label>
                             </div>
@@ -321,9 +323,7 @@
             }
 
             toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         }
 
         // Trigger Scraper
@@ -436,7 +436,7 @@
             if (!config.token || !config.repo || !config.owner) return showToast('Please configure GitHub settings first.', true);
 
             const folder = document.getElementById('folder-select').value;
-            let baseDir = config.baseDir || 'bjXRF';
+            let baseDir = config.baseDir;
             const path = `${baseDir}/${folder}`;
 
             try {
