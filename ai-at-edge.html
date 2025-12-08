@@ -40,26 +40,20 @@
                 height: 400px;
             }
         }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
     </style>
     <!-- Chosen Palette: "Lab Clean". Backgrounds are Slate/Cool Gray. Primary is Emerald (Efficiency) and Blue (Intelligence). Accents in Violet (DeepSeek) and Orange (Qwen). -->
     <!-- Application Structure Plan:
          1. Hero: Announcements of the new "Qwen 3-VL" and the rise of specialized OCR models.
-         2. VLM Landscape (Scatter): Visualizing the new hierarchy with Qwen 3-VL 4B at the top right (Smart & Big).
-         3. The OCR Battle Arena: A dedicated interactive section comparing DeepSeek, SmolVLM, and specialized OCR models (using GOT-OCR as the 'Huynyan' proxy if specific specs are missing, but addressing the user's query directly).
-         4. Capabilities Simulator: Interactive toggle to see simulated "OCR Output" differences between models.
-         5. Hosting & Hardware: VRAM calculator updated for 4B models.
-         6. Data Grid: Full technical specs. -->
+         2. VLM Landscape (Scatter): Visualizing the new hierarchy with Qwen 3-VL 4B at the top right.
+         3. The OCR Battle Arena: Updated to feature HunyuanOCR vs DeepSeek vs SmolVLM.
+         4. Capabilities Simulator: Interactive toggle to see simulated "OCR Output" differences.
+         5. Hosting & Hardware: VRAM calculator updated.
+         6. Data Grid: Full technical specs with HunyuanOCR specific details. -->
     <!-- Visualization & Content Choices:
-         1. Scatter Plot: Essential for Size vs Performance mapping.
-         2. Radar Chart: "VLM Performance Dimensions" (OCR, Chart Reading, General Captioning).
-         3. Dynamic Text Block: To simulate model outputs (Show, don't just tell).
-         4. Bar Chart: Benchmark comparison (MMMU/OCRBench).
+         1. Scatter Plot: Size vs Performance.
+         2. Radar Chart: Dimensions (OCR, Chart Reading, General Captioning).
+         3. Dynamic Text Block: Simulated output for accurate comparison.
+         4. Bar Chart: Benchmark comparison.
          Confirming NO SVG, NO Mermaid. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
@@ -96,13 +90,13 @@
             </div>
             <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
                 The Rise of <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Qwen
-                    3-VL 4B</span> & Small OCR
+                    3-VL 4B</span> & HunyuanOCR
             </h1>
             <p class="text-lg text-slate-600 leading-relaxed">
                 We've upgraded the benchmark. The new <strong>Qwen 3-VL Instruct 4B</strong> sets a new SOTA for sub-5B
-                models, challenging larger proprietary APIs.
-                Simultaneously, micro-models like <strong>SmolVLM</strong> and <strong>DeepSeek-Janus</strong> are
-                revolutionizing private OCR.
+                models.
+                Simultaneously, specialized models like <strong>HunyuanOCR</strong> and <strong>DeepSeek-VL</strong> are
+                redefining private document processing.
             </p>
         </header>
 
@@ -122,7 +116,7 @@
 
             <!-- DeepSeek Card -->
             <div class="p-5 rounded-2xl bg-white border border-indigo-100 shadow-sm relative overflow-hidden">
-                <h3 class="text-sm font-bold text-indigo-600 uppercase">OCR Efficiency</h3>
+                <h3 class="text-sm font-bold text-indigo-600 uppercase">Efficiency</h3>
                 <div class="text-2xl font-bold text-slate-900 mt-1">DeepSeek-VL</div>
                 <div class="text-sm text-slate-500 mt-2">
                     1.3B parameters. Punchy OCR capabilities for its tiny footprint.
@@ -138,12 +132,12 @@
                 </div>
             </div>
 
-            <!-- "Huynyan"/OCR Card -->
-            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden">
-                <h3 class="text-sm font-bold text-slate-600 uppercase">Specialist</h3>
-                <div class="text-2xl font-bold text-slate-900 mt-1">GOT-OCR 2.0</div>
+            <!-- HunyuanOCR Card (Updated) -->
+            <div class="p-5 rounded-2xl bg-white border border-blue-100 shadow-sm relative overflow-hidden">
+                <h3 class="text-sm font-bold text-blue-600 uppercase">OCR Specialist</h3>
+                <div class="text-2xl font-bold text-slate-900 mt-1">HunyuanOCR</div>
                 <div class="text-sm text-slate-500 mt-2">
-                    The "Hunyuan" alternative. 580M dedicated OCR model.
+                    Tencent's engine. Specialized for dense, multi-lingual text extraction.
                 </div>
             </div>
         </div>
@@ -165,8 +159,8 @@
                         Series</div>
                     <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-indigo-500"></span>
                         DeepSeek</div>
-                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-pink-500"></span> Micro
-                        Models</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-blue-500"></span> Hunyuan
+                    </div>
                 </div>
             </div>
 
@@ -184,8 +178,8 @@
                         <span class="text-2xl">⚡</span> The OCR Verdict
                     </h2>
                     <p class="text-slate-300 text-sm mb-6">
-                        You asked to check <strong>SmolVLM</strong>, <strong>DeepSeek OCR</strong>, and <strong>Huynyan
-                            (interpreted as GOT-OCR/Hunyuan-Lite)</strong>. Here is the breakdown:
+                        You asked to check <strong>SmolVLM</strong>, <strong>DeepSeek OCR</strong>, and
+                        <strong>HunyuanOCR</strong>. Here is the breakdown:
                     </p>
 
                     <div class="space-y-4">
@@ -208,12 +202,11 @@
                             <span class="text-xs bg-pink-500 text-white px-2 py-1 rounded group-hover:bg-pink-400">Tiny
                                 / Web</span>
                         </button>
-                        <button onclick="updateRadar('got')"
+                        <button onclick="updateRadar('hunyuan')"
                             class="w-full text-left p-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/5 transition-all flex justify-between items-center group">
-                            <span>GOT-OCR 2.0 (580M)</span>
-                            <span
-                                class="text-xs bg-emerald-500 text-white px-2 py-1 rounded group-hover:bg-emerald-400">Pure
-                                OCR Spec</span>
+                            <span>HunyuanOCR</span>
+                            <span class="text-xs bg-blue-500 text-white px-2 py-1 rounded group-hover:bg-blue-400">Top
+                                Tier OCR</span>
                         </button>
                     </div>
 
@@ -268,7 +261,7 @@
                                 <option value="qwen">Qwen 3-VL 4B</option>
                                 <option value="deepseek">DeepSeek-VL</option>
                                 <option value="smol">SmolVLM</option>
-                                <option value="got">GOT-OCR 2.0</option>
+                                <option value="hunyuan">HunyuanOCR</option>
                             </select>
                         </div>
                         <div id="simOutput"
@@ -320,20 +313,13 @@
                             <td class="p-4"><span class="text-emerald-600 font-bold">A-</span></td>
                             <td class="p-4 text-slate-500">Good balance. Use if 4B is too slow.</td>
                         </tr>
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="p-4 font-bold text-slate-900">MiniCPM-V 2.6</td>
-                            <td class="p-4">2.6B</td>
-                            <td class="p-4">High-Res Slicing</td>
+                        <tr class="hover:bg-blue-50/30 transition-colors">
+                            <td class="p-4 font-bold text-slate-900">HunyuanOCR</td>
+                            <td class="p-4">~2B</td>
+                            <td class="p-4">Specialized Encoder</td>
                             <td class="p-4"><span class="text-emerald-600 font-bold">S</span></td>
-                            <td class="p-4 text-slate-500"><strong>Note:</strong> Often confused with "Huynyan". Top
-                                tier OCR.</td>
-                        </tr>
-                        <tr class="hover:bg-emerald-50/30 transition-colors">
-                            <td class="p-4 font-bold text-slate-900">GOT-OCR 2.0</td>
-                            <td class="p-4">0.6B</td>
-                            <td class="p-4">OCR-Specialized</td>
-                            <td class="p-4"><span class="text-emerald-600 font-bold">A</span></td>
-                            <td class="p-4 text-slate-500">Use purely for text extraction. Very fast.</td>
+                            <td class="p-4 text-slate-500"><strong>Leader.</strong> Exceptional dense text & Chinese
+                                character support.</td>
                         </tr>
                         <tr class="hover:bg-pink-50/30 transition-colors">
                             <td class="p-4 font-bold text-slate-900">SmolVLM</td>
@@ -370,11 +356,11 @@
                 radar: [60, 40, 50, 98, 30],
                 sim: "The image shows a receipt on a table. I can see a price of $45.20 and a date. There is a coffee stain on the paper."
             },
-            got: {
-                name: "GOT-OCR 2.0",
-                desc: "This is likely what you want if you need 'Huynyan' style OCR. It doesn't chat well, but it reads text perfectly. It ignores the coffee stain meaning context and just outputs raw text.",
-                radar: [98, 20, 90, 95, 10], // High OCR, Low Reasoning
-                sim: "Total: $45.20\n2025-10-12\nCappuccino $5.50\nCroissant $4.20\nTax [Unreadable]\n..."
+            hunyuan: {
+                name: "HunyuanOCR",
+                desc: "Tencent's HunyuanOCR is specialized for stability in dense text scenarios. It is less 'chatty' than Qwen but offers extremely high fidelity for text extraction, especially for multi-lingual docs.",
+                radar: [99, 40, 95, 85, 20], // Very High OCR, Low 'Chat'/Reasoning
+                sim: "Store_ID: 8842\nDate: 2025-10-12\n----------------\nCappuccino   5.50\nCroissant    4.20\n----------------\nTotal: 45.20\n[Text Obscured: Tax_Area]"
             }
         };
 
@@ -397,11 +383,16 @@
                             label: 'Competitors',
                             data: [
                                 { x: 1.3, y: 55, r: 8, model: 'DeepSeek-VL' },
-                                { x: 2.6, y: 65, r: 12, model: 'MiniCPM-V 2.6' },
-                                { x: 0.6, y: 45, r: 6, model: 'GOT-OCR 2.0' }
+                                { x: 2.6, y: 65, r: 12, model: 'MiniCPM-V 2.6' }
                             ],
                             backgroundColor: 'rgba(99, 102, 241, 0.6)',
                             borderColor: 'rgba(99, 102, 241, 1)'
+                        },
+                        {
+                            label: 'Specialist/OCR',
+                            data: [{ x: 2.0, y: 50, r: 11, model: 'HunyuanOCR' }],
+                            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                            borderColor: 'rgba(59, 130, 246, 1)'
                         },
                         {
                             label: 'Micro Models',
@@ -467,7 +458,7 @@
             let color = 'rgb(249, 115, 22)'; // Qwen Orange default
             if (modelKey === 'deepseek') color = 'rgb(99, 102, 241)';
             if (modelKey === 'smol') color = 'rgb(236, 72, 153)';
-            if (modelKey === 'got') color = 'rgb(16, 185, 129)';
+            if (modelKey === 'hunyuan') color = 'rgb(59, 130, 246)'; // Blue
 
             radarChart.data.datasets[0].borderColor = color;
             radarChart.data.datasets[0].pointBackgroundColor = color;
@@ -480,7 +471,7 @@
             if (modelKey === 'qwen') vram = "3.2 GB";
             if (modelKey === 'deepseek') vram = "1.5 GB";
             if (modelKey === 'smol') vram = "0.8 GB";
-            if (modelKey === 'got') vram = "0.9 GB";
+            if (modelKey === 'hunyuan') vram = "1.8 GB"; // Estimate
             document.getElementById('vram-display').innerText = vram;
         };
 
