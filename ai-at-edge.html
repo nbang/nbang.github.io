@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny Titans & Pocket Eyes: SLM + VLM Research Report</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Zen -->
+    <!-- Colors: 
+         Background: Stone-50 (#fafaf9)
+         Primary Text: Stone-800 (#292524)
+         Secondary Text: Stone-500 (#78716c)
+         Accent 1 (Efficiency): Emerald-600 (#059669)
+         Accent 2 (Power): Amber-600 (#d97706)
+         Accent 3 (Tech): Indigo-500 (#6366f1)
+         Accent 4 (Vision): Violet-600 (#7c3aed)
+         Card Bg: White (#ffffff)
+    -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9;
+            color: #292524;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Merriweather', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .vision-gradient {
+            background: linear-gradient(135deg, #f5f3ff 0%, #fff 100%);
+        }
+    </style>
+
+    <!-- Application Structure Plan: 
+         1. Hero Section: Updated to mention Multimodal/Vision capabilities.
+         2. Comparative Radar: Comparison of Text models (Added SmolLM).
+         3. Efficiency Frontier: Scatter plot updated with SmolLM (showing high efficiency per param).
+         4. NEW SECTION: Vision at the Edge. Focuses on VLMs <4B (Moondream, LLaVA-Phi, Qwen-VL).
+            - Bar Chart: Visual Benchmark Score vs Size.
+            - Feature Matrix: Capabilities (OCR, Object Det, Captioning).
+         5. Private Hosting Calculator: Updated slider range (min 0.1B) for SmolLM.
+         6. Model Catalog: Filterable grid including new Vision category.
+         
+         Rationale: The structure preserves the flow of "Text Capabilities" -> "Hardware Feasibility" but inserts "Vision Capabilities" as a distinct, high-value module for users interested in multimodal edge AI.
+    -->
+</head>
+
+<body class="antialiased selection:bg-violet-200 selection:text-stone-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">⚡</span>
+                    <span class="font-bold text-xl tracking-tight text-stone-800">SLM Research <span
+                            class="text-stone-400 font-light text-sm hidden sm:inline">| < 4B Params</span></span>
+                </div>
+                <div class="hidden md:flex space-x-6 text-sm font-medium text-stone-600">
+                    <a href="#performance" class="hover:text-amber-600 transition-colors">Text Performance</a>
+                    <a href="#vision" class="hover:text-violet-600 transition-colors">Vision (VLMs)</a>
+                    <a href="#efficiency" class="hover:text-emerald-600 transition-colors">Efficiency</a>
+                    <a href="#calculator" class="hover:text-indigo-600 transition-colors">Hardware Calc</a>
+                    <a href="#catalog" class="hover:text-stone-900 transition-colors">Catalog</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- Hero Section -->
+        <section class="text-center max-w-4xl mx-auto space-y-6">
+            <div class="inline-flex gap-2 justify-center">
+                <span
+                    class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold uppercase tracking-wider">Private
+                    AI</span>
+                <span
+                    class="px-3 py-1 rounded-full bg-violet-100 text-violet-800 text-xs font-semibold uppercase tracking-wider">Now
+                    with Vision</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-900 leading-tight">
+                Tiny Titans & <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-500">Pocket
+                    Eyes</span>
+            </h1>
+            <p class="text-lg text-stone-600 leading-relaxed max-w-2xl mx-auto">
+                The sub-4B parameter landscape has evolved. From <strong>SmolLM's</strong> synthetic efficiency to
+                <strong>Moondream's</strong> visual understanding, run powerful multimodal AI locally on consumer
+                hardware.
+            </p>
+        </section>
+
+        <!-- SECTION 1: Text Comparative Analysis (Radar Chart) -->
+        <section id="performance" class="bg-white rounded-2xl p-6 md:p-10 shadow-sm border border-stone-100">
+            <div class="grid lg:grid-cols-3 gap-10">
+                <div class="lg:col-span-1 space-y-4">
+                    <h2 class="text-2xl font-bold text-stone-800">Text Capability Profile</h2>
+                    <p class="text-stone-600 text-sm leading-relaxed">
+                        Compare the leading text-generation models. Notice how the new <strong>SmolLM-1.7B</strong>
+                        punches above its weight class, offering high general knowledge despite its small footprint.
+                    </p>
+
+                    <div class="space-y-3 mt-6">
+                        <div class="font-semibold text-xs text-stone-400 uppercase tracking-wide">Select Models</div>
+                        <label
+                            class="flex items-center gap-3 cursor-pointer p-2 hover:bg-stone-50 rounded-lg transition">
+                            <input type="checkbox"
+                                class="model-toggle w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
+                                value="phi" checked>
+                            <span class="text-sm font-medium">Phi-3.5 Mini (3.8B)</span>
+                            <span class="ml-auto w-3 h-3 rounded-full bg-indigo-500"></span>
+                        </label>
+                        <label
+                            class="flex items-center gap-3 cursor-pointer p-2 hover:bg-stone-50 rounded-lg transition">
+                            <input type="checkbox"
+                                class="model-toggle w-5 h-5 text-sky-500 rounded focus:ring-sky-500 border-gray-300"
+                                value="smollm" checked>
+                            <span class="text-sm font-medium">SmolLM 1.7B</span>
+                            <span class="ml-auto w-3 h-3 rounded-full bg-sky-500"></span>
+                        </label>
+                        <label
+                            class="flex items-center gap-3 cursor-pointer p-2 hover:bg-stone-50 rounded-lg transition">
+                            <input type="checkbox"
+                                class="model-toggle w-5 h-5 text-emerald-600 rounded focus:ring-emerald-500 border-gray-300"
+                                value="gemma">
+                            <span class="text-sm font-medium">Gemma 2 (2B)</span>
+                            <span class="ml-auto w-3 h-3 rounded-full bg-emerald-500"></span>
+                        </label>
+                        <label
+                            class="flex items-center gap-3 cursor-pointer p-2 hover:bg-stone-50 rounded-lg transition">
+                            <input type="checkbox"
+                                class="model-toggle w-5 h-5 text-rose-600 rounded focus:ring-rose-500 border-gray-300"
+                                value="qwen">
+                            <span class="text-sm font-medium">Qwen 2.5 (3B)</span>
+                            <span class="ml-auto w-3 h-3 rounded-full bg-rose-500"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 flex items-center justify-center bg-stone-50 rounded-xl p-4">
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: NEW Vision-Language Session -->
+        <section id="vision" class="space-y-8">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-stone-200 pb-4">
+                <div class="max-w-2xl">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-2xl">👁️</span>
+                        <h2 class="text-2xl font-bold text-stone-800">Vision at the Edge (Small VLMs)</h2>
+                    </div>
+                    <p class="text-stone-600 text-sm">
+                        Until recently, image-to-text required large models (10B+). New architecture (<strong>Moondream,
+                            Qwen-VL, LLaVA-Phi</strong>) now allows image description and OCR on mobile devices under
+                        4GB RAM.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Vision Chart -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 vision-gradient">
+                    <h3 class="font-bold text-stone-800 mb-4 text-center">Visual Reasoning vs Model Size</h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="visionChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-stone-500 mt-4">
+                        *Score aggregate of MMMU and VQAv2 benchmarks (Normalized). Lower size is better for
+                        privacy/hosting.
+                    </p>
+                </div>
+
+                <!-- Vision Capabilities Matrix -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 flex flex-col justify-center">
+                    <h3 class="font-bold text-stone-800 mb-4">Capability Breakdown</h3>
+                    <div class="space-y-4">
+                        <div class="group">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-medium text-stone-700">Moondream2 (1.6B)</span>
+                                <span class="text-xs px-2 py-0.5 rounded bg-violet-100 text-violet-700">Best for
+                                    Captioning</span>
+                            </div>
+                            <div class="w-full bg-stone-100 rounded-full h-2">
+                                <div class="bg-violet-500 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">Excellent natural language descriptions of images.
+                                Runs on phones.</p>
+                        </div>
+
+                        <div class="group">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-medium text-stone-700">Qwen2-VL (2B)</span>
+                                <span class="text-xs px-2 py-0.5 rounded bg-rose-100 text-rose-700">Best for OCR</span>
+                            </div>
+                            <div class="w-full bg-stone-100 rounded-full h-2">
+                                <div class="bg-rose-500 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">Superior at reading text in images and document
+                                understanding.</p>
+                        </div>
+
+                        <div class="group">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-medium text-stone-700">LLaVA-Phi-3 (3.8B)</span>
+                                <span class="text-xs px-2 py-0.5 rounded bg-indigo-100 text-indigo-700">Best
+                                    Reasoning</span>
+                            </div>
+                            <div class="w-full bg-stone-100 rounded-full h-2">
+                                <div class="bg-indigo-500 h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">Leverages Phi-3's logic for complex visual QA.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Efficiency Frontier (Scatter Plot) -->
+        <section id="efficiency" class="space-y-6">
+            <div class="max-w-2xl">
+                <h2 class="text-2xl font-bold text-stone-800">The Efficiency Frontier</h2>
+                <p class="text-stone-600 mt-2">
+                    Visualizing the trade-off between Size (Parameters) and Performance.
+                    <strong>SmolLM</strong> sets a new standard for the "Nano" category (< 2B). </p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 md:p-8 shadow-sm border border-stone-100">
+                <div class="chart-container" style="max-height: 450px; height: 400px;">
+                    <canvas id="scatterChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Private Hosting Calculator -->
+        <section id="calculator" class="bg-stone-900 text-stone-50 rounded-3xl overflow-hidden shadow-xl">
+            <div class="grid md:grid-cols-2">
+                <div class="p-8 md:p-12 space-y-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Can I Run It?</h2>
+                        <p class="text-stone-400 text-sm">
+                            Calculate VRAM requirements for Text and Vision models.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Input: Model Size -->
+                        <div>
+                            <label class="flex justify-between text-sm font-medium text-stone-300 mb-2">
+                                <span>Model Size (Billions of Params)</span>
+                                <span id="paramValue" class="text-amber-400 font-mono">1.7 B</span>
+                            </label>
+                            <!-- Updated min to 0.1 for SmolLM -->
+                            <input type="range" id="paramSlider" min="0.1" max="4.0" step="0.1" value="1.7"
+                                class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                            <div class="flex justify-between text-xs text-stone-500 mt-1">
+                                <span>0.1B (Nano)</span>
+                                <span>4.0B (Max SLM)</span>
+                            </div>
+                        </div>
+
+                        <!-- Input: Quantization -->
+                        <div>
+                            <label class="text-sm font-medium text-stone-300 mb-2 block">Quantization Level</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button
+                                    class="quant-btn active ring-2 ring-amber-500 bg-stone-800 hover:bg-stone-700 py-2 rounded-lg text-sm transition"
+                                    data-bits="4">
+                                    Q4_K_M
+                                    <span class="block text-[10px] text-stone-500">Standard</span>
+                                </button>
+                                <button
+                                    class="quant-btn bg-stone-800 hover:bg-stone-700 py-2 rounded-lg text-sm transition"
+                                    data-bits="8">
+                                    Q8_0
+                                    <span class="block text-[10px] text-stone-500">High Precision</span>
+                                </button>
+                                <button
+                                    class="quant-btn bg-stone-800 hover:bg-stone-700 py-2 rounded-lg text-sm transition"
+                                    data-bits="16">
+                                    FP16
+                                    <span class="block text-[10px] text-stone-500">Uncompressed</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Display -->
+                <div class="bg-stone-800/50 p-8 md:p-12 flex flex-col justify-center items-center text-center relative">
+                    <div class="absolute top-6 right-6 text-stone-500 text-6xl opacity-20">💾</div>
+
+                    <div class="mb-2 text-stone-400 text-sm uppercase tracking-widest font-semibold">Estimated VRAM
+                    </div>
+                    <div class="text-6xl font-bold text-white mb-2 font-mono"><span id="vramResult">1.2</span> <span
+                            class="text-2xl text-stone-400">GB</span></div>
+
+                    <div id="hardwareRec"
+                        class="mt-6 px-4 py-2 bg-emerald-500/20 text-emerald-300 rounded-full text-sm font-medium border border-emerald-500/30">
+                        Compatible with: Raspberry Pi 4 / High-End Phone
+                    </div>
+
+                    <p class="mt-6 text-xs text-stone-500 max-w-xs">
+                        *Includes 20-30% overhead for context window and vision adapters (if applicable).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Model Catalog -->
+        <section id="catalog">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                <div class="max-w-xl">
+                    <h2 class="text-2xl font-bold text-stone-800">Model Catalog</h2>
+                    <p class="text-stone-600 mt-2 text-sm">
+                        Curated list of high-performance SLMs and VLMs eligible for private hosting.
+                    </p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-2" id="catalogFilters">
+                    <button
+                        class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-stone-800 text-white shadow-md transition"
+                        data-filter="all">All</button>
+                    <button
+                        class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-stone-50 transition"
+                        data-filter="vision">Vision (VLM)</button>
+                    <button
+                        class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-stone-50 transition"
+                        data-filter="nano">Nano (<2B)< /button>
+                            <button
+                                class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:bg-stone-50 transition"
+                                data-filter="coding">Coding</button>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="modelGrid">
+                <!-- Cards will be injected by JS -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-stone-200 pt-8 pb-12 text-center text-stone-400 text-sm">
+            <p>&copy; 2025 SLM & VLM Research Report. Data simulated based on latest open-source benchmarks.</p>
+            <p class="mt-2">Built for Analysis & Exploration.</p>
+        </footer>
+
+    </main>
+
+    <!-- Visualization & Content Choices: 
+         1. Radar Chart: Maintained for Text models, added SmolLM to show its surprising breadth for size.
+         2. Vision Bar Chart (NEW): Compare Vision Capability (Score) side-by-side with Size. This is critical to show that Moondream (1.6B) rivals larger models in efficiency.
+         3. Capability Matrix (HTML): Used for Vision section to qualitatively distinguish "Captioning" vs "OCR" strengths which pure numbers don't convey.
+         4. Scatter Plot: Updated to show the new "Nano" cluster (SmolLM, Moondream) at the bottom left (Low Param, Decent Score).
+         
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All visuals are CSS, Unicode, or Canvas.
+    -->
+
+    <script>
+        // --- DATA STORE ---
+        const models = [
+            // --- NEW: SmolLM ---
+            {
+                id: 'smollm',
+                name: 'SmolLM 1.7B',
+                maker: 'Hugging Face',
+                params: 1.7,
+                context: '2k', // Focus on lightweight
+                desc: 'Trained on Cosmopedia v2 (synthetic). Incredible performance for its tiny size. Perfect for mobile.',
+                tags: ['nano', 'general'],
+                scores: { reasoning: 68, coding: 60, math: 55, knowledge: 72, speed: 98 },
+                license: 'Apache 2.0',
+                bench_avg: 58.5,
+                type: 'text'
+            },
+            // --- Existing Text Models ---
+            {
+                id: 'phi',
+                name: 'Phi-3.5 Mini',
+                maker: 'Microsoft',
+                params: 3.8,
+                context: '128k',
+                desc: 'State-of-the-art reasoning capabilities in a small package. Rivals GPT-3.5.',
+                tags: ['general', 'reasoning'],
+                scores: { reasoning: 95, coding: 85, math: 90, knowledge: 88, speed: 70 },
+                license: 'MIT',
+                bench_avg: 74.2,
+                type: 'text'
+            },
+            {
+                id: 'llama',
+                name: 'Llama 3.2 3B',
+                maker: 'Meta',
+                params: 3.2,
+                context: '128k',
+                desc: 'Highly optimized for instruction following and summarization on edge devices.',
+                tags: ['general', 'mobile'],
+                scores: { reasoning: 82, coding: 75, math: 65, knowledge: 80, speed: 85 },
+                license: 'Llama Community',
+                bench_avg: 68.5,
+                type: 'text'
+            },
+            {
+                id: 'llama1b',
+                name: 'Llama 3.2 1B',
+                maker: 'Meta',
+                params: 1.2,
+                context: '128k',
+                desc: 'Ultra-lightweight. Runs on almost any modern phone. Great for classification.',
+                tags: ['mobile', 'speed', 'nano'],
+                scores: { reasoning: 60, coding: 50, math: 45, knowledge: 65, speed: 100 },
+                license: 'Llama Community',
+                bench_avg: 52.0,
+                type: 'text'
+            },
+            {
+                id: 'gemma',
+                name: 'Gemma 2 2B',
+                maker: 'Google',
+                params: 2.6,
+                context: '8k',
+                desc: 'Derived from Gemini. Exceptional weight-to-performance ratio.',
+                tags: ['general', 'mobile'],
+                scores: { reasoning: 78, coding: 70, math: 60, knowledge: 75, speed: 90 },
+                license: 'Gemma Terms',
+                bench_avg: 64.0,
+                type: 'text'
+            },
+            {
+                id: 'qwen',
+                name: 'Qwen 2.5 3B',
+                maker: 'Alibaba Cloud',
+                params: 3.0,
+                context: '32k',
+                desc: 'A coding powerhouse. Outperforms many larger models in math and logic.',
+                tags: ['coding', 'math'],
+                scores: { reasoning: 92, coding: 98, math: 95, knowledge: 85, speed: 75 },
+                license: 'Apache 2.0',
+                bench_avg: 76.8,
+                type: 'text'
+            },
+
+            // --- NEW: Vision Language Models (VLMs) ---
+            {
+                id: 'moondream',
+                name: 'Moondream2',
+                maker: 'Vikhyat',
+                params: 1.6,
+                context: 'N/A',
+                desc: 'A tiny vision model that runs anywhere. Excellent at captioning and question answering about images.',
+                tags: ['vision', 'nano'],
+                scores: { reasoning: 65, coding: 30, math: 40, knowledge: 60, speed: 95 },
+                license: 'Apache 2.0',
+                bench_avg: 60.0, // Vision bench proxy
+                type: 'vision',
+                vision_score: 82 // Normalized VQA score for chart
+            },
+            {
+                id: 'qwenvl',
+                name: 'Qwen2-VL 2B',
+                maker: 'Alibaba Cloud',
+                params: 2.2,
+                context: '32k',
+                desc: 'State-of-the-art 2B VLM. Handles video and document OCR exceptionally well.',
+                tags: ['vision', 'ocr'],
+                scores: { reasoning: 80, coding: 75, math: 80, knowledge: 75, speed: 80 },
+                license: 'Apache 2.0',
+                bench_avg: 72.0,
+                type: 'vision',
+                vision_score: 94
+            },
+            {
+                id: 'llavaphi',
+                name: 'LLaVA-Phi-3',
+                maker: 'Community/Msft',
+                params: 3.8,
+                context: '4k',
+                desc: 'Combines Phi-3 reasoning with LLaVA vision adapter. High logic visual understanding.',
+                tags: ['vision', 'reasoning'],
+                scores: { reasoning: 88, coding: 70, math: 75, knowledge: 80, speed: 65 },
+                license: 'MIT',
+                bench_avg: 71.5,
+                type: 'vision',
+                vision_score: 89
+            }
+        ];
+
+        // --- CHART CONFIGURATION ---
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#78716c';
+
+        // 1. Radar Chart Logic (Text Models)
+        let radarChart;
+        function initRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            const initialModels = models.filter(m => ['phi', 'smollm', 'gemma'].includes(m.id));
+
+            const datasets = initialModels.map(m => {
+                let color;
+                if (m.id === 'phi') color = '#6366f1'; // Indigo
+                else if (m.id === 'smollm') color = '#0ea5e9'; // Sky Blue
+                else if (m.id === 'gemma') color = '#059669'; // Emerald
+                else color = '#e11d48';
+
+                return {
+                    label: m.name,
+                    data: [m.scores.reasoning, m.scores.coding, m.scores.math, m.scores.knowledge, m.scores.speed],
+                    fill: true,
+                    backgroundColor: color + '20',
+                    borderColor: color,
+                    pointBackgroundColor: color,
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: color
+                };
+            });
+
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Reasoning', 'Coding', 'Math', 'Gen. Knowledge', 'Speed'],
+                    datasets: datasets
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
+                            pointLabels: { font: { size: 12, weight: '600' }, color: '#44403c' },
+                            ticks: { display: false, max: 100 }
+                        }
+                    },
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        function updateRadarChart() {
+            const checkboxes = document.querySelectorAll('.model-toggle:checked');
+            const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+
+            const newDatasets = models
+                .filter(m => selectedIds.includes(m.id))
+                .map(m => {
+                    let color;
+                    if (m.id === 'phi') color = '#6366f1';
+                    else if (m.id === 'smollm') color = '#0ea5e9'; // Sky
+                    else if (m.id === 'llama') color = '#d97706';
+                    else if (m.id === 'gemma') color = '#059669';
+                    else color = '#e11d48';
+
+                    return {
+                        label: m.name,
+                        data: [m.scores.reasoning, m.scores.coding, m.scores.math, m.scores.knowledge, m.scores.speed],
+                        fill: true,
+                        backgroundColor: color + '20',
+                        borderColor: color,
+                        pointBackgroundColor: color,
+                        pointBorderColor: '#fff',
+                        tension: 0.1
+                    };
+                });
+
+            radarChart.data.datasets = newDatasets;
+            radarChart.update();
+        }
+
+        // 2. Vision Chart Logic (NEW Bar Chart)
+        function initVisionChart() {
+            const ctx = document.getElementById('visionChart').getContext('2d');
+            // Filter only vision models
+            const vlModels = models.filter(m => m.type === 'vision');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: vlModels.map(m => m.name),
+                    datasets: [
+                        {
+                            label: 'Visual Capability Score (0-100)',
+                            data: vlModels.map(m => m.vision_score),
+                            backgroundColor: ['#8b5cf6', '#f43f5e', '#6366f1'], // Violet, Rose, Indigo
+                            borderRadius: 6,
+                            order: 1
+                        },
+                        {
+                            label: 'Size (Billions)',
+                            data: vlModels.map(m => m.params * 20), // Scaled for visual comparison
+                            type: 'line',
+                            borderColor: '#a8a29e',
+                            borderDash: [5, 5],
+                            pointBackgroundColor: '#fff',
+                            order: 0,
+                            tooltip: {
+                                callbacks: { label: (c) => `Size: ${c.raw / 20}B Params` }
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: '#f5f5f4' }
+                        },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: true, position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // 3. Scatter Chart Logic (Updated with new models)
+        function initScatterChart() {
+            const ctx = document.getElementById('scatterChart').getContext('2d');
+
+            const dataPoints = models.map(m => ({
+                x: m.params,
+                y: m.bench_avg,
+                r: m.type === 'vision' ? 8 : 6, // Larger dots for Vision
+                model: m // Store ref
+            }));
+
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Model Efficiency',
+                        data: dataPoints,
+                        backgroundColor: (ctx) => {
+                            const m = ctx.raw?.model;
+                            if (!m) return '#d6d3d1';
+                            if (m.type === 'vision') return '#8b5cf6'; // Violet for Vision
+                            if (m.tags.includes('nano')) return '#0ea5e9'; // Sky for Nano
+                            if (m.bench_avg > 70) return '#6366f1';
+                            return '#d97706';
+                        }
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Parameters (Billions)' },
+                            grid: { display: false }
+                        },
+                        y: {
+                            title: { display: true, text: 'Avg Benchmark Score' },
+                            grid: { color: '#f5f5f4' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const m = context.raw.model;
+                                    return `${m.name} (${m.type}): ${m.bench_avg} score`;
+                                }
+                            }
+                        },
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // --- CALCULATOR LOGIC (Updated for SmolLM) ---
+        const slider = document.getElementById('paramSlider');
+        const paramValue = document.getElementById('paramValue');
+        const vramDisplay = document.getElementById('vramResult');
+        const hardwareRec = document.getElementById('hardwareRec');
+        const quantBtns = document.querySelectorAll('.quant-btn');
+        let currentBits = 4;
+
+        function calculateVRAM() {
+            const params = parseFloat(slider.value);
+            paramValue.textContent = params + " B";
+
+            // Formula: Params * Bits / 8 + Overhead 
+            const rawSizeGB = (params * currentBits) / 8;
+            const overhead = rawSizeGB * 0.3; // Increased overhead slightly for VLMs
+            const total = (rawSizeGB + overhead).toFixed(1);
+
+            vramDisplay.textContent = total;
+
+            let recText = "";
+            let recClass = "";
+
+            if (total < 2) {
+                recText = "Compatible with: Raspberry Pi 4 / Mid-Range Phone";
+                recClass = "bg-sky-500/20 text-sky-300 border-sky-500/30"; // Sky Blue
+            } else if (total < 4) {
+                recText = "Compatible with: Raspberry Pi 5 / Flagship Phone";
+                recClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"; // Green
+            } else if (total < 8) {
+                recText = "Compatible with: Standard Laptop / Mac M1";
+                recClass = "bg-amber-500/20 text-amber-400 border-amber-500/30"; // Amber
+            } else {
+                recText = "Compatible with: Gaming GPU / Mac Pro";
+                recClass = "bg-indigo-500/20 text-indigo-300 border-indigo-500/30"; // Indigo
+            }
+
+            hardwareRec.textContent = recText;
+            hardwareRec.className = `mt-6 px-4 py-2 rounded-full text-sm font-medium border ${recClass}`;
+        }
+
+        // --- CATALOG LOGIC ---
+        const grid = document.getElementById('modelGrid');
+
+        function renderCatalog(filter = 'all') {
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all'
+                ? models
+                : models.filter(m => m.tags.includes(filter) || (filter === 'vision' && m.type === 'vision'));
+
+            filtered.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-xl border border-stone-200 card-hover flex flex-col justify-between h-full";
+
+                let icon = '🧠';
+                if (m.type === 'vision') icon = '👁️';
+                else if (m.tags.includes('coding')) icon = '💻';
+                else if (m.tags.includes('mobile')) icon = '📱';
+
+                // Color bar for type
+                const barColor = m.type === 'vision' ? 'bg-violet-500' : (m.id === 'smollm' ? 'bg-sky-500' : 'bg-stone-200');
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full ${barColor}"></div>
+                        <div class="pl-4">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="font-bold text-lg text-stone-800">${m.name}</h3>
+                                    <p class="text-xs text-stone-500 uppercase font-semibold tracking-wide">${m.maker}</p>
+                                </div>
+                                <span class="text-2xl">${icon}</span>
+                            </div>
+                            <p class="text-stone-600 text-sm mb-4 leading-relaxed">${m.desc}</p>
+                            
+                            <div class="grid grid-cols-2 gap-2 text-xs text-stone-500 mb-6 bg-stone-50 p-3 rounded-lg">
+                                <div><span class="font-semibold text-stone-700">Params:</span> ${m.params}B</div>
+                                <div><span class="font-semibold text-stone-700">Context:</span> ${m.context}</div>
+                                <div><span class="font-semibold text-stone-700">License:</span> ${m.license}</div>
+                                <div><span class="font-semibold text-stone-700">Score:</span> ${m.bench_avg}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pl-4 pt-4 border-t border-stone-100 flex gap-2 flex-wrap">
+                        ${m.tags.map(tag => `<span class="px-2 py-1 bg-stone-100 text-stone-600 rounded text-[10px] uppercase font-bold">${tag}</span>`).join('')}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initRadarChart();
+            initVisionChart();
+            initScatterChart();
+            calculateVRAM();
+            renderCatalog();
+
+            // Interactive Toggles
+            document.querySelectorAll('.model-toggle').forEach(cb => {
+                cb.addEventListener('change', updateRadarChart);
+            });
+
+            slider.addEventListener('input', calculateVRAM);
+
+            quantBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    quantBtns.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-amber-500');
+                        b.querySelector('span').classList.remove('text-stone-300');
+                    });
+                    const target = e.currentTarget;
+                    target.classList.add('ring-2', 'ring-amber-500');
+                    currentBits = parseInt(target.dataset.bits);
+                    calculateVRAM();
+                });
+            });
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('bg-stone-800', 'text-white', 'shadow-md');
+                        b.classList.add('bg-white', 'text-stone-600');
+                    });
+                    e.target.classList.remove('bg-white', 'text-stone-600');
+                    e.target.classList.add('bg-stone-800', 'text-white', 'shadow-md');
+                    renderCatalog(e.target.dataset.filter);
+                });
+            });
+        });
+
+    </script>
+</body>
+
+</html>
