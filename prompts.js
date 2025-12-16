@@ -14,6 +14,7 @@ const parametersContainer = document.getElementById('parameters-container');
 const promptPreview = document.getElementById('prompt-preview');
 const copyPromptBtn = document.getElementById('copy-prompt-btn');
 
+
 let promptsData = [];
 let currentPrompt = null;
 
@@ -94,6 +95,7 @@ function renderPrompts(prompts) {
                 <span class="px-3 py-1 text-xs font-semibold rounded-full ${categoryColor}">
                     ${prompt.Category}
                 </span>
+                ${prompt.Type === 'IMAGE' ? '<span class="px-2 py-1 text-xs font-bold bg-purple-100 text-purple-700 rounded border border-purple-200">IMAGE</span>' : ''}
             </div>
             <h3 class="text-xl font-bold text-gray-900 group-hover:text-sky-600 transition-colors mb-3 line-clamp-2">
                 ${prompt.Title}
@@ -190,6 +192,8 @@ function openEditor(prompt) {
     }
 
     updatePreview();
+
+
 
     // Show Modal
     modal.classList.remove('hidden');
