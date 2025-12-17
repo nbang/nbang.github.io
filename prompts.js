@@ -65,7 +65,11 @@ function populateCategories() {
 
 // Populate Users
 function populateUsers() {
-    const users = [...new Set(promptsData.map(p => p.User).filter(Boolean))].sort();
+    const users = [...new Set(promptsData.map(p => p.User).filter(Boolean))].sort((a, b) => {
+        if (a === 'Everyone') return 1;
+        if (b === 'Everyone') return -1;
+        return a.localeCompare(b);
+    });
     users.forEach(user => {
         const option = document.createElement('option');
         option.value = user;

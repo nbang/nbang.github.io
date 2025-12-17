@@ -992,6 +992,17 @@ const PROMPTS_DATA = [
         "Type": "TEXT"
     },
     {
+        "Id": "DEV-100",
+        "Title": "Adding Documentation #1",
+        "User": "Developer",
+        "Category": "Documentation",
+        "Prompt": "As a patient educator, your task is to explain the given code in a manner that a non-technical person can understand.\r\nThe code to be explained can be found below, surrounded by tags.\r\n\r\n<code>\r\n{{code}}\r\n</code>\r\n\r\nPlease follow these steps:\r\n\t1. Organize the explanation by sections with headers.\r\n\t2. Use Markdown formatting and nice formatting to make it easier to follow.\r\n\t3. Include references to the code as Markdown code blocks in each section.\r\n\t4. Clearly explain the purpose and functionality of the code in simple terms.\r\nLet’s work this out in a step by step way to be sure we have the right answer.",
+        "Parameters": [
+            "code"
+        ],
+        "Type": "TEXT"
+    },
+    {
         "Id": "ENG-000",
         "Title": "Document internal API behavior",
         "User": "Engineer",
@@ -1157,7 +1168,7 @@ const PROMPTS_DATA = [
         "Id": "ENG-016",
         "Title": "Analyze performance test results",
         "User": "Engineer",
-        "Category": "System",
+        "Category": "Analysis",
         "Prompt": "Analyze this set of performance test results. Context: It compares two versions of our backend service. Output: Side-by-side comparison charts + text summary of improvements or regressions.",
         "Parameters": [],
         "Type": "TEXT"
@@ -1188,7 +1199,7 @@ const PROMPTS_DATA = [
         "Id": "ENG-019",
         "Title": "Identify trends in product usage logs",
         "User": "Engineer",
-        "Category": "System",
+        "Category": "Analysis",
         "Prompt": "Analyze this CSV of product usage logs. Context: We want to identify usage trends over time and across user segments. Output: Summary stats + line or bar charts highlighting key trends.",
         "Parameters": [],
         "Type": "TEXT"
@@ -1300,17 +1311,6 @@ const PROMPTS_DATA = [
             "audience_type",
             "context",
             "paste_text"
-        ],
-        "Type": "TEXT"
-    },
-    {
-        "Id": "ALL-002",
-        "Title": "Adding Documentation #1",
-        "User": "Everyone",
-        "Category": "Documentation",
-        "Prompt": "As a patient educator, your task is to explain the given code in a manner that a non-technical person can understand.\r\nThe code to be explained can be found below, surrounded by tags.\r\n\r\n<code>\r\n{{code}}\r\n</code>\r\n\r\nPlease follow these steps:\r\n\t1. Organize the explanation by sections with headers.\r\n\t2. Use Markdown formatting and nice formatting to make it easier to follow.\r\n\t3. Include references to the code as Markdown code blocks in each section.\r\n\t4. Clearly explain the purpose and functionality of the code in simple terms.\r\nLet’s work this out in a step by step way to be sure we have the right answer.",
-        "Parameters": [
-            "code"
         ],
         "Type": "TEXT"
     },
@@ -1456,7 +1456,7 @@ const PROMPTS_DATA = [
         "Id": "ALL-015",
         "Title": "Summarize a long document",
         "User": "Everyone",
-        "Category": "Documentation",
+        "Category": "Summarization",
         "Prompt": "Summarize the following document into 5 key points and 3 recommended actions. The document is {{type}}. Keep the summary concise and professional. Text: {{paste_document}}.",
         "Parameters": [
             "type",
@@ -1468,7 +1468,7 @@ const PROMPTS_DATA = [
         "Id": "ALL-016",
         "Title": "Summarize long email",
         "User": "Everyone",
-        "Category": "Documentation",
+        "Category": "Summarization",
         "Prompt": "Summarize this email thread into a short recap. The thread includes several back-and-forth messages. Highlight key decisions, action items, and open questions. Email: {{paste_text}}.",
         "Parameters": [
             "paste_text"
@@ -1479,7 +1479,7 @@ const PROMPTS_DATA = [
         "Id": "ALL-017",
         "Title": "Summarize meeting notes",
         "User": "Everyone",
-        "Category": "Documentation",
+        "Category": "Summarization",
         "Prompt": "Summarize these meeting notes into a structured recap. The notes are rough and informal. Organize them into categories: key decisions, next steps, and responsibilities. Notes: {{paste_text}}.",
         "Parameters": [
             "paste_text"
@@ -1951,7 +1951,7 @@ const PROMPTS_DATA = [
         "Id": "ALL-067",
         "Title": "Detailed Analysis of YouTube Channels, Databases, and Profiles",
         "User": "Everyone",
-        "Category": "General",
+        "Category": "Analysis",
         "Prompt": "Act as a data analysis expert. You are skilled at examining YouTube channels, website databases, and user profiles to gather insights based on specific parameters provided by the user.\n\nYour task is to:\n- Analyze the YouTube channel's metrics, content type, and audience engagement.\n- Evaluate the structure and data of website databases, identifying trends or anomalies.\n- Review user profiles, extracting relevant information based on the specified criteria.\n\nYou will:\n1. Accept parameters such as {{platform}}, {{metrics}}, {{filters}}, etc.\n2. Perform a detailed analysis and provide insights with recommendations.\n3. Ensure the data is clearly structured and easy to understand.\n\nRules:\n- Always include a summary of key findings.\n- Use visualizations where applicable (e.g., tables or charts) to present data.\n- Ensure all analysis is based only on the provided parameters and avoid assumptions.\n\nOutput Format:\n1. Summary:\n   - Key insights\n   - Highlights of analysis\n2. Detailed Analysis:\n   - Data points\n   - Observations\n3. Recommendations:\n   - Suggestions for improvement or actions to take based on findings.",
         "Parameters": [
             "filters",
@@ -3516,7 +3516,7 @@ const PROMPTS_DATA = [
         "Id": "ALL-237",
         "Title": "video-analysis-expert",
         "User": "Everyone",
-        "Category": "General",
+        "Category": "Analysis",
         "Prompt": "# System Prompt: Elite Cinematic & Forensic Analysis AI\n\n**Role:** You are an elite visual analysis AI capable of acting simultaneously as a **Director**, **Master Cinematographer**, **Production Designer**, **Editor**, **Sound Designer**, and **Forensic Video Analyst**.\n\n**Task:** Analyze the provided visual input (image or video) with extreme technical precision. Your goal is not just to summarize, but to **CATALOG** every perceptible detail and strictly analyze cinematic qualities.\n\n### 🚨 CRITICAL INSTRUCTION FOR VIDEO INPUTS (SEGMENTATION):\nIf the input is a video containing **multiple distinct shots**, camera angles, or cuts, you must **SEGMENT THE VIDEO**:\n1.  **Detect every single cut/scene change.**\n2.  Generate a separate, highly detailed analysis profile for **EACH** distinct scene/shot detected.\n3.  Do not merge distinct scenes into one general summary. Treat them as separate universes.\n4.  Maintain the chronological order (Scene 1, Scene 2, etc.).\n\n---\n\n### Analysis Perspectives (Required for Every Scene)\n\nFor each detected scene/shot, analyze the following deep-dive sections:\n\n#### 1. 🕵️ Forensic & Technical Analyst\n*   **OCR & Text Detection:** Transcribe ANY visible text (license plates, street signs, phone screens, logos). If blurry, provide best guess.\n*   **Object Inventory:** List distinct key objects present (e.g., \"1 vintage Rolex watch, 3 empty coffee cups\").\n*   **Subject Biology/Physics:** Estimate age/gender of characters, specific car models (Make/Model/Year), or biological species with high precision.\n*   **Technical Metadata Hypothesis:**\n    *   *Camera Brand:* (e.g., Arri Alexa, Sony Venice, iPhone 15 Pro, Film Stock 35mm)\n    *   *Lens:* (e.g., Anamorphic, Spherical, Macro)\n    *   *Settings:* (Est. ISO, Shutter Angle, Aperture)\n\n#### 2. 🎬 Director’s Perspective (Narrative & Emotion)\n*   **Dramatic Structure:** The micro-arc within this specific shot; the dramatic beat.\n*   **Story Placement:** Possible placement within a larger narrative (Inciting Incident, Climax, etc.).\n*   **Micro-Beats & Emotion:** Breakdown of action into seconds (e.g., \"00:01 turns head\"). Analysis of internal feelings and body language.\n*   **Subtext & Semiotics:** What does the scene imply *without* saying it?\n*   **Narrative Composition:** How blocking and arrangement contribute to storytelling.\n\n#### 3. 🎥 Cinematographer’s Perspective (Visuals)\n*   **Framing & Lensing:** Focal length (24mm, 50mm, 85mm), camera angle, height. Depth of field (T-stop), bokeh characteristics.\n*   **Lighting Design:** Key, Fill, Backlight positions. Light quality (hard/soft), color temperature (Kelvin), contrast ratios (e.g., 8:1).\n*   **Color Palette:** Dominant hues (HEX codes), saturation levels, specific aesthetics (Teal & Orange, Noir).\n*   **Optical Characteristics:** Lens flares, chromatic aberration, distortion, grain structure.\n*   **Camera Movement:** Precise movement (Static, Pan, Tilt, Dolly, Steadicam) and *quality* of motion (jittery vs hydraulic).\n\n#### 4. 🎨 Production Designer’s Perspective (World)\n*   **Set Design & Architecture:** Physical space description, architectural style (Brutalist, Victorian), spatial confinement.\n*   **Props & Decor:** Analysis of objects (clutter, hero props, technology level).\n*   **Costume & Styling:** Fabric textures (leather, silk), wear-and-tear, character status indicators.\n*   **Material Physics:** Specific textures (rust, chrome, wet asphalt, dust particles).\n*   **Atmospherics:** Fog, smoke, rain, heat haze.\n\n#### 5. ✂️ Editor’s Perspective (Pacing)\n*   **Rhythm & Tempo:** Pacing (Largo, Allegro, Staccato).\n*   **Transition Logic:** Connection to potential previous/next shots (Match cut, J-Cut).\n*   **Visual Anchor Points:** Saccadic eye movement prediction (where the eye lands 1st, 2nd).\n*   **Cutting Strategy:** Why this shot exists here; potential cutting points.\n\n#### 6. 🔊 Sound Designer’s Perspective (Audio)\n*   **Ambient Sounds:** Room tone, atmospheric layers (wind, traffic).\n*   **Foley Requirements:** Specific material interactions (footsteps on gravel, fabric rustle).\n*   **Musical Atmosphere:** Suggested genre, tempo, key, instrumentation.\n*   **Spatial Audio:** 3D sound map, reverb tail, space size.\n\n---\n\n### Output Format: Strict JSON\n\nProvide the output **strictly** as a JSON object with the following structure. Do not include markdown formatting inside the JSON string itself.\n\n```json\n{\n  \"project_meta\": {\n    \"title_hypothesis\": \"A generated title for the sequence\",\n    \"total_scenes_detected\": 0,\n    \"input_resolution_est\": \"1080p/4K/Vertical\",\n    \"holistic_meta_analysis\": \"An overarching interpretation combining all scenes and perspectives into a unified cinematic reading.\"\n  },\n  \"timeline_analysis\": [\n    {\n      \"scene_index\": 1,\n      \"time_stamp_approx\": \"00:00 - 00:XX\",\n      \"visual_summary\": \"Highly specific visual description including action and setting.\",\n      \"perspectives\": {\n        \"forensic_analyst\": {\n            \"ocr_text_detected\": [\"List\", \"Any\", \"Text\", \"Here\"],\n            \"detected_objects\": [\"Object 1\", \"Object 2\"],\n            \"subject_identification\": \"Specific car model or actor description\",\n            \"technical_metadata_hypothesis\": \"Arri Alexa, 35mm Grain, Anamorphic Lens, ISO 800\"\n        },\n        \"director\": {\n          \"dramatic_structure\": \"...\",\n          \"story_placement\": \"...\",\n          \"micro_beats_and_emotion\": \"...\",\n          \"subtext_semiotics\": \"...\",\n          \"main_message\": \"...\"\n        },\n        \"cinematographer\": {\n          \"framing_and_lensing\": \"...\",\n          \"lighting_design\": \"...\",\n          \"color_palette_hex\": [\"#RRGGBB\", \"#RRGGBB\"],\n          \"optical_characteristics\": \"...\",\n          \"camera_movement\": \"...\"\n        },\n        \"production_designer\": {\n          \"set_design_architecture\": \"...\",\n          \"props_and_costume\": \"...\",\n          \"material_physics\": \"...\",\n          \"atmospherics\": \"...\"\n        },\n        \"editor\": {\n          \"rhythm_and_tempo\": \"...\",\n          \"visual_anchor_points\": \"...\",\n          \"cutting_strategy\": \"...\"\n        },\n        \"sound_designer\": {\n          \"ambient_sounds\": \"...\",\n          \"foley_requirements\": \"...\",\n          \"musical_atmosphere\": \"...\",\n          \"spatial_audio_map\": \"...\"\n        },\n        \"ai_generation_data\": {\n          \"midjourney_v6_prompt\": \"/imagine prompt: [Subject] + [Action] + [Environment] + [Lighting] + [Camera Gear] + [Style/Aesthetic] --ar [Aspect Ratio] --stylize 250 --v 6.0\",\n          \"negative_prompt\": \"text, watermark, blur, deformed, low res, bad hands, [SCENE SPECIFIC NEGATIVES]\"\n        }\n      }\n    },\n    {\n      \"scene_index\": 2,\n      \"time_stamp_approx\": \"00:XX - 00:YY\",\n      \"visual_summary\": \"Next shot description...\",\n      \"perspectives\": {\n         \"forensic_analyst\": { \"...\" },\n         \"director\": { \"...\" },\n         \"...\" : \"...\"\n      }\n    }\n  ]\n}\n```",
         "Parameters": [],
         "Type": "TEXT"
@@ -4053,7 +4053,7 @@ const PROMPTS_DATA = [
         "Id": "EXE-006",
         "Title": "Write investor update summary",
         "User": "Executive",
-        "Category": "Finance",
+        "Category": "Communication",
         "Prompt": "Write a summary for our next investor update. Use highlights from {{insert_performance_report_or_fundraising_update}}. Format the output as a concise executive email suitable for external stakeholders.",
         "Parameters": [
             "insert_performance_report_or_fundraising_update"
@@ -4410,7 +4410,7 @@ const PROMPTS_DATA = [
         "Id": "HRM-009",
         "Title": "Draft an internal policy summary",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Summarization",
         "Prompt": "Summarize the key points of this {{internal_policy_or_handbook_section}} so HR business partners can understand and communicate it effectively. This policy relates to {{brief_description_or_context}}. Present the summary in clear, professional language under 200 words.",
         "Parameters": [
             "internal_policy_or_handbook_section",
@@ -4484,7 +4484,7 @@ const PROMPTS_DATA = [
         "Id": "HRM-016",
         "Title": "Research global HR compliance updates",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Research",
         "Prompt": "Research the latest 2024–2025 HR compliance changes in the EU, US, and APAC (focus on remote work laws, employee classification, and data privacy). Provide links to official sources and summarize in plain language. Present findings in a 3-region comparison table with a 1-paragraph summary per region.",
         "Parameters": [],
         "Type": "TEXT"
@@ -4493,7 +4493,7 @@ const PROMPTS_DATA = [
         "Id": "HRM-017",
         "Title": "Research tools for recruiting",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Research",
         "Prompt": "Research 4 top-rated candidate screening or sourcing tools used by mid-market companies. Summarize features, pricing, compliance status (EEOC), and known limitations. Provide links to primary sources and present findings in a comparison table.",
         "Parameters": [],
         "Type": "TEXT"
@@ -4502,10 +4502,10 @@ const PROMPTS_DATA = [
         "Id": "HRM-018",
         "Title": "Visualize the employee lifecycle",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Visualization",
         "Prompt": "Create a simple visual diagram of the employee lifecycle: attract, onboard, develop, retain, offboard. Use icons or abstract figures to represent each phase. Style: corporate presentation-ready.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "HRM-019",
@@ -4558,7 +4558,7 @@ const PROMPTS_DATA = [
         "Category": "Visualization",
         "Prompt": "Create a poster-style image for an internal DEI campaign. Style: bold, minimal. Include abstract representations of diversity (hands, overlapping shapes, color blocks). Mood: optimistic and forward-looking. Include placeholder space for a slogan or quote.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "ITD-000",
@@ -4620,7 +4620,7 @@ const PROMPTS_DATA = [
         "Id": "ITD-006",
         "Title": "Draft an incident postmortem",
         "User": "IT",
-        "Category": "Documentation",
+        "Category": "Summarization",
         "Prompt": "Summarize the recent {{insert_system_or_service}} outage. Include the root cause, timeline of events, user impact, and actions taken. Use information from the incident ticket or war room notes, and format the summary as a shareable internal postmortem report.",
         "Parameters": [
             "insert_system_or_service"
@@ -4765,7 +4765,7 @@ const PROMPTS_DATA = [
         "Id": "ITD-021",
         "Title": "Summarize system health trends",
         "User": "IT",
-        "Category": "Evaluation",
+        "Category": "Analysis",
         "Prompt": "Analyze the system health logs from the last 30 days. Focus on spikes in CPU/memory, service outages, and recurring error codes. Provide a concise summary of the key issues and add brief commentary on possible causes or needed follow-ups.",
         "Parameters": [],
         "Type": "TEXT"
@@ -4886,7 +4886,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-007",
         "Title": "Analyze workload distribution",
         "User": "Manager",
-        "Category": "Evaluation",
+        "Category": "Analysis",
         "Prompt": "I have a CSV that shows task assignments and completion times per team member for the last 4 weeks. Analyze workload distribution across the team—identify who may be overburdened or underutilized, and summarize in a short paragraph with a chart.",
         "Parameters": [],
         "Type": "TEXT"
@@ -4907,7 +4907,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-009",
         "Title": "Diagnose team health issues",
         "User": "Manager",
-        "Category": "Evaluation",
+        "Category": "Analysis",
         "Prompt": "I’m noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: {{insert_description}}, what are the likely causes and what should I do next? Provide a 3-part action plan.",
         "Parameters": [
             "insert_description"
@@ -4918,7 +4918,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-010",
         "Title": "Identify burnout risk from hours",
         "User": "Manager",
-        "Category": "Evaluation",
+        "Category": "Analysis",
         "Prompt": "Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of >45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours.",
         "Parameters": [],
         "Type": "TEXT"
@@ -4927,7 +4927,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-011",
         "Title": "Understand burnout risks and mitigation",
         "User": "Manager",
-        "Category": "Evaluation",
+        "Category": "Analysis",
         "Prompt": "I’m seeing signs of burnout on my team. Research recent studies or expert guidance on recognizing burnout in knowledge workers and preventing escalation. Summarize key risk factors and recommend a 3-part action plan with citations.",
         "Parameters": [],
         "Type": "TEXT"
@@ -4936,7 +4936,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-012",
         "Title": "Analyze cost reduction opportunities",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Analysis",
         "Prompt": "Identify cost reduction opportunities from our recent budget report. Use the breakdown from {{insert_cost_center_or_department}} to evaluate. Provide a table with opportunities, projected savings, and any potential risks.",
         "Parameters": [
             "insert_cost_center_or_department"
@@ -4947,7 +4947,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-013",
         "Title": "Benchmark expense ratios vs. peers",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Evaluation",
         "Prompt": "I'm a finance lead at {{insert_company_or_industry}}. Research current SG&A and R&D expense ratios for 5 comparable companies in the {{insert_sector}}. Provide a table with metrics, source links, and a short analysis of how we compare.",
         "Parameters": [
             "insert_company_or_industry",
@@ -4959,7 +4959,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-014",
         "Title": "Benchmark financial performance",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Evaluation",
         "Prompt": "Benchmark our financial performance against companies in the {{insert_industry}} sector. Use public data to compare gross margin, net profit, and CAC. Present results in a table with source links.",
         "Parameters": [
             "insert_industry"
@@ -4970,7 +4970,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-015",
         "Title": "Competitive fundraising analysis",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Analysis",
         "Prompt": "I'm a CFO preparing for our next fundraising round. Research recent funding rounds (past 12 months) in {{insert_industry}}. Summarize deal sizes, valuations, lead investors, and positioning. Format as a briefing memo with source citations and clear bullet-point insights.",
         "Parameters": [
             "insert_industry"
@@ -4981,7 +4981,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-016",
         "Title": "Conduct ROI analysis for tooling",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Analysis",
         "Prompt": "Conduct an ROI analysis for a new {{insert_software_or_tool}} we’re considering. Context: {{insert_usage_or_pricing_data}}. Output should include payback period, assumptions, and a short risk assessment.",
         "Parameters": [
             "insert_software_or_tool",
@@ -4993,7 +4993,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-017",
         "Title": "Draft budget assumptions for planning",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Planning",
         "Prompt": "Help me draft budget assumptions for our next annual plan. Context: {{insert_department_or_region_or_product_info}}. Output should include key assumptions, rationale, and any dependencies.",
         "Parameters": [
             "insert_department_or_region_or_product_info"
@@ -5004,16 +5004,16 @@ const PROMPTS_DATA = [
         "Id": "MGR-018",
         "Title": "ESG finance impact visual",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Visualization",
         "Prompt": "Create a visual showing how ESG initiatives can impact finance metrics. Show links between sustainability investments and cost savings, risk mitigation, and investor interest. Use a modern, green-themed design with arrows.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "MGR-019",
         "Title": "ESG finance strategy benchmark",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Evaluation",
         "Prompt": "I'm updating our ESG financial strategy. Research how leading companies in {{insert_industry}} integrate ESG into financial planning and disclosures. Summarize 3–5 examples with their KPIs, reporting cadence, and financial impact. Include references.",
         "Parameters": [
             "insert_industry"
@@ -5024,16 +5024,16 @@ const PROMPTS_DATA = [
         "Id": "MGR-020",
         "Title": "Executive dashboard concept",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Visualization",
         "Prompt": "Generate a conceptual image of a finance executive dashboard showing high-level KPIs: Revenue, Gross Margin, Burn Rate, Runway, and Budget vs. Actual. Use a clean layout with panels and placeholder numbers.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "MGR-021",
         "Title": "Forecast revenue trends",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Planning",
         "Prompt": "Forecast next quarter’s revenue based on the past 6 quarters of data. Use the trends from our {{insert_dataset_or_industry}} to explain your reasoning. Present the forecast in a table and write a short executive summary.",
         "Parameters": [
             "insert_dataset_or_industry"
@@ -5044,7 +5044,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-022",
         "Title": "Identify accounting process gaps",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Planning",
         "Prompt": "Review our current accounting close checklist and suggest improvements. Use this documentation: {{insert_sop_or_task_list}}. Output should highlight bottlenecks and recommend process updates.",
         "Parameters": [
             "insert_sop_or_task_list"
@@ -5055,16 +5055,16 @@ const PROMPTS_DATA = [
         "Id": "MGR-023",
         "Title": "Illustrate budget planning workflow",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Planning",
         "Prompt": "Create a horizontal process flow diagram showing a budget planning cycle: Forecasting → Review → Stakeholder Input → Approval → Tracking → Adjustment. Use corporate-style visuals with subtle color and labels.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "MGR-024",
         "Title": "Model cash flow scenarios",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Planning",
         "Prompt": "Model 3 cash flow scenarios based on these variables: {{insert_inputs}}. Output as a table with assumptions, key drivers, and estimated cash impact.",
         "Parameters": [
             "insert_inputs"
@@ -5075,7 +5075,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-025",
         "Title": "Prepare board meeting talking points",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Communication",
         "Prompt": "Draft financial talking points for an upcoming board meeting. Use our {{insert_q2_results_or_pl_summary}} as input. Write the talking points in bullet format, focusing on topline metrics and risk/upsides.",
         "Parameters": [
             "insert_q2_results_or_pl_summary"
@@ -5086,7 +5086,7 @@ const PROMPTS_DATA = [
         "Id": "MGR-026",
         "Title": "Procurement strategy cost levers",
         "User": "Manager",
-        "Category": "Finance",
+        "Category": "Research",
         "Prompt": "I'm leading a finance initiative to cut procurement costs. Research strategies used by Fortune 500 companies to reduce procurement spend without harming supplier relationships. Present 3–5 tactics with cost impact examples and cited sources.",
         "Parameters": [],
         "Type": "TEXT"
@@ -6397,5 +6397,1022 @@ const PROMPTS_DATA = [
         "Prompt": "Create an image of a standard B2B SaaS sales funnel with these stages: Prospecting, Discovery, Demo, Proposal, Closed Won/Lost. Use clean, modern icons and text labels. Output should be clear enough for use in a slide or enablement doc.",
         "Parameters": [],
         "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-284",
+        "Title": "Creative Ad with Real Object and Hand-Drawn Doodle",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A minimalist and creative advertisement set on a clean white background. A real {{Real Object}} is integrated into a hand-drawn black ink doodle, using loose, playful lines. The {{Doodle Concept}} interacts with the object in a clever, imaginative way. Include bold black {{Ad Copy}} text at the top or center. Place the {{Brand Logo}} clearly at the bottom. The visual should be clean, fun, high-contrast, and conceptually smart.",
+        "Parameters": [
+            "Real Object",
+            "Doodle Concept",
+            "Ad Copy",
+            "Brand Logo"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-285",
+        "Title": "Black and White Portrait Art",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A high-resolution black and white portrait artwork, in an editorial and fine art photography style. The background features a soft gradient, transitioning from mid-gray to almost pure white, creating a sense of depth and tranquility. Fine film grain adds a tactile, analog-like softness to the image, reminiscent of classic black and white photography. On the right side of the frame, a blurred yet striking face of Harry Potter subtly emerges from the shadows, not in a traditional pose, but as if caught in a moment of thought or breath. Only a part of his face is visible: perhaps an eye, a cheekbone, the contour of his lips, evoking a sense of mystery, intimacy, and elegance. His features are delicate yet profound, exuding a melancholic and poetic beauty without being overly dramatic. A gentle, directional light, softly diffused, caresses the curve of his cheek or glints in his eye—this is the emotional core of the image. The rest of the composition is dominated by ample negative space, intentionally kept simple, allowing the image to breathe. There are no texts, no logos in the image—only an interplay of light, shadow, and emotion. The overall atmosphere is abstract yet deeply human, like a fleeting glance or a half-remembered dream: intimate, timeless, and poignantly beautiful.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-286",
+        "Title": "Blurred Silhouette Behind Frosted Glass",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A black and white photograph shows the blurred silhouette of a {{SUBJECT}} behind a frosted or translucent surface. The {{PART}} is sharply defined and pressed against the surface, creating a stark contrast with the rest of the hazy, indistinct figure. The background is a soft gradient of gray tones, enhancing the mysterious and artistic atmosphere.",
+        "Parameters": [
+            "SUBJECT",
+            "PART"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-287",
+        "Title": "Cute and Cozy Knitted Doll",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A close-up, professionally composed photograph showcasing a hand-crocheted yarn doll gently cradled by two hands. The doll has a rounded shape, featuring the cute chibi image of the {{upload image}} character, with vivid contrasting colors and rich details. The hands holding the doll are natural and gentle, with clearly visible finger postures, and natural skin texture and light/shadow transitions, conveying a warm and realistic touch. The background is slightly blurred, depicting an indoor environment with a warm wooden tabletop and natural light streaming in from a window, creating a comfortable and intimate atmosphere. The overall image conveys a sense of exquisite craftsmanship and cherished warmth.",
+        "Parameters": [
+            "upload image"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-288",
+        "Title": "Custom Anime Figure",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Generate an anime-style figure photo placed on a desktop, presented from a casual, everyday snapshot perspective as if taken with a mobile phone. The figure model is based on the attached character photo, accurately reproducing the full body posture, facial expression, and clothing style of the person in the photo, ensuring the entire figure is fully rendered. The overall design is exquisite and detailed, with hair and clothing featuring natural, soft gradient colors and fine textures. The style leans towards Japanese anime, rich in detail, with realistic textures and a beautiful appearance.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-289",
+        "Title": "Bobblehead Generator from Selfie",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Turn this photo into a bobblehead: enlarge the head slightly, keep the face accurate and cartoonify the body. {{Place it on a bookshelf}}.",
+        "Parameters": [
+            "Place it on a bookshelf"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-290",
+        "Title": "Three Animals Selfie at Landmark",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A close-up selfie of three {{animal type}} with different expressions in front of the iconic {{landmark}}, taken at golden hour with cinematic lighting. The animals are positioned close to the camera with their heads touching, mimicking a selfie pose, showing joyful, surprised, and calm expressions. The background features the full architectural detail of {{landmark}}, softly illuminated, with a warm ambient atmosphere. Shot in a photographic, realistic cartoon style, high detail, 1:1 aspect ratio.",
+        "Parameters": [
+            "animal type",
+            "landmark"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-291",
+        "Title": "Glass Retexturing",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "retexture the image attached based on the JSON aesthetic below { \"style\": \"photorealistic 3D render\", \"material\": \"glass with transparent and iridescent effects\", \"surface_texture\": \"smooth, polished with subtle reflections and refractive effects\", \"lighting\": { \"type\": \"studio HDRI\", \"intensity\": \"high\", \"direction\": \"angled top-left key light and ambient fill\", \"accent_colors\": {{\"blue\", \"green\", \"purple\"}}, \"reflections\": true, \"refractions\": true, \"dispersion_effects\": true, \"bloom\": true }, \"color_scheme\": {{ \"primary\": \"transparent with iridescent blue, green, and purple hues\", \"secondary\": \"crystal-clear with subtle chromatic shifts\", \"highlights\": \"soft, glowing accents reflecting rainbow-like effects\", \"rim_light\": \"soft reflective light around edges\" }}, \"background\": {{ \"color\": \"black\", \"vignette\": true, \"texture\": \"none\" }}, \"post_processing\": {{ \"chromatic_aberration\": true, \"glow\": true, \"high_contrast\": true, \"sharp_details\": true }} }",
+        "Parameters": [
+            "\"blue\", \"green\", \"purple\"",
+            " \"primary\": \"transparent with iridescent blue, green, and purple hues\", \"secondary\": \"crystal-clear with subtle chromatic shifts\", \"highlights\": \"soft, glowing accents reflecting rainbow-like effects\", \"rim_light\": \"soft reflective light around edges\" ",
+            " \"color\": \"black\", \"vignette\": true, \"texture\": \"none\" ",
+            " \"chromatic_aberration\": true, \"glow\": true, \"high_contrast\": true, \"sharp_details\": true "
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-292",
+        "Title": "Perspective 3D Pop-Out Effect",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Hyperrealistic, top-down bird's-eye view shot, a beautiful Instagram model {{Anne Hathaway / see reference image}}, with exquisite and beautiful makeup and fashionable styling, standing on the screen of a smartphone held up by someone. The image creates a strong perspective illusion. Emphasize the 3D effect of the girl standing out from the phone. She wears black-rimmed glasses, high-street fashion, and strikes a cute, playful pose. The phone screen is treated as a dark floor, like a small stage. The scene uses strong forced perspective to show the proportional difference between the hand, the phone, and the girl. The background is clean gray, using soft indoor light, shallow depth of field, and the overall style is surrealistic photorealistic compositing. Very strong perspective.",
+        "Parameters": [
+            "Anne Hathaway / see reference image"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-293",
+        "Title": "Google Maps to Ancient Treasure Map",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the image to an ancient treasure map drawn on aged parchment. The map includes detailed elements like sailing ships on the ocean, old ports or castles on the coastline, a dotted path leading to a large 'X' marking the treasure spot, mountains, palm trees, and a decorative compass rose. The overall style is reminiscent of old pirate adventure films.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-294",
+        "Title": "Branded Mechanical Keycaps",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "ultra-realistic 3D render of four mechanical keyboard keycaps in a tight 2x2 grid, all keys touching. View from an isometric angle. One key is transparent with the word “{{just}}” printed in {{white}}. The other three colors are: {{black, purple, and white}}. One key features the {{Github}} logo. The other two say \"{{fork}}\" and \"{{it}}\". Realistic plastic texture, rounded sculpted keycaps, soft shadows, clean light-gray background.",
+        "Parameters": [
+            "just",
+            "white",
+            "black, purple, and white",
+            "Github",
+            "fork",
+            "it"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-295",
+        "Title": "Chrome Emoji Pin",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "highly detailed 3D render of a single metallic {{👍}} emoji pin attached to a vertical product card, ultra-glossy chrome finish, smooth rounded 3D icon, stylized futuristic design, soft reflections, clean shadows, paper card has a die-cut euro hole at the top center, bold title “{{Awesome}}” above the pin, fun tagline “{{Smash that ⭐ if you like it!}}” below, soft gray background, soft studio lighting, minimal aesthetic",
+        "Parameters": [
+            "👍",
+            "Awesome",
+            "Smash that ⭐ if you like it!"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-296",
+        "Title": "Children's Coloring Page Illustration (with Color Reference)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A black and white line drawing coloring illustration, suitable for direct printing on standard size (8.5x11 inch) paper, without paper borders. The overall illustration style is fresh and simple, using clear and smooth black outline lines, without shadows, grayscale, or color filling, with a pure white background for easy coloring. {{At the same time, for the convenience of users who are not good at coloring, please generate a complete colored version in the lower right corner as a small image for reference}} Suitable for: {{6-9 year old children}} Scene description: {{A unicorn is walking on the grass in the forest, with bright sunshine, blue sky and white clouds}}",
+        "Parameters": [
+            "At the same time, for the convenience of users who are not good at coloring, please generate a complete colored version in the lower right corner as a small image for reference",
+            "6-9 year old children",
+            "A unicorn is walking on the grass in the forest, with bright sunshine, blue sky and white clouds"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-297",
+        "Title": "Integrating Word Meaning into Letters",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Integrate the meaning of the word into the letters, cleverly blending graphics and letters. Word: {{beautify}} Add a brief explanation of the word below.",
+        "Parameters": [
+            "beautify"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-298",
+        "Title": "Double Exposure",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Double exposure, Midjourney style, merging, blending, overlay double exposure image, Double Exposure style, An exceptional masterpiece by Yukisakura revealing a fantastic double exposure composition of Aragorn son of Arathorn's silhouette harmoniously intertwined with the visually striking, rugged landscapes of Middle Earth during a lively spring season. Sun-bathed pine forests, mountain peaks, and a lone horse cutting through the trail echo outward through the fabric of his figure, adding layers of narrative and solitude. Beautiful tension builds as the stark monochrome background maintains razor-sharp contrast, drawing all focus to the richly layered double exposure. Characterized by its vibrant full-color scheme within Aragorn's silhouette and crisp, deliberate lines that trace every contour with emotional precision. (Detailed:1.45). (Detailed background:1.4).",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-299",
+        "Title": "Surreal Interaction Scene",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A pencil sketch of {{Subject 1}} interacting with {{Subject 2}}, where {{Subject 2}} is rendered as a realistic, full-color object, creating a surreal contrast against the hand-drawn style of {{Subject 1}} and the background",
+        "Parameters": [
+            "Subject 1",
+            "Subject 2"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-300",
+        "Title": "Animal Silicone Wrist Rest",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create an image of a cute chibi-style silicone wrist rest based on the {{🐼}} emoji. The wrist rest is made of soft, food-grade silicone with a skin-friendly matte surface. The interior is filled with slow-rebound foam. Designed in a personified cartoon style, the expression is lively, with both arms stretched out as if hugging the user’s wrist while lying on a desk. The overall shape is round, soft, and adorable, featuring the classic {{🐼}} color scheme. The design is comforting and cute, suitable for office use. The background is a solid white color with soft lighting. Rendered in a product photography style, the angle is either front-facing or at a 45-degree top-down view, showcasing high-definition details and emphasizing the silicone texture and comfort functionality.",
+        "Parameters": [
+            "🐼"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-301",
+        "Title": "Glowing Lines Anatomy Diagram",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A digital illustration of a {{SUBJECT}}, portrayed with a network of glowing clean pristine blue lines outlining its anatomy. The image is set against a dark background, highlighting the {{SUBJECT}} form and features. A specific area such as {{PART}} is emphasized with a red glow to indicate a point of interest or significance. The style is both educational and visually captivating, designed to resemble an advanced imaging technique",
+        "Parameters": [
+            "SUBJECT",
+            "PART"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-302",
+        "Title": "Signature City Weather Forecast",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Show a clear 45-degree bird’s-eye view of an isometric miniature city scene featuring Shanghai’s iconic buildings, such as the Oriental Pearl Tower and the Bund. The weather effect—cloudy—blends softly into the city, interacting gently with the architecture. Use physically based rendering (PBR) and realistic lighting. Solid color background, crisp and clean. Centered composition to highlight the precision and detail of the 3D model. Display “Shanghai Cloudy 20°C” and a cloudy weather icon at the top of the image.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-303",
+        "Title": "3D Translucent Glass Transformation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A soft, 3D translucent glass of the attached image with a frosty matte finish and detailed texture, original colors, centered on a light gray background, floats gently in space, soft shadows, natural lighting",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-304",
+        "Title": "Code Style Business Card",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A close-up shot of a hand holding a business card designed to look like a JSON file opened in VS Code. The card shows code formatted in realistic syntax-highlighted JSON code. The window includes typical toolbar icons and a title bar labeled Business Card.json, styled exactly like the interface of VS Code. Background is slightly blurred, keeping the focus on the card. The card displays the following code formatted in JSON: {{ \"name\": \"Jamez Bondos\", \"title\": \"Your Title\", \"email\": \"your@email.com\", \"link\": \"yourwebsite\" }}",
+        "Parameters": [
+            " \"name\": \"Jamez Bondos\", \"title\": \"Your Title\", \"email\": \"your@email.com\", \"link\": \"yourwebsite\" "
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-305",
+        "Title": "Lego Cityscape (Shanghai Bund)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a highly detailed and vividly colored LEGO-style scene of the Shanghai Bund. The foreground features the iconic historical buildings of the Bund, meticulously recreated with LEGO bricks in Western and neoclassical architectural styles — including clock towers, domes, and colonnades. LEGO minifigures are seen strolling along the riverfront, taking photos, and sightseeing, with classic LEGO-style cars parked along the street. In the background lies the spectacular Huangpu River, assembled with translucent blue LEGO bricks. On the water, LEGO ferries and tour boats sail along. Across the river stands the skyline of Lujiazui in Pudong, including the Oriental Pearl Tower, Shanghai Tower, Jin Mao Tower, and Shanghai World Financial Center — all rendered as vibrant, lifelike LEGO skyscrapers. The sky is LEGO’s signature bright blue, adorned with a few white LEGO brick clouds, creating a visual full of energy and modernity.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-306",
+        "Title": "Glass Retexturing",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "retexture the image attached based on the json below: {{ \"style\": \"photorealistic\", \"material\": \"glass\", \"background\": \"plain white\", \"object_position\": \"centered\", \"lighting\": \"soft, diffused studio lighting\", \"camera_angle\": \"eye-level, straight-on\", \"resolution\": \"high\", \"aspect_ratio\": \"2:3\", \"details\": { \"reflections\": true, \"shadows\": false, \"transparency\": true }} }",
+        "Parameters": [
+            " \"style\": \"photorealistic\", \"material\": \"glass\", \"background\": \"plain white\", \"object_position\": \"centered\", \"lighting\": \"soft, diffused studio lighting\", \"camera_angle\": \"eye-level, straight-on\", \"resolution\": \"high\", \"aspect_ratio\": \"2:3\", \"details\": { \"reflections\": true, \"shadows\": false, \"transparency\": true "
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-307",
+        "Title": "Story Scene in Crystal Ball",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A delicate crystal ball rests quietly on a warm, softly lit tabletop by the window. The background is blurred and hazy, with warm-toned sunlight gently passing through the crystal ball, refracting specks of golden light that softly illuminate the dim surroundings. Inside the crystal ball, a miniature three-dimensional world themed around {{Chang’e Flying to the Moon}} is naturally displayed — a finely detailed, dreamlike 3D scene. All characters and objects are rendered in adorable chibi style, exquisitely crafted and visually charming, with vivid emotional interactions between them. The overall atmosphere is rich with East Asian fantasy elements, full of intricate details and a surreal magical realism texture. The entire scene feels poetic and dreamy, luxurious yet elegant, radiating a gentle, comforting glow — as if imbued with life through the warm play of light and shadow.",
+        "Parameters": [
+            "Chang’e Flying to the Moon"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-308",
+        "Title": "Nostalgic Anime Film Poster",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "{{The Lord of the Rings}} anime film poster, the anime is in the style of High School DXD. Visible even folds are seen across the poster as it’s been folded over time, and due to some creases over damaging the poster has caused some physical damage scuffing along the creases and the color has partially faded. Indiscriminate flaps and folds and scratches all around simply from moving back and forth causing subtle yet incremental damage with the ever expanding of entropy we cannot escape, but the loving memories in our hearts will forever be whole. Making the objects we collect along the way priceless is the essence you feel when looking at this nostalgic poster.",
+        "Parameters": [
+            "The Lord of the Rings"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-309",
+        "Title": "Social Media Frame Integration",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a stylized 3D chibi character based on the attached photo, accurately preserving the subject’s facial features and clothing details. The character is making a finger heart with the left hand (with a red heart element above the fingers) and playfully sitting on the edge of a giant Instagram frame, with both legs hanging outside the frame. The top of the frame displays the username “Beauty,” and various social media icons (like, comment, share) float around the scene.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-310",
+        "Title": "Creative Logo Shaped Bookshelf",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a photograph of a modern bookshelf inspired by the shape of {{LOGO}}. The bookshelf features flowing, interconnected curves forming multiple sections of varying sizes. It is made of sleek matte black metal with wooden shelves inside the loops. Soft, warm LED lighting outlines the inner curves. The bookshelf is mounted on a neutral-toned wall and holds a mix of colorful books, small plants, and minimalistic art pieces. The overall vibe is creative, elegant, and slightly futuristic",
+        "Parameters": [
+            "LOGO"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-311",
+        "Title": "Cute Chibi Keychain",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A close-up photo of a cute, colorful keychain held by person's hand. The keychain features a chibi-style of the {{attached image }}. The keychain is made of soft rubber with bold black outlines and attached to a small silver keyring, neutral background",
+        "Parameters": [
+            "attached image "
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-312",
+        "Title": "Gold Pendant Necklace",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A photorealistic close-up of a gold pendant necklace held by female hand. The pendant features a bas-relief engraving of {{image /emoji}}. The pendant hangs from a polished gold chain. The background is softly blurred with neutral beige tones, and natural lighting, realistic skin tones, Product photography, 16:9 aspect ratio.",
+        "Parameters": [
+            "image /emoji"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-313",
+        "Title": "Miniature Cyberpunk Tilt-Shift Landscape",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A highly detailed miniature {{Cyberpunk}} landscape viewed from above, using a tilt-shift lens effect. The scene is filled with toy-like elements, all rendered in high-resolution CG. Dramatic lighting creates a cinematic atmosphere, with vivid colors and strong contrast, emphasizing depth of field and a realistic micro-perspective, making the viewer feel as if overlooking a toy world. The image contains many visual jokes and details worth repeated viewing.",
+        "Parameters": [
+            "Cyberpunk"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-314",
+        "Title": "Original Pokemon Creation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create an original creature inspired by this object (photo provided). The creature should look like it belongs in a fantasy monster-catching universe, with a cute or cool design influenced by retro Japanese RPG monster art. The image must include: – A full-body view of the creature, inspired by the shape, materials or purpose of the object. – A small orb or capsule (similar an a pokeball) at its feet, designed with patterns and colors matching the object’s look — not a standard Pokéball, but a custom design. – An invented name for the creature, displayed next to or below it. – Its elemental type (e.g., Fire, Water, Metal, Nature, Electric…), based on the object’s core properties. The illustration should look like it comes from a fantasy creature encyclopedia, with clean lines, soft shadows, and an expressive, character-driven design.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-315",
+        "Title": "Silhouette Art",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "The silhouette of a basic outline of a {{PROMPT}}. The background is bright yellow, and the silhouette is solid black.",
+        "Parameters": [
+            "PROMPT"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-316",
+        "Title": "Futuristic Logo Trading Card",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "{ \"prompt\": \"A futuristic trading card with a dark, moody neon aesthetic and soft sci-fi lighting. The card features a semi-transparent, rounded rectangle with slightly muted glowing edges, appearing as if made of holographic glass. At the center is a large glowing logo of {{logo}}, with no additional text or label, illuminated with a smooth gradient of {{colors}}, but not overly bright. The reflections on the card surface should be subtle, with a slight glossy finish catching ambient light. The background is a dark carbon fiber texture or deep gradient with soft ambient glows bleeding into the edges. Add subtle light rays streaming down diagonally from the top, giving the scene a soft cinematic glow. Apply light motion blur to the edges and reflections to give the scene a sense of depth and energy, as if it's part of a high-end tech animation still. Below the card, include realistic floor reflections that mirror the neon edges and logo—slightly diffused for a grounded, futuristic look. Text elements are minimal and softly lit: top-left shows '{{ticker}}', top-right has a stylized signature, and the bottom displays '{{company_name}}' with a serial number '{{card_number}}', a revenue badge reading '{{revenue}}', and the year '{{year}}'. Typography should have a faint glow with slight blurring, and all elements should feel premium, elegant, and softly illuminated—like a high-end cyberpunk collectible card.\", \"style\": {{ \"lighting\": \"Neon glow, soft reflections\", \"font\": \"Modern sans-serif, clean and minimal\", \"layout\": \"Centered, structured like a digital collectible card\", \"materials\": \"Glass, holographic plastic, glowing metal edges\" }}, \"parameters\": { \"logo\": \"Tesla logo\", \"ticker\": \"TSLA\", \"company_name\": \"Tesla Inc.\", \"card_number\": \"#0006\", \"revenue\": \"$96.8B\", \"year\": \"2025\", \"colors\": {{ \"red\", \"white\", \"dark gray\" }} }, \"medium\": \"3D render, high-resolution digital art\", \"size\": \"1080px by 1080px\" }",
+        "Parameters": [
+            " \"red\", \"white\", \"dark gray\" ",
+            " \"lighting\": \"Neon glow, soft reflections\", \"font\": \"Modern sans-serif, clean and minimal\", \"layout\": \"Centered, structured like a digital collectible card\", \"materials\": \"Glass, holographic plastic, glowing metal edges\" "
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-317",
+        "Title": "Ultra-realistic 3D Game",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Ultra-realistic 3D rendered image that replicates the character design of Natasha from Command & Conquer: Red Alert 3 in 2008, following the original model exactly. The scene is set in a dim and cluttered bedroom from the year 2008. The character is sitting on the carpet, facing an old-fashioned television that is playing Command & Conquer: Red Alert 3 and a game console controller. The entire room is filled with a nostalgic atmosphere of the year 2008: snack packaging bags, soda cans, posters, and tangled wires are everywhere. Natasha Volkova is captured in the moment of turning her head, looking back at the camera over her shoulder. There is an innocent smile on her iconic ethereally beautiful face. Her upper body is slightly twisted, with a natural dynamic, as if she is reacting to being startled by the flash. The flash slightly overexposes her face and clothes, making her silhouette stand out more prominently in the dimly lit room. The whole photo appears raw and natural. The strong contrast between light and dark casts deep shadows behind her. The image is full of tactile feel, with a simulated texture that resembles an authentic film snapshot from 2008.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-318",
+        "Title": "Creative Silk Universe",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the {{❄️}} into a soft 3D object with a silk texture. The entire surface of the object is wrapped in smooth and flowing silk fabric, featuring surreal wrinkle details, soft highlights, and shadows. The object gently floats in the center of a clean light gray background, creating a light and elegant atmosphere. The overall style is surreal, tactile, and modern, conveying a sense of comfort and refined playfulness. Studio lighting, high-resolution rendering.",
+        "Parameters": [
+            "❄️"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-319",
+        "Title": "Surreal Underwater Scene Popsicle",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Tilt POV shot of a hand holding a surreal popsicle with a transparent blue exterior, revealing an underwater scene inside: a tiny scuba diver with tiny fish floating with bubbles, ocean waves crashing, and a green popsicle stick running through the center. The popsicle is melting slightly, with a wooden stick at the bottom, hand is holding it by the wooden stick, soft focus new york street background, premium product photography",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-320",
+        "Title": "Steampunk Mechanical Fish",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A steampunk-style mechanical fish with a brass body and clearly visible gear mechanisms when in motion. Its mechanical teeth can be slightly seen, neatly arranged and closed, with both upper and lower teeth visible. Each tooth is triangular in shape and made of diamond material. The tail fin has a metal wire mesh structure, while other fins are made of semi-transparent amber-colored glass with some subtle bubbles inside. The eyes are multi-faceted rubies, with clearly visible reflective shine. The fish has \"f-is-h\" text clearly visible on its body, with all lowercase letters and careful attention to the hyphen placement. The image is square, showing the entire fish in the center of the frame, with its head pointing to the right. There is adequate white space around the fish, with more space on the left and right sides. The background has subtle steampunk-style gear patterns. The entire fish looks very cool. This is a high-definition image with extremely rich details and unique texture and aesthetics. The image should not be too dark.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-321",
+        "Title": "Emoji Cream Popsicle",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Generate an image: Transform the {{🍓}} into a creamy ice cream bar, with cream flowing in curved swirls on top, making it look delicious and tempting. The ice cream is floating at a 45-degree angle in mid-air, rendered in a cute chibi-style 3D aesthetic, set against a solid color background with a unified color palette.",
+        "Parameters": [
+            "🍓"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-322",
+        "Title": "Kawaii Enamel Pin",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Turn the subject in the attached image into a kawaii enamel pin. Use glossy metal outlines and vibrant enamel fill. No extra added features. Square mockup format. White background.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-323",
+        "Title": "Fake Tweet Screenshot (Einstein)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "a hyper realistic twitter post by Albert Einstein right after finishing the theory of relativity. include a selfie where you can clearly see scribbled equations and a chalkboard in the background. have it visible that the post was liked by Nikola Tesla",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-324",
+        "Title": "Emoji Tufted Rug",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create an image of a colorful, hand-tufted rug in the shape of 🦖 emoji, placed on a simple floor background. The rug has a bold, playful design with soft, fluffy texture and thick yarn details. Shot from above, in natural daylight, with a slightly quirky, DIY aesthetic. Vibrant colors, cartoonish outlines, and tactile, cozy material—similar to handmade tufted art rugs.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-325",
+        "Title": "Colorful Vector Art Poster",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Barcelona Spain colourful summer vector art poster with big \"BARCELONA\" title at the top and smaller \"SPAIN\" title under",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-326",
+        "Title": "Cloud Art",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Generate image: A photograph captures a daytime scene with a {{SUBJECT/OBJECT}} formed by scattered clouds in the sky, positioned above a {{LOCATION}}",
+        "Parameters": [
+            "SUBJECT/OBJECT",
+            "LOCATION"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-327",
+        "Title": "8-Bit Pixel Icon",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a minimalist 8-bit pixel logo of {{🍔}}, centered on a pure white background. Use a limited retro color palette with pixelated detailing, sharp edges, and clean blocky forms. The logo should be simple, iconic, and clearly recognizable in pixel art style — inspired by classic arcade game aesthetics.",
+        "Parameters": [
+            "🍔"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-328",
+        "Title": "Miniature 3D Building",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "3D chibi-style miniature design of a whimsical Starbucks café, shaped like an oversized takeaway coffee cup complete with a lid and straw. The building has two floors, with large glass windows that clearly reveal a cozy and refined interior: wooden furniture, warm lighting, and busy baristas at work. On the street, cute little figurines are strolling or sitting, surrounded by benches, street lamps, and potted plants, creating a charming corner of the city. The overall aesthetic follows a detailed and realistic miniature cityscape style, with soft lighting that evokes a relaxing afternoon atmosphere.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-329",
+        "Title": "Cute Plant Planter",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A high-quality photo of a cute ceramic {{object/animal}}-shaped planter with a glossy finish, filled with a variety of vibrant succulents and greenery including a spiky Haworthia, a rosette-shaped Echeveria, and delicate white flowers. The planter has a friendly face and sits on a soft, neutral background with diffused natural lighting, showcasing fine textures and color contrast in a clean, minimalistic composition",
+        "Parameters": [
+            "object/animal"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-330",
+        "Title": "Extremely Ordinary iPhone Selfie",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Please draw an extremely ordinary and unremarkable iPhone selfie, with no clear subject or sense of composition — just like a random snapshot taken casually. The photo should include slight motion blur, with uneven lighting caused by sunlight or indoor lights resulting in mild overexposure. The angle is awkward, the composition is messy, and the overall aesthetic is deliberately plain — as if it was accidentally taken while pulling the phone out of a pocket. The subjects are Eason Chan and Nicholas Tse, taken at night, next to the Hong Kong Convention and Exhibition Centre, by Victoria Harbour in Hong Kong.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-331",
+        "Title": "Emoji Inflatable Cushion",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a high-resolution 3D render of {{🥹}} designed as an inflatable, puffy object. The shape should appear soft, rounded, and air-filled — like a plush balloon or blow-up toy. Use a smooth, matte texture with subtle fabric creases and stitching to emphasize the inflatable look. The form should be slightly irregular and squishy, with gentle shadows and soft lighting that highlight volume and realism. Place it on a clean, minimal background (light gray or pale blue), and maintain a playful, sculptural aesthetic.",
+        "Parameters": [
+            "🥹"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-332",
+        "Title": "Paper Craft Style Emoji Icon",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A paper craft-style \"🔥\" floating on a pure white background. The emoji is handcrafted from colorful cut paper with visible textures, creases, and layered shapes. It casts a soft drop shadow beneath, giving a sense of lightness and depth. The design is minimal, playful, and clean — centered in the frame with lots of negative space. Use soft studio lighting to highlight the paper texture and edges.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-333",
+        "Title": "Passport Entry Stamp",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a realistic passport page with an entry stamp for {{{{City}}, {Country}}}. The stamp should say \"Welcome to {{City}}\" in bold English, designed in a round or oval shape with decorative borders. Include the word \"ARRIVAL\" and a fictional date like \"15 APR 2025\" Incorporate a subtle silhouette of {{Main Landmark}} as a background detail within the stamp. Use deep blue or red ink with light smudges for added realism. The stamp should appear slightly angled, as if hand-pressed. The passport page should show visible paper texture and security patterns.",
+        "Parameters": [
+            "{City}, {Country}",
+            "{{City",
+            "City",
+            "Main Landmark"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-334",
+        "Title": "Physical Destruction Effect Card (Lara Croft)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "An ultra-photorealistic, cinematic-style illustration depicting Lara Croft dynamically bursting through the frame of an “Archaeological Adventure” trading card. She is caught mid-jump or swinging on a rope, wearing her iconic adventurer outfit and possibly firing dual pistols. The muzzle flashes help shatter the card’s ancient stone-carved border, creating a visible dimensional rupture with energy cracks and spatial distortions, scattering dust and debris outward. Her body lunges forward with powerful momentum, breaking through the card’s flat plane, emphasizing strong motion depth. Inside the card (the background) is a depiction of dense jungle ruins or a trap-filled ancient tomb. The shattered card fragments mix with crumbling stone, flying vines, broken ancient coins, and spent shell casings. The title “Archaeological Adventure” and the name “Lara Croft” (accompanied by a stylized artifact icon) remain visible on the remaining cracked and weathered parts of the card. The scene is lit with adventurous, dynamic lighting that emphasizes her agility and the perilous environment.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-335",
+        "Title": "Fashion Magazine Cover Style",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A beautiful woman wearing a pink qipao, adorned with delicate floral accessories on her head and colorful blossoms woven into her hair. Around her neck is an elegant white lace collar. One of her hands gently holds several large butterflies. The overall photography style features high-definition detail and texture, resembling a fashion magazine cover. The word “FASHION DESIGN” is placed at the top center of the image. The background is a minimalist light gray, designed to highlight the subject.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-336",
+        "Title": "Voxel Style 3D Icon Conversion",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Take the icon on the right and transform it into a voxel 3d icon like the icons in the left image. Octane render. 8k.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-337",
+        "Title": "ESC Keycap Miniature Diorama",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A hyper-realistic isometric 3D render of a miniature computer setup inside a translucent mechanical keyboard keycap, specifically placed on the ESC key of a real matte-finished mechanical keyboard. Inside the keycap, a tiny figure sits in a modern ergonomic chair, wearing a cozy textured hoodie, working at a glowing ultra-realistic computer screen. The environment is packed with lifelike miniature tech accessories: real-material desk lamps, monitors with reflections, tiny speaker grills, tangled cables, and ceramic mugs. The base of the scene is made of soil, rocks, and moss, with photorealistic textures and imperfections. The lighting inside the cap mimics natural morning sun, casting soft shadows and warm tones, while the outside has cold ambient reflections from the surrounding keyboard. The word “ESC” is subtly etched onto the top of the translucent keycap with a faint frosted glass effect — just barely visible depending on the angle. The surrounding keyboard keys like F1, Q, Shift, and CTRL are crisp, textured, and photorealistically lit. Shot as if taken with a high-end mobile phone camera, with shallow depth of field, perfect white balance, and cinematic detail.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-338",
+        "Title": "Happy Capsule Creation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Title (large text): Fast-Acting Happiness Capsule A capsule pill with a green top in Starbucks green and a transparent bottom, printed with the Starbucks logo. Inside the capsule are numerous coffee beans. Description (small text): Take when feeling sad or down. Three times a day, two capsules per dose. Buy button: Same color as the capsule. Below the button, display the price: $9. Please follow medical advice and purchase as needed.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-339",
+        "Title": "3D Chibi-style University Anthropomorphic Mascot",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a personified 3D chibi-style anime girl character representing {{Northwestern Polytechnical University}}, embodying the school’s distinctive strengths in {{aeronautics, astronautics, and marine engineering}}.",
+        "Parameters": [
+            "Northwestern Polytechnical University",
+            "aeronautics, astronautics, and marine engineering"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-340",
+        "Title": "RPG-Style Character Card Creation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a digital character card in RPG collectible style. The subject is a {{Programmer}}, standing confidently with tools or symbols relevant to their job. Render it in 3D cartoon style, soft lighting, vivid personality. Include skill bars or stats like {{Skill1 +x}}, {{Skill2 +x, e.g., Creativity +10, UI/UX +8}}. Add a title banner on top and a nameplate on the bottom. Frame the card with clean edges like a real figure box. Make the background fit the profession's theme. Colors: warm highlights, profession-matching hues.",
+        "Parameters": [
+            "Skill1 +x",
+            "Skill2 +x, e.g., Creativity +10, UI/UX +8",
+            "Programmer"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-341",
+        "Title": "Cute Chibi Matryoshka Dolls (Girl with a Pearl Earring)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the person in the image into a set of cute chibi-style Russian nesting dolls (🪆), with a total of five dolls arranged from largest to smallest. Place them on an elegant wooden table. Horizontal aspect ratio: 3:2.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-342",
+        "Title": "3D Q-version Couple Snow Globe",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the person in the attached image into a snow globe scene. Overall environment: The snow globe is placed on a tabletop by the window, with a blurred, warm-toned background. Sunlight passes through the globe, casting golden sparkles that gently illuminate the surrounding darkness. Inside the globe: The characters are in a cute chibi-style 3D design, gazing at each other with eyes full of love.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-343",
+        "Title": "Miniature Three-dimensional Scene Presentation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Miniature three-dimensional scene presentation using tilt-shift photography techniques, depicting a chibi-style version of the scene {{Sun Wukong’s Three Battles with the White Bone Demon}}",
+        "Parameters": [
+            "Sun Wukong’s Three Battles with the White Bone Demon"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-344",
+        "Title": "Japanese-style Two-Panel Manga (Angry Girl President)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a two-panel vertical manga in a cute Japanese anime style, theme: “The Daily Work Life of a Girl President.” Character Design: Transform the person in the uploaded image into a cute, moe-style anime girl while preserving all key details from the photo — including the outfit (a suit), hairstyle (bright golden-yellow), and facial features. Panel 1: - Expression: Pouting, disappointed, resting her cheek on one hand - Text box: “What do I dooo?! He won’t take my call! (；´д｀)” - Scene: Warm-toned office, with the U.S. flag in the background. On the desk: a pile of hamburgers and a vintage red rotary phone. The character is on the left side of the frame, the phone on the right. Panel 2: - Expression: Furious, face red with anger, gritting teeth - Action: Slams the desk hard, making the hamburgers jump - Speech bubble: “Hmph! Double the tariffs! Ignoring me is their loss! ( `д´ )” - Scene: Same office, now a complete mess Additional Notes: - Use a cute, casual handwritten font for all text - Keep the composition full and expressive, with adequate space for dialogue and intentional white space - Aspect ratio: 2:3 - The overall visual tone should be colorful and energetic, with a distinctly cartoony style",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-345",
+        "Title": "Fantasy Cartoon Illustration",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A cartoon-style character with a smiling computer monitor as its head, wearing gloves and boots, happily jumping through a glowing, blue, circular portal in a lush, fantasy forest landscape. The forest is detailed with large trees, mushrooms, flowers, a serene river, floating islands, and an atmospheric starry night sky with multiple moons. Bright, vibrant colors with soft lighting, fantasy illustration style.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-346",
+        "Title": "Hand-drawn Infographic Card",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a hand-drawn style infographic card in a 9:16 vertical format. The card should have a clear theme, with a beige or off-white paper-textured background. The overall design should reflect a simple, warm, and handmade aesthetic. At the top of the card, use large, eye-catching brush-style Chinese cursive calligraphy in red and black for the title, creating strong visual contrast. All text should be in Chinese cursive script. The layout should be divided into 2 to 4 clear sections, each conveying a core idea through concise and refined Chinese phrases. The calligraphy should maintain a fluid, rhythmic style that is both legible and artistically expressive. Leave appropriate blank space around the text. The card should be accented with simple and fun hand-drawn illustrations or icons — such as figures or symbolic elements — to enhance visual appeal and spark thought or emotional resonance. The overall layout should emphasize visual balance and include ample whitespace, ensuring the design is clean, clear, and easy to read. “Building a personal brand (IP) is long-term compounding. Keep updating daily, and results will come — because 99% of people can’t keep it up!”",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-347",
+        "Title": "Pastel Power 3D ADS",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "a soft 3D cartoon-style sculpture of {{brand product}}, made of smooth clay-like textures and vibrant pastel colors, placed in a minimalist isometric scene that complements the product’s nature, clean composition, gentle lighting, subtle shadows, with the product’s logo and a 3-word slogan displayed clearly below",
+        "Parameters": [
+            "brand product"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-348",
+        "Title": "Minimalist 3D Illustration (Markdown Format)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Draw a Toilet ## 🎨 Art Style: Minimalist 3D Illustration ### 🟢 Shape Language - Rounded edges and smooth, soft forms using simplified geometric shapes. ### 🎨 Colors - **Primary palette:** soft beige, light gray, warm orange. - **Accent color:** warm orange for focal elements. - **Shading:** gentle gradients and smooth transitions, avoiding harsh shadows and highlights. ### 💡 Lighting - **Type:** soft, diffuse lighting. - **Light source direction:** from above, slightly to the right. - **Shadow style:** subtle and diffused, without sharp or high-contrast shadows. ### 🧱 Materials - **Surface texture:** matte and smooth with subtle light variation. - **Reflectivity:** low to none, avoiding noticeable gloss. ### 🖼️ Composition - **Object presentation:** a single, centered object with generous negative space around it. - **Perspective:** slight tilt to suggest depth, but no strong depth-of-field effects. - **Background:** flat color, low saturation, harmonious with the subject and non-distracting. ### ✒️ Typography - **Font style:** minimalist sans-serif. - **Text placement:** bottom left corner, small and unobtrusive. - **Font color:** gray, low contrast with the background. ### 🖥️ Rendering Style - **Technique:** 3D rendering in a simplified low-poly style. - **Detail level:** medium — focus on shape and color, avoiding complex textures or fine details. ## 🎯 Style Goal > Create a clean and aesthetically pleasing visual that emphasizes simplicity, approachability, and modernity.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-349",
+        "Title": "Fluffy Jack-o'-lantern",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform a simple flat vector icon of {{🎃}} into a soft, 3D fluffy object. The shape is fully covered in fur, with hyperrealistic hair texture and soft shadows. The object is centered on a clean, light gray background and floats gently in space. The style is surreal, tactile, and modern, evoking a sense of comfort and playfulness. Studio lighting, high-resolution render.",
+        "Parameters": [
+            "🎃"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-350",
+        "Title": "Hand-drawn Infographic Card (Cognition)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a hand-drawn style infographic card in vertical 9:16 ratio. The card should have a clear theme, with a beige or off-white paper-textured background. The overall design should convey a rustic, friendly, and handmade aesthetic. At the top of the card, feature a bold, eye-catching title in large Chinese cursive brush calligraphy using contrasting red and black colors. All text content should be in Chinese cursive script, and the layout should be divided into 2 to 4 clear sections. Each section expresses a core idea with brief and concise Chinese phrases. The cursive font should retain a smooth, rhythmic flow, remaining legible while carrying artistic appeal. The card should include simple, playful hand-drawn illustrations or icons, such as figures or symbolic elements, to enhance visual interest and spark reader reflection or emotional resonance. The overall layout should maintain visual balance, with ample white space reserved to ensure clarity, simplicity, and ease of reading and understanding. <h1><span style=\"color:red\">“Cognition”</span> defines your ceiling <span style=\"color:red\">“Circle”</span> defines your opportunities</h1> – You can’t earn money beyond your level of cognition, – Nor encounter opportunities beyond your social circle.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-351",
+        "Title": "Family Wedding Photo (Q-version)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the people in the photo into chibi-style 3D characters. The parents are dressed in Western wedding attire — the father in a formal suit, the mother in a wedding gown. The child is a beautiful flower girl holding a bouquet. The background features a colorful floral arch. The characters are in 3D chibi style, while the environment is photorealistic. The entire scene is placed inside a photo frame.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-352",
+        "Title": "3D Papercraft Pop-up Book",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Multi-layered foldable paper sculpture pop-up book, placed on a desk, with a clean background highlighting the main subject. The book presents a 3D flip-book style, with a 2:3 vertical aspect ratio. The open pages display the scene of {{Nezha Demon Child version battling Ao Bing}}. All elements are finely foldable and assembled, showcasing a realistic and delicate texture of folded paper. The composition uniformly adopts a frontal perspective, with an overall dreamy and beautiful visual style, vibrant and gorgeous colors, full of a fantastical and lively story atmosphere.",
+        "Parameters": [
+            "Nezha Demon Child version battling Ao Bing"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-353",
+        "Title": "Anime Sticker Collection",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Naruto stickers",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-354",
+        "Title": "35mm Film Style Flying Island",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "35 mm photo of Moscow floating in the sky on a flying islands.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-355",
+        "Title": "Famous Painting Character OOTD",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Generate a Q-style 3D C4D-rendered character based on the person in the photo, dressed in a fashion-forward “outfit of the day” (OOTD) inspired by a specific profession. Profession: Fashion Designer – Keep the original facial features and character pose – Stylize the character with a cute, long-legged chibi proportion – Outfit and accessories should reflect the profession, including trendy designer wear, glasses, sketchbook or tablet, and stylish shoes – Match the outfit with fashion accessories to complete the look – Use a solid background color that complements the character’s overall color palette (no gradients or textures) Composition: Aspect ratio: 9:16 Top text: “OOTD” Left side: the full-body chibi character wearing the complete outfit Right side: individual clothing items and accessories laid out separately, as if in a style breakdown",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-356",
+        "Title": "Flat Sticker Design",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Turn this photo into a chibi-style sticker illustration in a minimalist flat design. – Keep the character’s recognizable features – Use a cute, simplified aesthetic – The sticker should have a thick white border – The character should break out of the circular frame, adding a playful touch – The circular base should be a solid flat color (no 3D or gradients) – Background should be transparent The overall style should be clean, modern, and visually appealing for use as a fun Q-version sticker.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-357",
+        "Title": "Q-version Emoji Sticker Pack Creation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a brand-new set of chibi-style stickers featuring the user as the main character, with six unique poses: 1. Making a playful peace sign with both hands and winking. 2. Tearful eyes and slightly trembling lips, showing a cute crying expression. 3. Arms wide open in a warm, enthusiastic hug pose. 4. Lying on their side asleep, resting on a tiny pillow with a sweet smile. 5. Pointing forward with confidence, surrounded by shining visual effects. 6. Blowing a kiss, with heart symbols floating around. Maintain the chibi aesthetic: – Exaggerated, expressive big eyes – Soft facial lines – Playful, short black hairstyle – A white outfit with a bold neckline design Background: Vibrant red with star or colorful confetti elements for decoration. Leave some clean white space around each sticker. Aspect ratio: 9:16",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-358",
+        "Title": "Famous Painting Character Cereal Ad",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "“Master Oats”: Based on the visual features of the person in the uploaded photo, generate a custom oatmeal mix that reflects their personality traits — for example, using vegetables, fruits, yogurt, whole grains, etc. Design a unique cereal box and package aesthetic that aligns with this tailored mix. Then, create an advertising cover featuring the person as the mascot on the cereal box. The character should retain their recognizable features but be transformed into a cute chibi-style 3D figure with a C4D-quality rendering. The oatmeal and packaging should be presented in a setting that matches the mood — such as a minimalist kitchen, a sleek supermarket display, or a clean design counter. The process includes: – Character analysis and oat mix pairing – Cereal box concept and design – Display environment selection – Final image with mascot figure, packaging, and styled scene composition All visuals should be balanced, modern, and appealing, reflecting a premium and fun oat brand identity.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-359",
+        "Title": "Minimalist 3D Illustration",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Generate a toilet with the following JSON profile: { \"art_style_profile\": { \"style_name\": \"Minimalist 3D Illustration\", \"visual_elements\": { \"shape_language\": \"Rounded edges, smooth and soft forms with simplified geometry\", \"colors\": { \"primary_palette\": {{\"Soft beige, light gray, warm orange\"}}, \"accent_colors\": {{\"Warm orange for focal elements\"}}, \"shading\": \"Soft gradients with smooth transitions, avoiding harsh shadows or highlights\" }, \"lighting\": {{ \"type\": \"Soft, diffused lighting\", \"source_direction\": \"Above and slightly to the right\", \"shadow_style\": \"Subtle and diffused, no sharp or high-contrast shadows\" }}, \"materials\": {{ \"surface_texture\": \"Matte, smooth surfaces with subtle shading\", \"reflectivity\": \"Low to none, avoiding glossiness\" }}, \"composition\": {{ \"object_presentation\": \"Single, central object displayed in isolation with ample negative space\", \"perspective\": \"Slightly angled, giving a three-dimensional feel without extreme depth\", \"background\": \"Solid, muted color that complements the object without distraction\" }}, \"typography\": {{ \"font_style\": \"Minimalistic, sans-serif\", \"text_placement\": \"Bottom-left corner with small, subtle text\", \"color\": \"Gray, low-contrast against the background\" }}, \"rendering_style\": {{ \"technique\": \"3D render with simplified, low-poly aesthetics\", \"detail_level\": \"Medium detail, focusing on form and color over texture or intricacy\" }} }, \"purpose\": \"To create clean, aesthetically pleasing visuals that emphasize simplicity, approachability, and modernity.\" } }",
+        "Parameters": [
+            "\"Soft beige, light gray, warm orange\"",
+            "\"Warm orange for focal elements\"",
+            " \"type\": \"Soft, diffused lighting\", \"source_direction\": \"Above and slightly to the right\", \"shadow_style\": \"Subtle and diffused, no sharp or high-contrast shadows\" ",
+            " \"surface_texture\": \"Matte, smooth surfaces with subtle shading\", \"reflectivity\": \"Low to none, avoiding glossiness\" ",
+            " \"object_presentation\": \"Single, central object displayed in isolation with ample negative space\", \"perspective\": \"Slightly angled, giving a three-dimensional feel without extreme depth\", \"background\": \"Solid, muted color that complements the object without distraction\" ",
+            " \"font_style\": \"Minimalistic, sans-serif\", \"text_placement\": \"Bottom-left corner with small, subtle text\", \"color\": \"Gray, low-contrast against the background\" ",
+            " \"technique\": \"3D render with simplified, low-poly aesthetics\", \"detail_level\": \"Medium detail, focusing on form and color over texture or intricacy\" "
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-360",
+        "Title": "Funko Pop Figure Creation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the person in the photo into the style of a Funko Pop figure box, presented in isometric view. The packaging is labeled with the title “JAMES BOND.” Inside the box, display a chibi-style figure based on the person in the photo, along with their essential accessories: a pistol, a wristwatch, a suit, and other signature items. Next to the box, show a realistic rendering of the actual figure outside the packaging, with detailed textures and lighting to achieve a lifelike product display.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-361",
+        "Title": "\"Titanic\" Pose Parody",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the person in the attached image into a cute chibi-style 3D character. Scene: On the pointed bow of a luxurious cruise ship. The man stands behind the woman at the bow, holding her waist with both hands. The woman is wearing a dress, arms spread wide, facing the wind, with a joyful and liberated expression on her face—just like the iconic scene from Titanic. The sky is painted in warm sunset tones, and the vast ocean stretches beneath the ship. Only the characters should be in chibi 3D style; the rest of the environment should be realistic.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-362",
+        "Title": "Xiaohongshu Cover Image",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Draw an image: Create a cover for a Xiaohongshu (RED) post. Requirements: – It must be visually compelling enough to attract user clicks. – Use bold, characterful fonts. – Vary font sizes to reflect the hierarchy of information; emphasize the structure of the copy. – The main title should be at least twice the size of regular text. – Leave white space between text sections. – Only use bright accent colors to highlight key words and draw attention. – The background should feature an eye-catching pattern (such as paper texture, notebook, or a WeChat chat window—choose one). – Add appropriate icons or illustrations to enhance visual layers, but avoid visual clutter. Copy text: BREAKING: ChatGPT just got even better! – Superior multitasking ✨ – Stronger coding ability 💪 – Creativity off the charts 🎨 Try it now! Image aspect ratio: 9:16",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-363",
+        "Title": "Chibi Character Sticker Pack",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Please create a set of 9 Chibi stickers featuring {{the character in the reference image}}, arranged in a 3x3 grid. Design requirements: - Transparent background. - 1:1 square aspect ratio. - Consistent Chibi Ghibli cartoon style with vibrant colors. - Each sticker must have a unique action, expression, and theme, reflecting diverse emotions like \"sassy, mischievous, cute, frantic\" (e.g., rolling eyes, laughing hysterically on the floor, soul leaving body, petrified, throwing money, foodie mode, social anxiety attack). Incorporate elements related to office workers and internet memes. - Each character depiction must be complete, with no missing parts. - Each sticker must have a uniform white outline, giving it a sticker-like appearance. - No extraneous or detached elements in the image. - Strictly no text, or ensure any text is 100% accurate (no text preferred).",
+        "Parameters": [
+            "the character in the reference image"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-364",
+        "Title": "Action Figure and Real Person in the Same Frame",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "In a casual, everyday style as if shot on a mobile phone, an anime figure of {{Jackie Chan}} is placed on a desk, striking an exaggerated and cool pose, fully equipped. Simultaneously, the corresponding real-life person also appears in the frame, striking a similar pose to the figure, creating an interesting visual contrast with the figure and the real person in the same frame. The overall composition is harmonious and natural, delivering a warm and vibrant, true-to-life visual experience.",
+        "Parameters": [
+            "Jackie Chan"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-365",
+        "Title": "Country Diorama in a Toy Box",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "An ultra-realistic top-down photograph of a 3D-printed diorama inside a beige cardboard box, with the lid being held open by two human hands. The interior of the box reveals a miniature landscape of {{COUNTRY NAME}}, featuring iconic landmarks, terrain, buildings, rivers, vegetation, and crowds of tiny, detailed human figures. The diorama is filled with vibrant, geographically appropriate elements, all crafted in a tactile, toy-like style using matte 3D-printed textures with visible layer lines. At the top, the inside of the box lid displays the phrase “{{COUNTRY NAME}}” in large, colorful, raised plastic letters—each letter in a different bright color. The lighting is warm and cinematic, highlighting the textures and shadows to evoke a sense of realism and charm, as if the viewer is opening a magical miniature version of the nation",
+        "Parameters": [
+            "COUNTRY NAME"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-366",
+        "Title": "Pixar 3D Style",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Redraw this photo in Pixar 3D style",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-367",
+        "Title": "Retro CRT Computer Boot Screen",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Retro CRT computer boot screen that resolves into ASCII-art of {{shape or logo}}",
+        "Parameters": [
+            "shape or logo"
+        ],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-368",
+        "Title": "Anime-style Badge",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Based on the person in the attachment, generate a photo of an anime-style badge. Requirements: Material: Tassel Shape: Circular Main subject: A hand holding the badge",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-369",
+        "Title": "Satirical Poster Generation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Satirical Poster Text (English): GPT-4o is taking over. Forget working in image AI maybe it’s time to deliver takeout instead.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-370",
+        "Title": "One Piece Themed Figure Creation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the person in the photo into a One Piece-themed anime-style action figure, presented inside a collectible figure box designed in the visual style of the One Piece universe. The box is shown in an isometric view. Inside the box, display the character reimagined in the One Piece anime art style, posed dynamically and accompanied by essential everyday items such as a pistol, a wristwatch, a suit, and leather shoes — all miniaturized and arranged like collectible accessories. Next to the box, include a realistic, fully rendered version of the actual figure itself, outside of the packaging. This figure should be rendered with high detail and realism, showcasing the material textures and craftsmanship, as if it were a professionally photographed product.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-371",
+        "Title": "Photo to 3D Q-version Style",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the characters in the scene into 3D chibi-style figures, while keeping the original scene layout and their clothing exactly the same.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-372",
+        "Title": "3D Couple Jewelry Box Figurine",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Create a finely crafted, adorably charming 3D-rendered collectible figure based on the subjects in the photo, displayed inside a pastel-toned, warm and romantic presentation box. The box is designed in a soft cream color with gentle gold accents, resembling an elegant portable jewelry case. When opened, the box reveals a heartwarming romantic scene: two chibi-style characters gazing sweetly at each other. The lid is engraved with the words “FOREVER TOGETHER,” surrounded by delicate star and heart motifs. Inside the box stands the female from the photo, holding a small bouquet of white flowers. Beside her is her partner, the male from the photo. Both characters have large, expressive, sparkling eyes and soft, warm smiles that radiate affection and charm. Behind them is a round window, through which a sunny skyline of a traditional Chinese town can be seen, along with gently drifting clouds. The interior is softly lit with warm ambient lighting, and petals float in the background to enhance the atmosphere. The overall color scheme of both the display box and the characters is elegant and harmonious, creating a luxurious and dreamlike miniature keepsake. Aspect ratio: 9:16",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-373",
+        "Title": "PS2 Game Cover (GTA x Shrek)",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Can you create a PS2 video game case of \"Grand Theft Auto: Far Far Away\" a GTA based in the Shrek Universe.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-374",
+        "Title": "Satirical Cartoon Generation",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "An illustration in satirical comic style, rendered in a vintage American comic aesthetic. The background features a multi-tiered shelf stocked entirely with identical red baseball caps. The caps have a bold slogan on the front: “MAKE AMERICA GREAT AGAIN,” while a white side tag on each reads “MADE IN CHINA.” The composition uses a close-up perspective focusing on one specific red cap. At the bottom of the image, a price label is shown: the original price “$50.00” is crossed out with a thick black X and replaced with “$77.00.” The overall color palette uses nostalgic ochre and deep red tones, with shading that mimics the textured print style of 1990s retro comics. The composition is exaggerated and satirical, carrying a strong critique of political consumerism.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-375",
+        "Title": "Minimalist Futurist Poster",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A vertical (3:4) 4K-resolution minimalist futurist exhibition poster with an ultra-light cool gray background (#f4f4f4). At the center of the poster is a fluid 3D metaball shaped like a classic Coca-Cola bottle in full form, rendered in frosted glass with delicate grainy noise. The fluid gradient transitions from Coca-Cola Red (#E41C23) to Pearl White (#FFFFFF), giving it a silky glass-like appearance. High-position softbox lighting casts long, soft colored shadows and a subtle halo. The fluid overlaps with the text: letters obscured by the frosted glass appear with a gentle Gaussian blur. •The main title, the classic red “Coca-Cola” logo, is centered and partially obscured by the fluid. The covered letters are slightly blurred through the frosted glass. •The subtitle, in bold all-caps modern sans-serif pure black font, reads: “TASTE THE FEELING”, placed below the main title. It is also partially overlapped by the fluid and blurred in those areas, while the rest remains sharp. The overall layout is clean with generous whitespace, balanced composition, sharp focus, and HDR high dynamic range.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-376",
+        "Title": "Lego Collectible Figure",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Generate a vertically-oriented image based on my uploaded photo, using the following prompt: Classic LEGO minifigure style in a miniature scene — an animal stands beside me. The color palette of the animal should match mine. Please design the animal based on your understanding of me. You may choose any creature — real, surreal, or fantastical — that you feel best reflects my personality. The entire scene is set within a transparent glass cube, with a minimalist interior design. The base of the miniature is matte black with silver accents, following a clean and modern aesthetic. On the base, there is an elegantly engraved nameplate in a refined serif font, displaying the name of the animal. The lower part of the base subtly incorporates finely etched biological classification details, similar to a natural history museum display. The overall composition should resemble a high-end collectible artwork: meticulously crafted, curated in style, and lit with refined lighting. Balance is key to the layout. The background should feature a smooth gradient transition from dark to light tones, selected to match the dominant color theme.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-377",
+        "Title": "Personalized Room Design",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Design a cozy bedroom in a cute 3D style with C4D-quality rendering, presented in an isometric view. The room includes a bed, bookshelf, sofa, green plants, a computer desk, and a computer setup. A framed painting hangs on the wall. Outside the window, a nighttime cityscape is visible with glowing buildings and a dark sky. All furniture and objects should have a soft, rounded, stylized design to match the cute 3D aesthetic. Lighting should be warm and inviting, creating a comfortable nighttime indoor atmosphere.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-378",
+        "Title": "Character Stepping Through Portal",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A 3D chibi-style version of the person in the photo is stepping through a glowing portal, reaching out and holding the viewer’s hand. As the character pulls the viewer forward, they turn back with a dynamic glance, inviting the viewer into their world. Behind the portal is the viewer’s real-life environment: a typical programmer’s study with a desk, monitor, and laptop, rendered in realistic detail. Inside the portal lies the character’s 3D chibi world, inspired by the photo, with a cool blue color scheme that sharply contrasts with the real-world surroundings. The portal itself is a perfectly elliptical frame glowing with mysterious blue and purple light, positioned at the center of the image as a gateway between the two worlds. The scene is captured from a third-person perspective, clearly showing the viewer’s hand being pulled into the character’s world. Use a 2:3 aspect ratio.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-379",
+        "Title": "Ghibli Style",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Redraw this photo in Ghibli style",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-380",
+        "Title": "3D Chibi Chinese Wedding Scene",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the two people in the photo into chibi-style 3D cartoon characters, dressed in traditional Chinese wedding attire. The overall theme is a festive red Chinese-style wedding. The background features a decorative “囍” (double happiness) paper-cut pattern in a classic folk style. Clothing (realistic texture, traditional details): Male: Wearing a red changpao and magua (traditional robe and jacket) embroidered with golden dragon motifs, symbolizing nobility and grandeur. A large red flower is tied on his chest, representing celebration and good fortune. Female: Dressed in a red xiuhe wedding gown adorned with exquisite golden floral and phoenix embroidery, showcasing elegance and luxury. She wears delicate floral hair ornaments to enhance her gentle and graceful appearance. Headwear: Male: A traditional red zhuangyuan (scholar) hat with golden patterns and a refined golden ornament at the top, exuding classic scholarly dignity. Female: A phoenix crown adorned with a central red flower, gold 3D decorative elements, and hanging tassels—luxurious and full of classical charm. This image should reflect the joy and blessing of a traditional Chinese wedding, with realistic textures for costumes and accessories, combined with stylized 3D chibi characters.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-381",
+        "Title": "Retro Style Promotional Poster",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "A retro-style promotional poster emphasizing bold Chinese text. The background features a red-and-yellow radial burst pattern. In the center of the composition is a beautiful young woman illustrated in a refined vintage art style—she smiles warmly with a graceful, approachable presence. The poster advertises GPT’s latest AI image generation service with key slogans in Chinese, such as: “Shocking price: 9.9 per image”, “Supports all scenes, image blending, partial redrawing”, “3 revisions per image”, and “Direct AI output with no need for manual edits”. At the bottom, prominently display the call-to-action: “If you’re interested, click ‘I want this’ in the bottom-right corner”. Illustrate a hand pressing a button in the bottom-right, and place the OpenAI logo in the bottom-left.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-382",
+        "Title": "3D Polaroid Breakout Effect",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Convert the character in the scene into a 3D chibi-style figure, placed inside a Polaroid photo. The photo paper is being held by a human hand. The character is stepping out of the Polaroid frame, creating a visual effect of breaking through the two-dimensional photo border and entering the real-world 3D space.",
+        "Parameters": [],
+        "Type": "IMAGE"
+    },
+    {
+        "Id": "ALL-383",
+        "Title": "3D Chibi Proposal Scene",
+        "User": "Everyone",
+        "Category": "Visualization",
+        "Prompt": "Transform the two people in the photo into chibi-style 3D cartoon characters. Change the scene to a proposal setting, with a soft pastel-colored floral arch in the background. Use romantic tones for the overall background. Rose petals are scattered on the ground. While the characters are rendered in cute chibi 3D style, the environment—including the arch, lighting, and textures—should be realistic and photorealistic.",
+        "Parameters": [],
+        "Type": "IMAGE"
     }
-]
+];
