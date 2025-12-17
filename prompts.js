@@ -82,6 +82,11 @@ function populateUsers() {
 function renderPrompts(prompts) {
     promptsGrid.innerHTML = '';
 
+    const countElement = document.getElementById('prompts-count');
+    if (countElement) {
+        countElement.textContent = `Showing ${prompts.length} prompt${prompts.length !== 1 ? 's' : ''}`;
+    }
+
     if (prompts.length === 0) {
         promptsGrid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">No prompts found matching your criteria.</p>';
         return;
