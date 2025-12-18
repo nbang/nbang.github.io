@@ -168,17 +168,30 @@ function openEditor(prompt) {
     // Actually, prompt.Parameters is reliable per the structure.
 
     if (prompt.Parameters && prompt.Parameters.length > 0) {
-        prompt.Parameters.forEach(param => {
+        prompt.Parameters.forEach(paramStr => {
             const wrapper = document.createElement('div');
+
+            // Parse "paramName:defaultValue"
+            let paramName = paramStr;
+            let defaultValue = '';
+
+            if (paramStr.includes(':')) {
+                const parts = paramStr.split(':');
+                paramName = parts[0];
+                defaultValue = parts.slice(1).join(':');
+            }
 
             const label = document.createElement('label');
             label.className = 'block text-xs font-medium text-gray-700 mb-1';
-            label.textContent = formatParamLabel(param);
+            label.textContent = formatParamLabel(paramName);
 
-            const type = param.toLowerCase().includes('code') || param.toLowerCase().includes('list') || param.toLowerCase().includes('text') ? 'textarea' : 'input';
+            const displayType = paramName.toLowerCase().includes('code') ||
+                paramName.toLowerCase().includes('list') ||
+                paramName.toLowerCase().includes('text')
+                ? 'textarea' : 'input';
 
             let input;
-            if (type === 'textarea') {
+            if (displayType === 'textarea') {
                 input = document.createElement('textarea');
                 input.rows = 3;
                 input.className = 'w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-sm transition-shadow resize-y custom-scrollbar';
@@ -188,8 +201,14 @@ function openEditor(prompt) {
                 input.className = 'w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-sm transition-shadow';
             }
 
-            input.dataset.param = param;
-            input.placeholder = `Enter ${formatParamLabel(param)}...`;
+            input.dataset.param = paramName;
+
+            // Set default value if present
+            if (defaultValue) {
+                input.value = defaultValue;
+            }
+
+            input.placeholder = `Enter ${formatParamLabel(paramName)}...`;
             input.addEventListener('input', updatePreview);
 
             wrapper.appendChild(label);

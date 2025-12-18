@@ -116,7 +116,7 @@ const PROMPTS_DATA = [
         "Category": "Code Generation",
         "Prompt": "Develop a comprehensive budget tracking application using HTML5, CSS3, and JavaScript. Create an intuitive dashboard showing income, expenses, savings, and budget status. Implement transaction management with categories, tags, and recurring transactions. Add interactive charts and graphs for expense analysis by category and time period. Include budget goal setting with progress tracking and alerts. Support multiple accounts and transfer between accounts. Implement receipt scanning and storage using the device camera. Add export functionality for reports in {{export_format}} formats. Create a responsive design with mobile-first approach. Include data backup and restore functionality. Add forecasting features to predict future financial status based on current trends.",
         "Parameters": [
-            "export_format"
+            "export_format:csv"
         ],
         "Type": "TEXT"
     },
@@ -304,7 +304,7 @@ const PROMPTS_DATA = [
         "Category": "Code Generation",
         "Prompt": "As an experienced DevOps engineer, your task is to write a Dockerfile for the specified framework.\r\nThe framework to be used can be found below, surrounded by tags.\r\n\r\n<framework>\r\n{{framework}}\r\n</framework>\r\n\r\nPlease ensure the Dockerfile contains:\r\n\t1. The necessary base image.\r\n\t2. Necessary commands for setting up the environment.\r\n\t3. Appropriate commands for installing dependencies.\r\n\t4. Commands for copying the application code.\r\n\t5. Instructions for exposing the required ports.\r\n\t6. The entry point command to run the application.\r\nLet’s work this out in a step by step way to be sure we have the right answer.",
         "Parameters": [
-            "framework"
+            "framework:Spring"
         ],
         "Type": "TEXT"
     },
@@ -840,7 +840,7 @@ const PROMPTS_DATA = [
         "Category": "Code Refactoring",
         "Prompt": "Act as an expert software engineer in test with strong experience in {{programming_language}} who is teaching a junior developer how to write tests. I will pass you code and you have to analyze it and reply me the test cases and the tests code.",
         "Parameters": [
-            "programming_language"
+            "programming_language:Java"
         ],
         "Type": "TEXT"
     },
@@ -1535,11 +1535,11 @@ const PROMPTS_DATA = [
         "Title": "Adapt message for audience",
         "User": "Everyone",
         "Category": "Documentation",
-        "Prompt": "Reframe this message for {{audience_type}}. The message was originally written for {{context}}. Adjust tone, word choice, and style to fit the intended audience. Text: {{paste_text}}.",
+        "Prompt": "Reframe this message for {{audience_type}}. The message was originally written for {{context}}. Adjust tone, word choice, and style to fit the intended audience. Text: {{text}}.",
         "Parameters": [
             "audience_type",
             "context",
-            "paste_text"
+            "text"
         ],
         "Type": "TEXT"
     },
@@ -1584,9 +1584,9 @@ const PROMPTS_DATA = [
         "Title": "Create an action items list",
         "User": "Everyone",
         "Category": "Documentation",
-        "Prompt": "Turn the following meeting notes into a clean task list. The tasks should be grouped by owner and include deadlines if mentioned. Notes: {{paste_text}}.",
+        "Prompt": "Turn the following meeting notes into a clean task list. The tasks should be grouped by owner and include deadlines if mentioned. Notes: {{text}}.",
         "Parameters": [
-            "paste_text"
+            "text"
         ],
         "Type": "TEXT"
     },
@@ -1641,9 +1641,9 @@ const PROMPTS_DATA = [
         "Title": "Rewrite for clarity",
         "User": "Everyone",
         "Category": "Documentation",
-        "Prompt": "Rewrite the following text so it is easier to understand. The text will be used in a professional setting. Ensure the tone is clear, respectful, and concise. Text: {{paste_text}}.",
+        "Prompt": "Rewrite the following text so it is easier to understand. The text will be used in a professional setting. Ensure the tone is clear, respectful, and concise. Text: {{text}}.",
         "Parameters": [
-            "paste_text"
+            "text"
         ],
         "Type": "TEXT"
     },
@@ -2477,7 +2477,7 @@ const PROMPTS_DATA = [
         "Category": "General",
         "Prompt": "{\n  \"meta\": {\n    \"description\": \"Structured prompt for generating an isometric city diorama in a miniature 3D style, with weather and environment adaptive to the specified city.\",\n    \"variable\": \"{{City}}\"\n  },\n  \"prompt_structure\": {\n    \"perspective_and_format\": {\n      \"view\": \"Isometric camera view\",\n      \"format\": \"Miniature 3D diorama resting on a floating square base serving as the ground plinth.\",\n      \"ratio\": \"16:9 (vertical phone)\"\n    },\n    \"art_style\": {\n      \"medium\": \"High-detail 3D render\",\n      \"texture_quality\": \"Realistic textures appropriate for the region's architecture (e.g., stone/brick, stucco/adobe, glass/steel).\",\n      \"vibe\": \"Toy-like but highly sophisticated architectural model with tactile material qualities.\"\n    },\n    \"environment_and_atmosphere\": {\n      \"weather\": \"Typical climate and weather conditions associated with the specified city (e.g., overcast/rainy for London, bright/sunny/arid for Cairo, snowy for Moscow). Lighting matches the weather.\",\n      \"ground\": \"Ground surface material typical for the city (e.g., asphalt, cobblestones, sand, dirt). Surface conditions reflect the weather (e.g., wet with reflections if rainy, dry and dusty if arid, snow-covered if winter).\",\n      \"background\": \"Sky gradient and atmosphere matching the chosen weather, filling the upper frame.\"\n    },\n    \"architectural_elements\": {\n      \"housing\": \"Dense cluster of residential or commercial buildings reflecting the city's vernacular architecture style.\",\n      \"landmarks\": \"Isometric miniature representations of iconic landmarks defining the city.\"\n    },\n    \"props_and_details\": {\n      \"street_level\": \"Miniature elements specific to the city's vibe (e.g., iconic vehicles like yellow cabs or red buses, specific vegetation like palm trees or deciduous trees, streetlights, signage).\",\n      \"life\": \"Tiny, stylized figures dressed in clothing appropriate for the climate and culture.\"\n    },\n    \"text_overlay\": {\n      \"content\": \"{{City}}\",\n      \"font_style\": \"White, sans-serif, bold, uppercase letters\",\n      \"placement\": \"Centered floating at the very top of the frame.\"\n    }\n  }\n}",
         "Parameters": [
-            "City"
+            "City:Ho Chi Minh"
         ],
         "Type": "STRUCTURED"
     },
@@ -3593,9 +3593,9 @@ const PROMPTS_DATA = [
         "Title": "Document daily priorities",
         "User": "Everyone",
         "Category": "Planning",
-        "Prompt": "Create a prioritized to-do list from the following tasks: {{paste_tasks}}. The context is a typical workday with limited time. Suggest which tasks should be done first and why.",
+        "Prompt": "Create a prioritized to-do list from the following tasks: {{tasks}}. The context is a typical workday with limited time. Suggest which tasks should be done first and why.",
         "Parameters": [
-            "paste_tasks"
+            "tasks"
         ],
         "Type": "TEXT"
     },
@@ -3631,10 +3631,10 @@ const PROMPTS_DATA = [
         "Title": "Summarize a long document",
         "User": "Everyone",
         "Category": "Summarization",
-        "Prompt": "Summarize the following document into 5 key points and 3 recommended actions. The document is {{type}}. Keep the summary concise and professional. Text: {{paste_document}}.",
+        "Prompt": "Summarize the following document into 5 key points and 3 recommended actions. The document is {{type}}. Keep the summary concise and professional. Text: {{document}}.",
         "Parameters": [
             "type",
-            "paste_document"
+            "document"
         ],
         "Type": "TEXT"
     },
@@ -3643,9 +3643,9 @@ const PROMPTS_DATA = [
         "Title": "Summarize long email",
         "User": "Everyone",
         "Category": "Summarization",
-        "Prompt": "Summarize this email thread into a short recap. The thread includes several back-and-forth messages. Highlight key decisions, action items, and open questions. Email: {{paste_text}}.",
+        "Prompt": "Summarize this email thread into a short recap. The thread includes several back-and-forth messages. Highlight key decisions, action items, and open questions. Email: {{text}}.",
         "Parameters": [
-            "paste_text"
+            "text"
         ],
         "Type": "TEXT"
     },
@@ -3654,9 +3654,9 @@ const PROMPTS_DATA = [
         "Title": "Summarize meeting notes",
         "User": "Everyone",
         "Category": "Summarization",
-        "Prompt": "Summarize these meeting notes into a structured recap. The notes are rough and informal. Organize them into categories: key decisions, next steps, and responsibilities. Notes: {{paste_text}}.",
+        "Prompt": "Summarize these meeting notes into a structured recap. The notes are rough and informal. Organize them into categories: key decisions, next steps, and responsibilities. Notes: {{text}}.",
         "Parameters": [
-            "paste_text"
+            "text"
         ],
         "Type": "TEXT"
     },
@@ -3739,10 +3739,10 @@ const PROMPTS_DATA = [
         "Title": "3D Chibi-style University Anthropomorphic Mascot",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "Create a personified 3D chibi-style anime girl character representing {{Northwestern Polytechnical University}}, embodying the school’s distinctive strengths in {{aeronautics, astronautics, and marine engineering}}.",
+        "Prompt": "Create a personified 3D chibi-style anime girl character representing {{University}}, embodying the school’s distinctive strengths in {{Strengths}}.",
         "Parameters": [
-            "Northwestern Polytechnical University",
-            "aeronautics, astronautics, and marine engineering"
+            "University:Northwestern Polytechnical University",
+            "Strengths:aeronautics, astronautics, and marine engineering"
         ],
         "Type": "IMAGE"
     },
@@ -3780,9 +3780,9 @@ const PROMPTS_DATA = [
         "Title": "3D Papercraft Pop-up Book",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "Multi-layered foldable paper sculpture pop-up book, placed on a desk, with a clean background highlighting the main subject. The book presents a 3D flip-book style, with a 2:3 vertical aspect ratio. The open pages display the scene of {{Nezha Demon Child version battling Ao Bing}}. All elements are finely foldable and assembled, showcasing a realistic and delicate texture of folded paper. The composition uniformly adopts a frontal perspective, with an overall dreamy and beautiful visual style, vibrant and gorgeous colors, full of a fantastical and lively story atmosphere.",
+        "Prompt": "Multi-layered foldable paper sculpture pop-up book, placed on a desk, with a clean background highlighting the main subject. The book presents a 3D flip-book style, with a 2:3 vertical aspect ratio. The open pages display the scene of {{scene}}. All elements are finely foldable and assembled, showcasing a realistic and delicate texture of folded paper. The composition uniformly adopts a frontal perspective, with an overall dreamy and beautiful visual style, vibrant and gorgeous colors, full of a fantastical and lively story atmosphere.",
         "Parameters": [
-            "Nezha Demon Child version battling Ao Bing"
+            "scene:Nezha Demon Child version battling Ao Bing"
         ],
         "Type": "IMAGE"
     },
@@ -3831,8 +3831,8 @@ const PROMPTS_DATA = [
         "Category": "Visualization",
         "Prompt": "Generate a whimsical miniature world featuring {{landmark_name}} crafted entirely from colorful modeling clay. Every element (buildings, trees, waterways, and urban features) should appear hand-sculpted with visible fingerprints and organic clay textures. Use a playful, childlike style with vibrant colors: bright azure sky, puffy cream clouds, emerald trees, and buildings in warm yellows, oranges, reds, and blues. The handmade quality should be evident in every surface and gentle curve. Capture from a wide perspective showcasing the entire miniature landscape in a harmonious, joyful composition.\n\nAt the top-center, add the city name {{city_name}} in a clean, bold, friendly rounded font that matches the playful clay aesthetic. The text should be clearly readable and high-contrast against the sky, with subtle depth as if it is also made from clay (slight 3D clay lettering), but keep it simple and not overly detailed.\n\nInclude no other text, words, or signage anywhere else in the scene. Only sculptural clay elements should define the location through recognizable architectural features. 1080x1080 dimension.",
         "Parameters": [
-            "city_name",
-            "landmark_name"
+            "city_name:Paris",
+            "landmark_name:Eiffel Tower"
         ],
         "Type": "IMAGE"
     },
@@ -3841,9 +3841,9 @@ const PROMPTS_DATA = [
         "Title": "Action Figure and Real Person in the Same Frame",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "In a casual, everyday style as if shot on a mobile phone, an anime figure of {{Jackie Chan}} is placed on a desk, striking an exaggerated and cool pose, fully equipped. Simultaneously, the corresponding real-life person also appears in the frame, striking a similar pose to the figure, creating an interesting visual contrast with the figure and the real person in the same frame. The overall composition is harmonious and natural, delivering a warm and vibrant, true-to-life visual experience.",
+        "Prompt": "In a casual, everyday style as if shot on a mobile phone, an anime figure of {{character}} is placed on a desk, striking an exaggerated and cool pose, fully equipped. Simultaneously, the corresponding real-life person also appears in the frame, striking a similar pose to the figure, creating an interesting visual contrast with the figure and the real person in the same frame. The overall composition is harmonious and natural, delivering a warm and vibrant, true-to-life visual experience.",
         "Parameters": [
-            "Jackie Chan"
+            "character:Jackie Chan"
         ],
         "Type": "IMAGE"
     },
@@ -3983,11 +3983,10 @@ const PROMPTS_DATA = [
         "Title": "Children's Coloring Page Illustration (with Color Reference)",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "A black and white line drawing coloring illustration, suitable for direct printing on standard size (8.5x11 inch) paper, without paper borders. The overall illustration style is fresh and simple, using clear and smooth black outline lines, without shadows, grayscale, or color filling, with a pure white background for easy coloring. {{At the same time, for the convenience of users who are not good at coloring, please generate a complete colored version in the lower right corner as a small image for reference}} Suitable for: {{6-9 year old children}} Scene description: {{A unicorn is walking on the grass in the forest, with bright sunshine, blue sky and white clouds}}",
+        "Prompt": "A black and white line drawing coloring illustration, suitable for direct printing on standard size (8.5x11 inch) paper, without paper borders. The overall illustration style is fresh and simple, using clear and smooth black outline lines, without shadows, grayscale, or color filling, with a pure white background for easy coloring. At the same time, for the convenience of users who are not good at coloring, please generate a complete colored version in the lower right corner as a small image for reference Suitable for: {{AGE}} children. Scene description: {{description}}",
         "Parameters": [
-            "At the same time, for the convenience of users who are not good at coloring, please generate a complete colored version in the lower right corner as a small image for reference",
-            "6-9 year old children",
-            "A unicorn is walking on the grass in the forest, with bright sunshine, blue sky and white clouds"
+            "AGE: 6-9-year-old",
+            "description:A unicorn is walking on the grass in the forest, with bright sunshine, blue sky and white clouds"
         ],
         "Type": "IMAGE"
     },
@@ -4041,9 +4040,9 @@ const PROMPTS_DATA = [
         "Title": "Code Style Business Card",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "A close-up shot of a hand holding a business card designed to look like a JSON file opened in VS Code. The card shows code formatted in realistic syntax-highlighted JSON code. The window includes typical toolbar icons and a title bar labeled Business Card.json, styled exactly like the interface of VS Code. Background is slightly blurred, keeping the focus on the card. The card displays the following code formatted in JSON: {{ \"name\": \"Jamez Bondos\", \"title\": \"Your Title\", \"email\": \"your@email.com\", \"link\": \"yourwebsite\" }}",
+        "Prompt": "A close-up shot of a hand holding a business card designed to look like a JSON file opened in VS Code. The card shows code formatted in realistic syntax-highlighted JSON code. The window includes typical toolbar icons and a title bar labeled Business Card.json, styled exactly like the interface of VS Code. Background is slightly blurred, keeping the focus on the card. The card displays the following code formatted in JSON: {{ JSON_String }}",
         "Parameters": [
-            " \"name\": \"Jamez Bondos\", \"title\": \"Your Title\", \"email\": \"your@email.com\", \"link\": \"yourwebsite\" "
+            "JSON_String:\"name\": \"Jamez Bondos\", \"title\": \"Your Title\", \"email\": \"your@email.com\", \"link\": \"yourwebsite\" "
         ],
         "Type": "IMAGE"
     },
@@ -4302,7 +4301,7 @@ const PROMPTS_DATA = [
         "Category": "Visualization",
         "Prompt": "Design a \"floating miniature island\" shaped like the {{city}} map/silhouette, gliding above white clouds. On the island, seamlessly blend {{city}}’s most iconic landmarks, architectural structures, and natural landscapes (parks, waterfronts, hills). Integrate large white 3D letters spelling \"{{city}}\" into the island’s surface or geographic texture. Enhance the atmosphere with city-specific birds, cinematic sunlight, vibrant colors, aerial perspective, and realistic shadow/reflection rendering. Ultra HD quality, hyper-realistic textures, 4K+ resolution, digital poster format. Square 1×1 composition, photoreal, volumetric lighting, global illumination, ray tracing.",
         "Parameters": [
-            "city"
+            "city:Ho Chi Minh"
         ],
         "Type": "IMAGE"
     },
@@ -4331,10 +4330,15 @@ const PROMPTS_DATA = [
         "Title": "Futuristic Logo Trading Card",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "{ \"prompt\": \"A futuristic trading card with a dark, moody neon aesthetic and soft sci-fi lighting. The card features a semi-transparent, rounded rectangle with slightly muted glowing edges, appearing as if made of holographic glass. At the center is a large glowing logo of {{logo}}, with no additional text or label, illuminated with a smooth gradient of {{colors}}, but not overly bright. The reflections on the card surface should be subtle, with a slight glossy finish catching ambient light. The background is a dark carbon fiber texture or deep gradient with soft ambient glows bleeding into the edges. Add subtle light rays streaming down diagonally from the top, giving the scene a soft cinematic glow. Apply light motion blur to the edges and reflections to give the scene a sense of depth and energy, as if it's part of a high-end tech animation still. Below the card, include realistic floor reflections that mirror the neon edges and logo—slightly diffused for a grounded, futuristic look. Text elements are minimal and softly lit: top-left shows '{{ticker}}', top-right has a stylized signature, and the bottom displays '{{company_name}}' with a serial number '{{card_number}}', a revenue badge reading '{{revenue}}', and the year '{{year}}'. Typography should have a faint glow with slight blurring, and all elements should feel premium, elegant, and softly illuminated—like a high-end cyberpunk collectible card.\", \"style\": {{ \"lighting\": \"Neon glow, soft reflections\", \"font\": \"Modern sans-serif, clean and minimal\", \"layout\": \"Centered, structured like a digital collectible card\", \"materials\": \"Glass, holographic plastic, glowing metal edges\" }}, \"parameters\": { \"logo\": \"Tesla logo\", \"ticker\": \"TSLA\", \"company_name\": \"Tesla Inc.\", \"card_number\": \"#0006\", \"revenue\": \"$96.8B\", \"year\": \"2025\", \"colors\": {{ \"red\", \"white\", \"dark gray\" }} }, \"medium\": \"3D render, high-resolution digital art\", \"size\": \"1080px by 1080px\" }",
+        "Prompt": "{ \"prompt\": \"A futuristic trading card with a dark, moody neon aesthetic and soft sci-fi lighting. The card features a semi-transparent, rounded rectangle with slightly muted glowing edges, appearing as if made of holographic glass. At the center is a large glowing logo of {{logo}}, with no additional text or label, illuminated with a smooth gradient of {{colors}}, but not overly bright. The reflections on the card surface should be subtle, with a slight glossy finish catching ambient light. The background is a dark carbon fiber texture or deep gradient with soft ambient glows bleeding into the edges. Add subtle light rays streaming down diagonally from the top, giving the scene a soft cinematic glow. Apply light motion blur to the edges and reflections to give the scene a sense of depth and energy, as if it's part of a high-end tech animation still. Below the card, include realistic floor reflections that mirror the neon edges and logo—slightly diffused for a grounded, futuristic look. Text elements are minimal and softly lit: top-left shows '{{ticker}}', top-right has a stylized signature, and the bottom displays '{{company_name}}' with a serial number '{{card_number}}', a revenue badge reading '{{revenue}}', and the year '{{year}}'. Typography should have a faint glow with slight blurring, and all elements should feel premium, elegant, and softly illuminated—like a high-end cyberpunk collectible card.\", \"style\": {{ \"lighting\": \"Neon glow, soft reflections\", \"font\": \"Modern sans-serif, clean and minimal\", \"layout\": \"Centered, structured like a digital collectible card\", \"materials\": \"Glass, holographic plastic, glowing metal edges\" }}, \"medium\": \"3D render, high-resolution digital art\", \"size\": \"1080px by 1080px\" }",
         "Parameters": [
-            " \"red\", \"white\", \"dark gray\" ",
-            " \"lighting\": \"Neon glow, soft reflections\", \"font\": \"Modern sans-serif, clean and minimal\", \"layout\": \"Centered, structured like a digital collectible card\", \"materials\": \"Glass, holographic plastic, glowing metal edges\" "
+            "logo:Tesla logo",
+            "colors:red,white,dark gray",
+            "ticker:TSLA",
+            "company_name:Tesla Inc.",
+            "card_number:#0006",
+            "revenue:$96.8B",
+            "year:2025"
         ],
         "Type": "IMAGE"
     },
@@ -4451,7 +4455,7 @@ const PROMPTS_DATA = [
         "Category": "Visualization",
         "Prompt": "Present a clear, 45° top-down isometric miniature 3D cartoon scene of {{city_name}}, featuring its most iconic landmarks and architectural elements. Use soft, refined textures with realistic PBR materials and gentle, lifelike lighting and shadows. Integrate the current weather conditions directly into the city environment to create an immersive atmospheric mood.\nUse a clean, minimalistic composition with a soft, solid-colored background.\n\nAt the top-center, place the title “İSTANBUL” in large bold text, a prominent weather icon beneath it, then the date (small text) and temperature (medium text).\nAll text must be centered with consistent spacing, and may subtly overlap the tops of the buildings.\nSquare 1080x1080 dimension.",
         "Parameters": [
-            "city_name"
+            "city_name:Ho Chi Minh"
         ],
         "Type": "IMAGE"
     },
@@ -4529,9 +4533,9 @@ const PROMPTS_DATA = [
         "Title": "Miniature Three-dimensional Scene Presentation",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "Miniature three-dimensional scene presentation using tilt-shift photography techniques, depicting a chibi-style version of the scene {{Sun Wukong’s Three Battles with the White Bone Demon}}",
+        "Prompt": "Miniature three-dimensional scene presentation using tilt-shift photography techniques, depicting a chibi-style version of the scene {{scene}}",
         "Parameters": [
-            "Sun Wukong’s Three Battles with the White Bone Demon"
+            "scene:Sun Wukong’s Three Battles with the White Bone Demon"
         ],
         "Type": "IMAGE"
     },
@@ -4540,15 +4544,9 @@ const PROMPTS_DATA = [
         "Title": "Minimalist 3D Illustration",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "Generate a toilet with the following JSON profile: { \"art_style_profile\": { \"style_name\": \"Minimalist 3D Illustration\", \"visual_elements\": { \"shape_language\": \"Rounded edges, smooth and soft forms with simplified geometry\", \"colors\": { \"primary_palette\": {{\"Soft beige, light gray, warm orange\"}}, \"accent_colors\": {{\"Warm orange for focal elements\"}}, \"shading\": \"Soft gradients with smooth transitions, avoiding harsh shadows or highlights\" }, \"lighting\": {{ \"type\": \"Soft, diffused lighting\", \"source_direction\": \"Above and slightly to the right\", \"shadow_style\": \"Subtle and diffused, no sharp or high-contrast shadows\" }}, \"materials\": {{ \"surface_texture\": \"Matte, smooth surfaces with subtle shading\", \"reflectivity\": \"Low to none, avoiding glossiness\" }}, \"composition\": {{ \"object_presentation\": \"Single, central object displayed in isolation with ample negative space\", \"perspective\": \"Slightly angled, giving a three-dimensional feel without extreme depth\", \"background\": \"Solid, muted color that complements the object without distraction\" }}, \"typography\": {{ \"font_style\": \"Minimalistic, sans-serif\", \"text_placement\": \"Bottom-left corner with small, subtle text\", \"color\": \"Gray, low-contrast against the background\" }}, \"rendering_style\": {{ \"technique\": \"3D render with simplified, low-poly aesthetics\", \"detail_level\": \"Medium detail, focusing on form and color over texture or intricacy\" }} }, \"purpose\": \"To create clean, aesthetically pleasing visuals that emphasize simplicity, approachability, and modernity.\" } }",
+        "Prompt": "Generate a {{object}} with the following JSON profile: { \"art_style_profile\": { \"style_name\": \"Minimalist 3D Illustration\", \"visual_elements\": { \"shape_language\": \"Rounded edges, smooth and soft forms with simplified geometry\", \"colors\": { \"primary_palette\": {{\"Soft beige, light gray, warm orange\"}}, \"accent_colors\": {{\"Warm orange for focal elements\"}}, \"shading\": \"Soft gradients with smooth transitions, avoiding harsh shadows or highlights\" }, \"lighting\": {{ \"type\": \"Soft, diffused lighting\", \"source_direction\": \"Above and slightly to the right\", \"shadow_style\": \"Subtle and diffused, no sharp or high-contrast shadows\" }}, \"materials\": {{ \"surface_texture\": \"Matte, smooth surfaces with subtle shading\", \"reflectivity\": \"Low to none, avoiding glossiness\" }}, \"composition\": {{ \"object_presentation\": \"Single, central object displayed in isolation with ample negative space\", \"perspective\": \"Slightly angled, giving a three-dimensional feel without extreme depth\", \"background\": \"Solid, muted color that complements the object without distraction\" }}, \"typography\": {{ \"font_style\": \"Minimalistic, sans-serif\", \"text_placement\": \"Bottom-left corner with small, subtle text\", \"color\": \"Gray, low-contrast against the background\" }}, \"rendering_style\": {{ \"technique\": \"3D render with simplified, low-poly aesthetics\", \"detail_level\": \"Medium detail, focusing on form and color over texture or intricacy\" }} }, \"purpose\": \"To create clean, aesthetically pleasing visuals that emphasize simplicity, approachability, and modernity.\" } }",
         "Parameters": [
-            "\"Soft beige, light gray, warm orange\"",
-            "\"Warm orange for focal elements\"",
-            " \"type\": \"Soft, diffused lighting\", \"source_direction\": \"Above and slightly to the right\", \"shadow_style\": \"Subtle and diffused, no sharp or high-contrast shadows\" ",
-            " \"surface_texture\": \"Matte, smooth surfaces with subtle shading\", \"reflectivity\": \"Low to none, avoiding glossiness\" ",
-            " \"object_presentation\": \"Single, central object displayed in isolation with ample negative space\", \"perspective\": \"Slightly angled, giving a three-dimensional feel without extreme depth\", \"background\": \"Solid, muted color that complements the object without distraction\" ",
-            " \"font_style\": \"Minimalistic, sans-serif\", \"text_placement\": \"Bottom-left corner with small, subtle text\", \"color\": \"Gray, low-contrast against the background\" ",
-            " \"technique\": \"3D render with simplified, low-poly aesthetics\", \"detail_level\": \"Medium detail, focusing on form and color over texture or intricacy\" "
+            "object:toilet"
         ],
         "Type": "IMAGE"
     },
@@ -4557,8 +4555,10 @@ const PROMPTS_DATA = [
         "Title": "Minimalist 3D Illustration (Markdown Format)",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "Draw a Toilet ## 🎨 Art Style: Minimalist 3D Illustration ### 🟢 Shape Language - Rounded edges and smooth, soft forms using simplified geometric shapes. ### 🎨 Colors - **Primary palette:** soft beige, light gray, warm orange. - **Accent color:** warm orange for focal elements. - **Shading:** gentle gradients and smooth transitions, avoiding harsh shadows and highlights. ### 💡 Lighting - **Type:** soft, diffuse lighting. - **Light source direction:** from above, slightly to the right. - **Shadow style:** subtle and diffused, without sharp or high-contrast shadows. ### 🧱 Materials - **Surface texture:** matte and smooth with subtle light variation. - **Reflectivity:** low to none, avoiding noticeable gloss. ### 🖼️ Composition - **Object presentation:** a single, centered object with generous negative space around it. - **Perspective:** slight tilt to suggest depth, but no strong depth-of-field effects. - **Background:** flat color, low saturation, harmonious with the subject and non-distracting. ### ✒️ Typography - **Font style:** minimalist sans-serif. - **Text placement:** bottom left corner, small and unobtrusive. - **Font color:** gray, low contrast with the background. ### 🖥️ Rendering Style - **Technique:** 3D rendering in a simplified low-poly style. - **Detail level:** medium — focus on shape and color, avoiding complex textures or fine details. ## 🎯 Style Goal > Create a clean and aesthetically pleasing visual that emphasizes simplicity, approachability, and modernity.",
-        "Parameters": [],
+        "Prompt": "Draw a {{object}} ## 🎨 Art Style: Minimalist 3D Illustration ### 🟢 Shape Language - Rounded edges and smooth, soft forms using simplified geometric shapes. ### 🎨 Colors - **Primary palette:** soft beige, light gray, warm orange. - **Accent color:** warm orange for focal elements. - **Shading:** gentle gradients and smooth transitions, avoiding harsh shadows and highlights. ### 💡 Lighting - **Type:** soft, diffuse lighting. - **Light source direction:** from above, slightly to the right. - **Shadow style:** subtle and diffused, without sharp or high-contrast shadows. ### 🧱 Materials - **Surface texture:** matte and smooth with subtle light variation. - **Reflectivity:** low to none, avoiding noticeable gloss. ### 🖼️ Composition - **Object presentation:** a single, centered object with generous negative space around it. - **Perspective:** slight tilt to suggest depth, but no strong depth-of-field effects. - **Background:** flat color, low saturation, harmonious with the subject and non-distracting. ### ✒️ Typography - **Font style:** minimalist sans-serif. - **Text placement:** bottom left corner, small and unobtrusive. - **Font color:** gray, low contrast with the background. ### 🖥️ Rendering Style - **Technique:** 3D rendering in a simplified low-poly style. - **Detail level:** medium — focus on shape and color, avoiding complex textures or fine details. ## 🎯 Style Goal > Create a clean and aesthetically pleasing visual that emphasizes simplicity, approachability, and modernity.",
+        "Parameters": [
+            "object:toilet"
+        ],
         "Type": "IMAGE"
     },
     {
@@ -4575,9 +4575,9 @@ const PROMPTS_DATA = [
         "Title": "Nostalgic Anime Film Poster",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "{{The Lord of the Rings}} anime film poster, the anime is in the style of High School DXD. Visible even folds are seen across the poster as it’s been folded over time, and due to some creases over damaging the poster has caused some physical damage scuffing along the creases and the color has partially faded. Indiscriminate flaps and folds and scratches all around simply from moving back and forth causing subtle yet incremental damage with the ever expanding of entropy we cannot escape, but the loving memories in our hearts will forever be whole. Making the objects we collect along the way priceless is the essence you feel when looking at this nostalgic poster.",
+        "Prompt": "{{movie}} anime film poster, the anime is in the style of High School DXD. Visible even folds are seen across the poster as it’s been folded over time, and due to some creases over damaging the poster has caused some physical damage scuffing along the creases and the color has partially faded. Indiscriminate flaps and folds and scratches all around simply from moving back and forth causing subtle yet incremental damage with the ever expanding of entropy we cannot escape, but the loving memories in our hearts will forever be whole. Making the objects we collect along the way priceless is the essence you feel when looking at this nostalgic poster.",
         "Parameters": [
-            "The Lord of the Rings"
+            "movie: The Lord of the Rings"
         ],
         "Type": "IMAGE"
     },
@@ -4827,9 +4827,9 @@ const PROMPTS_DATA = [
         "Title": "Story Scene in Crystal Ball",
         "User": "Everyone",
         "Category": "Visualization",
-        "Prompt": "A delicate crystal ball rests quietly on a warm, softly lit tabletop by the window. The background is blurred and hazy, with warm-toned sunlight gently passing through the crystal ball, refracting specks of golden light that softly illuminate the dim surroundings. Inside the crystal ball, a miniature three-dimensional world themed around {{Chang’e Flying to the Moon}} is naturally displayed — a finely detailed, dreamlike 3D scene. All characters and objects are rendered in adorable chibi style, exquisitely crafted and visually charming, with vivid emotional interactions between them. The overall atmosphere is rich with East Asian fantasy elements, full of intricate details and a surreal magical realism texture. The entire scene feels poetic and dreamy, luxurious yet elegant, radiating a gentle, comforting glow — as if imbued with life through the warm play of light and shadow.",
+        "Prompt": "A delicate crystal ball rests quietly on a warm, softly lit tabletop by the window. The background is blurred and hazy, with warm-toned sunlight gently passing through the crystal ball, refracting specks of golden light that softly illuminate the dim surroundings. Inside the crystal ball, a miniature three-dimensional world themed around {{scene}} is naturally displayed — a finely detailed, dreamlike 3D scene. All characters and objects are rendered in adorable chibi style, exquisitely crafted and visually charming, with vivid emotional interactions between them. The overall atmosphere is rich with East Asian fantasy elements, full of intricate details and a surreal magical realism texture. The entire scene feels poetic and dreamy, luxurious yet elegant, radiating a gentle, comforting glow — as if imbued with life through the warm play of light and shadow.",
         "Parameters": [
-            "Chang’e Flying to the Moon"
+            "scene:Chang’e Flying to the Moon"
         ],
         "Type": "IMAGE"
     },
@@ -4957,7 +4957,7 @@ const PROMPTS_DATA = [
         "Category": "Visualization",
         "Prompt": "Create a hyper-realistic 3D diorama-style model of {{Landmark Name}}. The model should appear as a miniature, set on a raised cross-section of earth that reveals soil and rock layers beneath a lush grassy surface. The structure must be highly detailed and proportionally accurate, surrounded by tiny realistic elements like region-appropriate street lamps, native trees, shrubs, water features like small fountains, and historically or culturally fitting pathways. The scene should evoke the unique character of {{Landmark Name}}’s surrounding landscape. The environment must include a soft white background to draw full attention to the model. Include the text “{{Landmark Name}}” in large, bold, elegant lettering prominently displayed on a big sign or billboard at the front of the diorama, easily readable and eye-catching, along with a large national flag on a tall, prominent flagpole positioned beside {{Landmark Name}}, clearly visible and waving. 1080x1080 dimension",
         "Parameters": [
-            "Landmark Name"
+            "Landmark Name:Eiffel Tower"
         ],
         "Type": "IMAGE"
     },
@@ -5310,9 +5310,9 @@ const PROMPTS_DATA = [
         "Title": "Analyze trends in employee attrition",
         "User": "HR",
         "Category": "HRM",
-        "Prompt": "Analyze this employee attrition dataset from the last 12 months. Focus on patterns by department, tenure, and exit reasons. Summarize key insights and suggest 2–3 actions HR should consider. Present findings as bullet points followed by a short paragraph. {{upload_your_csv_or_paste_table_here}}",
+        "Prompt": "Analyze this employee attrition dataset from the last 12 months. Focus on patterns by department, tenure, and exit reasons. Summarize key insights and suggest 2–3 actions HR should consider. Present findings as bullet points followed by a short paragraph. {{upload_your_csv_or_table_here}}",
         "Parameters": [
-            "upload_your_csv_or_paste_table_here"
+            "upload_your_csv_or_table_here"
         ],
         "Type": "TEXT"
     },
@@ -6326,9 +6326,9 @@ const PROMPTS_DATA = [
         "Title": "Create a customer spotlight post",
         "User": "Marketer",
         "Category": "Marketing",
-        "Prompt": "Write a customer spotlight post based on this success story: {{paste_key_details}}. Make it conversational, authentic, and aligned to our brand voice. Output as a LinkedIn post draft.",
+        "Prompt": "Write a customer spotlight post based on this success story: {{key_details}}. Make it conversational, authentic, and aligned to our brand voice. Output as a LinkedIn post draft.",
         "Parameters": [
-            "paste_key_details"
+            "key_details"
         ],
         "Type": "TEXT"
     },
@@ -6337,10 +6337,10 @@ const PROMPTS_DATA = [
         "Title": "Create a social post series",
         "User": "Marketer",
         "Category": "Marketing",
-        "Prompt": "Draft a 3-post social media series promoting {{event_product_or_milestone}}. Use this background for context: {{paste_details}}. Each post should include copy and a suggested visual description.",
+        "Prompt": "Draft a 3-post social media series promoting {{event_product_or_milestone}}. Use this background for context: {{details}}. Each post should include copy and a suggested visual description.",
         "Parameters": [
             "event_product_or_milestone",
-            "paste_details"
+            "details"
         ],
         "Type": "TEXT"
     },
@@ -6715,10 +6715,10 @@ const PROMPTS_DATA = [
         "Title": "Create account plan summary",
         "User": "Product Owner",
         "Category": "Customer Success",
-        "Prompt": "Draft a 1-pager account plan for {{customer_name}}. Use notes from our last 2 calls + contract info + goals: {{paste_here}}. Output should be formatted as goals, blockers, actions, and renewals.",
+        "Prompt": "Draft a 1-pager account plan for {{customer_name}}. Use notes from our last 2 calls + contract info + goals: {{here}}. Output should be formatted as goals, blockers, actions, and renewals.",
         "Parameters": [
             "customer_name",
-            "paste_here"
+            "here"
         ],
         "Type": "TEXT"
     },
@@ -6758,10 +6758,10 @@ const PROMPTS_DATA = [
         "Title": "Draft executive email update",
         "User": "Product Owner",
         "Category": "Customer Success",
-        "Prompt": "Write a weekly update email for {{executive_stakeholder_at_customer}}. Use these internal notes from this week’s call and usage metrics: {{paste_here}}. Output should be a short, polished email with 3 bullets.",
+        "Prompt": "Write a weekly update email for {{executive_stakeholder_at_customer}}. Use these internal notes from this week’s call and usage metrics: {{here}}. Output should be a short, polished email with 3 bullets.",
         "Parameters": [
             "executive_stakeholder_at_customer",
-            "paste_here"
+            "here"
         ],
         "Type": "TEXT"
     },
@@ -6881,9 +6881,9 @@ const PROMPTS_DATA = [
         "Title": "Visualize customer journey map",
         "User": "Product Owner",
         "Category": "Customer Success",
-        "Prompt": "Turn this outline of customer lifecycle stages into a visual journey map. Use the stages and pain points listed here: {{paste_text}}. Output as a labeled diagram with 5 lifecycle stages.",
+        "Prompt": "Turn this outline of customer lifecycle stages into a visual journey map. Use the stages and pain points listed here: {{text}}. Output as a labeled diagram with 5 lifecycle stages.",
         "Parameters": [
-            "paste_text"
+            "text"
         ],
         "Type": "TEXT"
     },
@@ -7181,10 +7181,10 @@ const PROMPTS_DATA = [
         "Title": "Draft renewal pitch for key customer",
         "User": "Sales",
         "Category": "Communication",
-        "Prompt": "Draft a renewal pitch for {{customer_name}} based on this renewal history and value data: {{paste_data}}. Include key ROI proof points and renewal recommendation. Output as a short pitch and optional follow-up email.",
+        "Prompt": "Draft a renewal pitch for {{customer_name}} based on this renewal history and value data: {{data}}. Include key ROI proof points and renewal recommendation. Output as a short pitch and optional follow-up email.",
         "Parameters": [
             "customer_name",
-            "paste_data"
+            "data"
         ],
         "Type": "TEXT"
     },
@@ -7204,9 +7204,9 @@ const PROMPTS_DATA = [
         "Title": "Rework demo follow-up email",
         "User": "Sales",
         "Category": "Communication",
-        "Prompt": "Rewrite this follow-up email after a demo to sound more consultative. Original email: {{paste_here}}. Include recap, next steps, and call scheduling CTA. Output as email text.",
+        "Prompt": "Rewrite this follow-up email after a demo to sound more consultative. Original email: {{here}}. Include recap, next steps, and call scheduling CTA. Output as email text.",
         "Parameters": [
-            "paste_here"
+            "here"
         ],
         "Type": "TEXT"
     },
@@ -7215,9 +7215,9 @@ const PROMPTS_DATA = [
         "Title": "Generate performance comparison chart",
         "User": "Sales",
         "Category": "Evaluation",
-        "Prompt": "Here’s a table of rep performance by quarter: {{paste_data}}. Compare top vs bottom performers. Show chart with trends and call out key differences. Output as table + insights.",
+        "Prompt": "Here’s a table of rep performance by quarter: {{data}}. Compare top vs bottom performers. Show chart with trends and call out key differences. Output as table + insights.",
         "Parameters": [
-            "paste_data"
+            "data"
         ],
         "Type": "TEXT"
     },
@@ -7237,9 +7237,9 @@ const PROMPTS_DATA = [
         "Title": "Prioritize accounts using firmographic data",
         "User": "Sales",
         "Category": "Evaluation",
-        "Prompt": "I have this list of accounts: {{paste_sample}}. Prioritize them based on {{criteria}}. Output a ranked list with reasons why.",
+        "Prompt": "I have this list of accounts: {{sample}}. Prioritize them based on {{criteria}}. Output a ranked list with reasons why.",
         "Parameters": [
-            "paste_sample",
+            "sample",
             "criteria"
         ],
         "Type": "TEXT"
@@ -7327,9 +7327,9 @@ const PROMPTS_DATA = [
         "Title": "Create summary of rep activity",
         "User": "Sales",
         "Category": "Summarization",
-        "Prompt": "Write a daily update summarizing key rep activities. Inputs: {{paste_call_summaries_or_crm_exports}}. Make it upbeat and concise. Output as 3–5 bullet message.",
+        "Prompt": "Write a daily update summarizing key rep activities. Inputs: {{call_summaries_or_crm_exports}}. Make it upbeat and concise. Output as 3–5 bullet message.",
         "Parameters": [
-            "paste_call_summaries_or_crm_exports"
+            "call_summaries_or_crm_exports"
         ],
         "Type": "TEXT"
     },
@@ -7338,9 +7338,9 @@ const PROMPTS_DATA = [
         "Title": "Draft exec update on pipeline status",
         "User": "Sales",
         "Category": "Summarization",
-        "Prompt": "Summarize our pipeline health this month for execs. Inputs: {{paste_data}}. Include total pipeline, top risks, biggest wins, and forecast confidence. Write it like a short exec update.",
+        "Prompt": "Summarize our pipeline health this month for execs. Inputs: {{data}}. Include total pipeline, top risks, biggest wins, and forecast confidence. Write it like a short exec update.",
         "Parameters": [
-            "paste_data"
+            "data"
         ],
         "Type": "TEXT"
     },
