@@ -1,4 +1,4 @@
-const PROMPTS_DATA = [
+const promptData = [
     {
         "Id": "DEV-000",
         "Title": "Comprehensive Repository Analysis and Bug Fixing Framework",
@@ -7402,4 +7402,4 @@ const PROMPTS_DATA = [
         "Parameters": [],
         "Type": "IMAGE"
     }
-]
+];

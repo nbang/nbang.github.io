@@ -4,15 +4,15 @@ let currentSortKey = 'Code';
 let currentSortDirection = 'asc';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Use the global variable 'embeddedData' loaded from data.js
-    if (typeof embeddedData !== 'undefined') {
-        data = embeddedData;
+    // Use the global variable 'hcmData' loaded from data.js
+    if (typeof hcmData !== 'undefined') {
+        data = hcmData;
         filteredData = [...data];
         populateFilters();
         setupEventListeners();
         sortAndRender();
     } else {
-        console.error('Error: embeddedData is not defined. Make sure data.js is loaded.');
+        console.error('Error: hcmData is not defined. Make sure data.js is loaded.');
     }
 });
 

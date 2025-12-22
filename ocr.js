@@ -1,10 +1,7 @@
-import { pipeline, env, Florence2ForConditionalGeneration, AutoModel, AutoProcessor, AutoTokenizer, RawImage } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
+// Global variables for dependencies
+let pipeline, env, Florence2ForConditionalGeneration, AutoModel, AutoProcessor, AutoTokenizer, RawImage;
 
-// Configuration
-env.allowLocalModels = false;
-env.useBrowserCache = true;
-
-// Model Configuration
+// Configuration placeholders (will be set in init)
 const MODEL_CONFIG = {
     'onnx-community/Florence-2-base-ft': { dtype: 'fp16' }, // explicit fp16 for consistency
     'onnx-community/Qwen2-VL-2B-Instruct': { dtype: 'q4', device: 'webgpu' }, // Prefer WebGPU for these
@@ -37,10 +34,151 @@ const copyBtn = document.getElementById('copy-btn');
 
 // Initialize
 async function init() {
-    setupEventListeners();
-    console.log("OCR System Initialized. Caching enabled:", env.useBrowserCache);
+    try {
+        // Dynamic import
+        const transformers = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers');
+        pipeline = transformers.pipeline;
+        env = transformers.env;
+        Florence2ForConditionalGeneration = transformers.Florence2ForConditionalGeneration;
+        AutoModel = transformers.AutoModel;
+        AutoProcessor = transformers.AutoProcessor;
+        AutoTokenizer = transformers.AutoTokenizer;
+        RawImage = transformers.RawImage;
+
+        // Configuration
+        env.allowLocalModels = false;
+        env.useBrowserCache = false; // We handle caching manually via fetch interceptor
+
+        setupEventListeners();
+        console.log("OCR System Initialized. Custom Chunked Caching enabled.");
+    } catch (error) {
+        console.error("Failed to load transformers library:", error);
+        statusText.textContent = "Error loading libraries. Please check your internet connection and reload.";
+    }
 }
 
+
+// --- Chunked Caching Logic ---
+const DB_NAME = 'TransformersChunkedCache';
+const DB_VERSION = 1;
+const STORE_NAME = 'models';
+const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME);
+            }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function storeInChunks(url, blob) {
+    const db = await openDB();
+    const totalSize = blob.size;
+    const totalChunks = Math.ceil(totalSize / CHUNK_SIZE);
+
+    const meta = {
+        url,
+        totalSize,
+        totalChunks,
+        mimeType: blob.type,
+        timestamp: Date.now()
+    };
+
+    // Store metadata
+    await new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).put(meta, url);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+    });
+
+    // Store chunks
+    for (let i = 0; i < totalChunks; i++) {
+        const start = i * CHUNK_SIZE;
+        const end = Math.min(start + CHUNK_SIZE, totalSize);
+        const chunk = blob.slice(start, end);
+
+        await new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            tx.objectStore(STORE_NAME).put(chunk, `${url}_chunk_${i}`);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    }
+    console.log(`Stored ${url} in ${totalChunks} chunks`);
+}
+
+async function retrieveFromChunks(url) {
+    const db = await openDB();
+
+    // Get Metadata
+    const meta = await new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const req = tx.objectStore(STORE_NAME).get(url);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+
+    if (!meta) return null;
+
+    const chunks = [];
+    for (let i = 0; i < meta.totalChunks; i++) {
+        const chunk = await new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readonly');
+            const req = tx.objectStore(STORE_NAME).get(`${url}_chunk_${i}`);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+        if (!chunk) return null; // Corrupted cache
+        chunks.push(chunk);
+    }
+
+    return new Blob(chunks, { type: meta.mimeType });
+}
+
+// Override fetch to use chunked cache for large model files
+const originalFetch = window.fetch;
+window.fetch = async (input, init) => {
+    const url = typeof input === 'string' ? input : input.url;
+
+    // Only cache model files (onnx, bin, json from huggingface)
+    if (url.includes('cdn.jsdelivr.net') || !url.includes('huggingface') && !url.includes('.onnx') && !url.includes('.bin') && !url.includes('model.safetensors')) {
+        return originalFetch(input, init);
+    }
+
+    try {
+        // Try getting from cache
+        const cachedBlob = await retrieveFromChunks(url);
+        if (cachedBlob) {
+            console.log(`[Cache Hit] Serving ${url} from IDB`);
+            return new Response(cachedBlob);
+        }
+    } catch (e) {
+        console.warn('Cache retrieval failed, fetching network:', e);
+    }
+
+    // Fetch from network
+    const response = await originalFetch(input, init);
+
+    // Clone to store in background
+    if (response.ok) {
+        const clone = response.clone();
+        clone.blob().then(blob => {
+            storeInChunks(url, blob).catch(err => console.error('Cache write failed:', err));
+        });
+    }
+
+    return response;
+};
+
+// --- End Chunked Caching Logic ---
 
 function setupEventListeners() {
     // Clear Cache
@@ -49,6 +187,11 @@ function setupEventListeners() {
         clearCacheBtn.addEventListener('click', async () => {
             if (confirm('Are you sure you want to delete all downloaded models? This will require re-downloading them next time.')) {
                 try {
+                    // Clear custom IDB
+                    const req = indexedDB.deleteDatabase(DB_NAME);
+                    req.onsuccess = () => console.log('Custom cache deleted');
+
+                    // Clear standard caches (just in case)
                     const keys = await caches.keys();
                     let deleted = 0;
                     for (const key of keys) {
@@ -57,7 +200,7 @@ function setupEventListeners() {
                             deleted++;
                         }
                     }
-                    alert(`Cache cleared! (${deleted} caches deleted). Please refresh the page.`);
+                    alert(`Cache cleared! Please refresh the page.`);
                     location.reload();
                 } catch (err) {
                     console.error(err);

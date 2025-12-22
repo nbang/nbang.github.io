@@ -4,14 +4,14 @@ let currentSortKey = 'code';
 let currentSortDirection = 'asc';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Use the global variable 'vietnamAdminData' loaded from vietnam-data.js
-    if (typeof vietnamAdminData !== 'undefined') {
-        processData(vietnamAdminData);
+    // Use the global variable 'vietnamData' loaded from vietnam-data.js
+    if (typeof vietnamData !== 'undefined') {
+        processData(vietnamData);
         populateFilters();
         setupEventListeners();
         sortAndRender();
     } else {
-        console.error('Error: vietnamAdminData is not defined. Make sure vietnam-data.js is loaded.');
+        console.error('Error: vietnamData is not defined. Make sure vietnam-data.js is loaded.');
     }
 });
 

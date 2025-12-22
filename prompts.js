@@ -21,13 +21,13 @@ let currentPrompt = null;
 // Fetch Data
 // Use Global Data
 function loadPrompts() {
-    if (typeof PROMPTS_DATA !== 'undefined') {
-        promptsData = PROMPTS_DATA;
+    if (typeof promptData !== 'undefined') {
+        promptsData = promptData;
         populateCategories();
         populateUsers();
         renderPrompts(promptsData);
     } else {
-        console.error('PROMPTS_DATA not found. Check prompt-data.js loading.');
+        console.error('promptData not found. Check prompt-data.js loading.');
         promptsGrid.innerHTML = '<p class="col-span-full text-center text-red-500">Failed to load prompts data.</p>';
     }
 }
