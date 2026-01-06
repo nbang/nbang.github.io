@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-2QJTEKK89H');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert JPG images to PNG or GIF format for free.">
+    <title>Convert from JPG - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style> body { font-family: 'Inter', sans-serif; } h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; } </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-orange-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-yellow-200/40 blur-[100px]"></div>
+    </div>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-5xl">
+        <header class="flex items-center justify-between mb-8 animate-[fadeIn_0.6s_ease-out]">
+            <a href="index.html" class="flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors">
+                <i class="fa-solid fa-arrow-left"></i> <span class="font-medium">All Tools</span>
+            </a>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">Convert from JPG</h1>
+            <div class="w-20"></div>
+        </header>
+
+        <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden animate-[fadeIn_0.7s_ease-out] min-h-[600px] flex flex-col">
+            <!-- Upload -->
+            <div id="uploadView" class="flex-1 flex flex-col items-center justify-center p-12 text-center transition-all">
+                <div class="w-full max-w-xl">
+                    <label for="fileInput" class="group block border-3 border-dashed border-gray-300 rounded-3xl p-16 cursor-pointer hover:border-orange-500 hover:bg-orange-50/50 transition-all duration-300">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-orange-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-camera-retro text-3xl text-orange-600"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-700 mb-2 group-hover:text-orange-600 transition-colors">Select JPG Image</h2>
+                        <p class="text-gray-400 text-lg">JPG or JPEG files</p>
+                        <input type="file" id="fileInput" accept="image/jpeg, image/jpg" class="hidden">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Workspace -->
+            <div id="workspaceView" class="hidden flex-1 flex flex-col lg:flex-row h-full">
+                <div class="flex-1 p-8 bg-gray-50/50 flex flex-col items-center justify-center relative border-b lg:border-b-0 lg:border-r border-gray-200">
+                    <img id="previewImage" class="max-w-full max-h-[60vh] object-contain rounded-lg shadow-sm" src="" alt="Preview">
+                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm text-xs font-medium text-gray-500 border border-white/50" id="fileInfo"></div>
+                </div>
+                <div class="w-full lg:w-80 p-6 flex flex-col gap-6 bg-white/50 backdrop-blur-sm">
+                    <div>
+                        <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-sliders text-orange-600"></i> Convert To</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl cursor-pointer hover:border-orange-500 transition-all">
+                                <input type="radio" name="format" value="image/png" checked class="w-5 h-5 text-orange-600 focus:ring-orange-500">
+                                <span class="font-medium text-gray-700">PNG Image</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl cursor-pointer hover:border-orange-500 transition-all">
+                                <input type="radio" name="format" value="image/gif" class="w-5 h-5 text-orange-600 focus:ring-orange-500">
+                                <span class="font-medium text-gray-700">GIF Image</span>
+                            </label>
+                             <label class="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-xl cursor-pointer hover:border-orange-500 transition-all">
+                                <input type="radio" name="format" value="image/webp" class="w-5 h-5 text-orange-600 focus:ring-orange-500">
+                                <span class="font-medium text-gray-700">WEBP Image</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-auto space-y-4">
+                        <button id="btnConvert" class="w-full py-3.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <span id="btnText">Convert Image</span> <i class="fa-solid fa-bolt"></i>
+                        </button>
+                        <a id="downloadLink" class="hidden w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            Download File <i class="fa-solid fa-download"></i>
+                        </a>
+                        <button id="btnReset" class="w-full py-2.5 text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">Upload Different Image</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadView = document.getElementById('uploadView');
+        const workspaceView = document.getElementById('workspaceView');
+        const previewImage = document.getElementById('previewImage');
+        const fileInfo = document.getElementById('fileInfo');
+        const btnConvert = document.getElementById('btnConvert');
+        const downloadLink = document.getElementById('downloadLink');
+        const btnReset = document.getElementById('btnReset');
+
+        let originalFile = null;
+        let originalImage = new Image();
+
+        fileInput.addEventListener('change', handleFile);
+        btnReset.addEventListener('click', resetUI);
+        btnConvert.addEventListener('click', convertImage);
+        
+        // Drag Drop
+        const dropZone = document.querySelector('label[for="fileInput"]');
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-orange-500', 'bg-orange-50/50'); });
+        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('border-orange-500', 'bg-orange-50/50'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-orange-500', 'bg-orange-50/50');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFile({ target: fileInput });
+            }
+        });
+
+        function handleFile(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            originalFile = file;
+            
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                originalImage.onload = () => {
+                    previewImage.src = originalImage.src;
+                    fileInfo.textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                    uploadView.classList.add('hidden');
+                    workspaceView.classList.remove('hidden');
+                };
+                originalImage.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function convertImage() {
+            btnConvert.disabled = true;
+            btnConvert.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Converting...';
+            
+            const format = document.querySelector('input[name="format"]:checked').value;
+            const ext = format === 'image/png' ? '.png' : (format === 'image/gif' ? '.gif' : '.webp');
+
+            setTimeout(() => {
+                const canvas = document.createElement('canvas');
+                canvas.width = originalImage.width;
+                canvas.height = originalImage.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(originalImage, 0, 0);
+                
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    downloadLink.href = url;
+                    downloadLink.download = originalFile.name.split('.')[0] + ext;
+                    
+                    btnConvert.classList.add('hidden');
+                    downloadLink.classList.remove('hidden');
+                    btnConvert.disabled = false;
+                    btnConvert.innerHTML = 'Convert Image <i class="fa-solid fa-bolt"></i>';
+                }, format);
+            }, 50);
+        }
+
+        function resetUI() {
+            fileInput.value = '';
+            uploadView.classList.remove('hidden');
+            workspaceView.classList.add('hidden');
+            downloadLink.classList.add('hidden');
+            btnConvert.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

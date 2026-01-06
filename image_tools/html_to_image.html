@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-2QJTEKK89H');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert Webpage to Image. Paste HTML code and download as JPG or PNG.">
+    <title>HTML to Image - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style> body { font-family: 'Inter', sans-serif; } h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; } </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-cyan-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-sky-200/40 blur-[100px]"></div>
+    </div>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+        <header class="flex items-center justify-between mb-8 animate-[fadeIn_0.6s_ease-out]">
+            <a href="index.html" class="flex items-center gap-2 text-gray-500 hover:text-cyan-600 transition-colors">
+                <i class="fa-solid fa-arrow-left"></i> <span class="font-medium">All Tools</span>
+            </a>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-sky-600 bg-clip-text text-transparent">HTML to Image</h1>
+            <div class="w-20"></div>
+        </header>
+
+        <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden animate-[fadeIn_0.7s_ease-out] min-h-[600px] flex flex-col lg:flex-row">
+            
+            <!-- Input Area -->
+            <div class="w-full lg:w-1/2 p-6 flex flex-col border-b lg:border-b-0 lg:border-r border-gray-200">
+                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-code text-cyan-600"></i> HTML Source</h3>
+                <p class="text-xs text-gray-500 mb-2">Paste your HTML/CSS code below.</p>
+                <textarea id="htmlInput" class="w-full flex-grow p-4 bg-gray-50 border border-gray-200 rounded-xl font-mono text-sm focus:border-cyan-500 outline-none resize-none mb-4" placeholder="<div style='background: red; padding: 20px; color: white;'><h1>Hello World</h1></div>"></textarea>
+                <button onclick="renderPreview()" class="w-full py-3 bg-gray-800 hover:bg-gray-900 text-white font-bold rounded-xl transition-all"><i class="fa-solid fa-play mr-2"></i> Update Preview</button>
+            </div>
+
+            <!-- Preview Area -->
+            <div class="w-full lg:w-1/2 p-6 flex flex-col bg-gray-50/50">
+                <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-regular fa-image text-cyan-600"></i> Preview</h3>
+                <div class="flex-grow flex items-center justify-center bg-white border border-gray-200 rounded-xl p-4 overflow-auto shadow-inner mb-4" id="previewContainerWrapper">
+                     <!-- This is the container we will render -->
+                     <div id="previewContainer" class="bg-white inline-block"></div>
+                </div>
+                
+                <button id="btnConvert" class="w-full py-3.5 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <span id="btnText">Convert to Image</span> <i class="fa-solid fa-bolt"></i>
+                </button>
+                <a id="downloadLink" class="hidden w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                    Download JPG <i class="fa-solid fa-download"></i>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const htmlInput = document.getElementById('htmlInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const btnConvert = document.getElementById('btnConvert');
+        const downloadLink = document.getElementById('downloadLink');
+        
+        // Initial example
+        htmlInput.value = `<div style="width: 400px; height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; border-radius: 12px; font-family: sans-serif;">
+    <h1 style="font-size: 32px; margin-bottom: 10px;">Hello World</h1>
+    <p style="opacity: 0.8;">Generated with Bang's Tools</p>
+</div>`;
+        renderPreview();
+
+        function renderPreview() {
+            previewContainer.innerHTML = htmlInput.value;
+            // Reset download button
+             btnConvert.classList.remove('hidden');
+             downloadLink.classList.add('hidden');
+        }
+
+        btnConvert.addEventListener('click', () => {
+             btnConvert.disabled = true;
+             btnConvert.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Rendering...';
+             
+             html2canvas(previewContainer, {
+                 scale: 2, // High DPI
+                 backgroundColor: null // Transparent logic if needed, but JPG doesn't support it
+             }).then(canvas => {
+                 const url = canvas.toDataURL('image/jpeg', 0.9);
+                 downloadLink.href = url;
+                 downloadLink.download = 'html_render.jpg';
+                 
+                 btnConvert.classList.add('hidden');
+                 downloadLink.classList.remove('hidden');
+                 btnConvert.disabled = false;
+                 btnConvert.innerHTML = 'Convert to Image <i class="fa-solid fa-bolt"></i>';
+             });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-2QJTEKK89H');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="AI In-Browser OCR tool. Extract text from images locally using privacy-first Transformer models like Florence-2 and Qwen2-VL.">
+    <title>AI In-Browser OCR - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,h2,h3,h4,h5,h6 { 
+            font-family: 'Outfit', sans-serif; 
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen relative overflow-x-hidden">
+    <!-- Dynamic background -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-sky-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-indigo-200/40 blur-[100px]"></div>
+    </div>
+
+    <main
+        class="container mx-auto max-w-7xl p-6 bg-white/80 backdrop-blur-xl border border-white/50 rounded-3xl shadow-xl my-8 animate-[fadeIn_0.8s_ease-out]">
+        <div class="mb-6 flex justify-between items-center">
+            <a href="index.html"
+                class="inline-flex items-center text-gray-500 hover:text-sky-600 transition-colors font-medium">
+                <i class="fa-solid fa-arrow-left mr-2"></i>
+                Back to All Tools
+            </a>
+            <div class="w-24"></div> <!-- Spacer for balance -->
+        </div>
+
+        <header class="text-center mb-8">
+            <h1
+                class="text-4xl font-bold mb-2 bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
+                AI In-Browser OCR</h1>
+            <p class="text-gray-500 text-base">Extract text from images locally using Transformer models.</p>
+        </header>
+
+        <section class="mb-6 flex flex-col md:flex-row justify-center gap-4 flex-wrap">
+            <div class="w-full md:w-auto relative group">
+                <label for="model-select" class="block text-xs font-medium text-gray-500 mb-1 ml-1">Select Model</label>
+                <div class="relative">
+                    <select id="model-select"
+                        class="w-full md:w-72 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 appearance-none focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all cursor-pointer hover:bg-white">
+                        <option value="onnx-community/Florence-2-base-ft">Microsoft Florence-2 (Powerful)</option>
+                        <option value="onnx-community/Qwen2-VL-2B-Instruct">Qwen2-VL 2B (WebGPU)</option>
+                        <option value="HuggingFaceTB/SmolVLM-Instruct">SmolVLM 256M (Fast)</option>
+                        <option value="Xenova/moondream2">Moondream v2 (Balanced)</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-sky-500">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantization select removed -->
+
+            <div class="w-full md:w-auto relative group hidden" id="task-wrapper">
+                <label for="task-select" class="block text-xs font-medium text-gray-500 mb-1 ml-1">Florence-2
+                    Mode</label>
+                <div class="relative">
+                    <select id="task-select"
+                        class="w-full md:w-56 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 appearance-none focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all cursor-pointer hover:bg-white">
+                        <option value="<OCR>">Standard OCR</option>
+                        <option value="<OCR_WITH_REGION>">OCR with Region</option>
+                        <option value="<CAPTION>">Describe Image</option>
+                        <option value="<DETAILED_CAPTION>">Detailed Description</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-sky-500">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8 relative" id="drop-zone">
+            <input type="file" id="file-input" accept="image/*" hidden>
+            <div
+                class="upload-area border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-sky-500 hover:bg-sky-50 transition-all flex flex-col items-center justify-center min-h-[200px] bg-gray-50 group">
+                <div class="upload-content flex flex-col items-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-sky-50 rounded-full flex items-center justify-center group-hover:bg-sky-100 transition-colors">
+                        <i class="fa-solid fa-file-image text-3xl text-sky-600"></i>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-1">Drag & Drop or <span
+                            class="text-sky-600 underline decoration-sky-300 hover:decoration-sky-600 font-medium">Click
+                            to Upload</span></p>
+                    <span class="text-sm text-gray-400" id="file-name">Supports JPG, PNG, WEBP</span>
+                </div>
+                <img id="image-preview" class="hidden max-w-full max-h-[300px] rounded-lg shadow-lg" alt="Preview">
+            </div>
+        </section>
+
+        <section class="mb-6">
+            <div class="hidden w-full h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2 shadow-inner"
+                id="progress-container">
+                <div class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 transition-all duration-300 rounded-full"
+                    id="progress-bar" style="width: 0%"></div>
+            </div>
+            <p id="status-text" class="text-sm text-gray-500 min-h-[1.25rem]">Ready</p>
+        </section>
+
+        <section class="mb-6">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-semibold text-gray-800">Extracted Text</h2>
+                <button id="copy-btn"
+                    class="p-2 text-gray-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
+                    title="Copy to Clipboard">
+                    <i class="fa-regular fa-copy text-lg"></i>
+                </button>
+            </div>
+            <textarea id="result-text" readonly placeholder="Text will appear here..."
+                class="w-full h-64 bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-sky-500 focus:bg-white text-base leading-relaxed resize-y"></textarea>
+        </section>
+
+        <section class="flex flex-col items-center pt-4 border-t border-gray-100">
+            <button id="clear-cache-btn"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-200"
+                title="Delete all downloaded models from browser cache">
+                <i class="fa-solid fa-trash-can"></i>
+                Clear Model Cache
+            </button>
+        </section>
+    </main>
+
+    <script>
+        // Global variables for dependencies
+        let pipeline, env, Florence2ForConditionalGeneration, AutoModel, AutoProcessor, AutoTokenizer, RawImage;
+
+        // Configuration placeholders (will be set in init)
+        const MODEL_CONFIG = {
+            'onnx-community/Florence-2-base-ft': { dtype: 'fp16' }, // explicit fp16 for consistency
+            'onnx-community/Qwen2-VL-2B-Instruct': { dtype: 'q4', device: 'webgpu' }, // Prefer WebGPU for these
+            'HuggingFaceTB/SmolVLM-Instruct': { dtype: 'q4', device: 'webgpu' },
+            'Xenova/moondream2': { dtype: 'q4' } // Usually q8 or q4 available
+        };
+
+        // State
+        let ocrPipeline = null;
+        let ocrModel = null;
+        let ocrProcessor = null;
+        let ocrTokenizer = null;
+
+        let currentModel = 'onnx-community/Florence-2-base-ft';
+        let isProcessing = false;
+
+        // DOM Elements
+        const modelSelect = document.getElementById('model-select');
+        const taskWrapper = document.getElementById('task-wrapper');
+        const taskSelect = document.getElementById('task-select');
+        const fileInput = document.getElementById('file-input');
+        const dropZone = document.getElementById('drop-zone');
+        const imagePreview = document.getElementById('image-preview');
+        const uploadContent = document.querySelector('.upload-content');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('status-text');
+        const resultText = document.getElementById('result-text');
+        const copyBtn = document.getElementById('copy-btn');
+
+        // Initialize
+        async function init() {
+            try {
+                // Dynamic import
+                const transformers = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers');
+                pipeline = transformers.pipeline;
+                env = transformers.env;
+                Florence2ForConditionalGeneration = transformers.Florence2ForConditionalGeneration;
+                AutoModel = transformers.AutoModel;
+                AutoProcessor = transformers.AutoProcessor;
+                AutoTokenizer = transformers.AutoTokenizer;
+                RawImage = transformers.RawImage;
+
+                // Configuration
+                env.allowLocalModels = false;
+                env.useBrowserCache = false; // We handle caching manually via fetch interceptor
+
+                setupEventListeners();
+                console.log("OCR System Initialized. Custom Chunked Caching enabled.");
+            } catch (error) {
+                console.error("Failed to load transformers library:", error);
+                statusText.textContent = "Error loading libraries. Please check your internet connection and reload.";
+            }
+        }
+
+
+        // --- Chunked Caching Logic ---
+        const DB_NAME = 'TransformersChunkedCache';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'models';
+        const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        db.createObjectStore(STORE_NAME);
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function storeInChunks(url, blob) {
+            const db = await openDB();
+            const totalSize = blob.size;
+            const totalChunks = Math.ceil(totalSize / CHUNK_SIZE);
+
+            const meta = {
+                url,
+                totalSize,
+                totalChunks,
+                mimeType: blob.type,
+                timestamp: Date.now()
+            };
+
+            // Store metadata
+            await new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).put(meta, url);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+
+            // Store chunks
+            for (let i = 0; i < totalChunks; i++) {
+                const start = i * CHUNK_SIZE;
+                const end = Math.min(start + CHUNK_SIZE, totalSize);
+                const chunk = blob.slice(start, end);
+
+                await new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, 'readwrite');
+                    tx.objectStore(STORE_NAME).put(chunk, `${url}_chunk_${i}`);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                });
+            }
+            console.log(`Stored ${url} in ${totalChunks} chunks`);
+        }
+
+        async function retrieveFromChunks(url) {
+            const db = await openDB();
+
+            // Get Metadata
+            const meta = await new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const req = tx.objectStore(STORE_NAME).get(url);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+
+            if (!meta) return null;
+
+            const chunks = [];
+            for (let i = 0; i < meta.totalChunks; i++) {
+                const chunk = await new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, 'readonly');
+                    const req = tx.objectStore(STORE_NAME).get(`${url}_chunk_${i}`);
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => reject(req.error);
+                });
+                if (!chunk) return null; // Corrupted cache
+                chunks.push(chunk);
+            }
+
+            return new Blob(chunks, { type: meta.mimeType });
+        }
+
+        // Override fetch to use chunked cache for large model files
+        const originalFetch = window.fetch;
+        window.fetch = async (input, init) => {
+            const url = typeof input === 'string' ? input : input.url;
+
+            // Only cache model files (onnx, bin, json from huggingface)
+            if (url.includes('cdn.jsdelivr.net') || !url.includes('huggingface') && !url.includes('.onnx') && !url.includes('.bin') && !url.includes('model.safetensors')) {
+                return originalFetch(input, init);
+            }
+
+            try {
+                // Try getting from cache
+                const cachedBlob = await retrieveFromChunks(url);
+                if (cachedBlob) {
+                    console.log(`[Cache Hit] Serving ${url} from IDB`);
+                    return new Response(cachedBlob);
+                }
+            } catch (e) {
+                console.warn('Cache retrieval failed, fetching network:', e);
+            }
+
+            // Fetch from network
+            const response = await originalFetch(input, init);
+
+            // Clone to store in background
+            if (response.ok) {
+                const clone = response.clone();
+                clone.blob().then(blob => {
+                    storeInChunks(url, blob).catch(err => console.error('Cache write failed:', err));
+                });
+            }
+
+            return response;
+        };
+
+        // --- End Chunked Caching Logic ---
+
+        function setupEventListeners() {
+            // Clear Cache
+            const clearCacheBtn = document.getElementById('clear-cache-btn');
+            if (clearCacheBtn) {
+                clearCacheBtn.addEventListener('click', async () => {
+                    if (confirm('Are you sure you want to delete all downloaded models? This will require re-downloading them next time.')) {
+                        try {
+                            // Clear custom IDB
+                            const req = indexedDB.deleteDatabase(DB_NAME);
+                            req.onsuccess = () => console.log('Custom cache deleted');
+
+                            // Clear standard caches (just in case)
+                            const keys = await caches.keys();
+                            let deleted = 0;
+                            for (const key of keys) {
+                                if (key === 'transformers-cache' || key.includes('transformers')) {
+                                    await caches.delete(key);
+                                    deleted++;
+                                }
+                            }
+                            alert(`Cache cleared! Please refresh the page.`);
+                            location.reload();
+                        } catch (err) {
+                            console.error(err);
+                            alert('Error clearing cache: ' + err.message);
+                        }
+                    }
+                });
+            }
+
+            // Model Selection
+            modelSelect.addEventListener('change', (e) => {
+                currentModel = e.target.value;
+                ocrPipeline = null;
+                ocrModel = null;
+                ocrProcessor = null;
+                ocrTokenizer = null;
+
+                statusText.textContent = `Model switched to ${e.target.options[e.target.selectedIndex].text}`;
+
+                // Show/Hide prompt selector for Florence-2
+                if (currentModel.includes('Florence-2')) {
+                    taskWrapper.classList.remove('hidden');
+                } else {
+                    taskWrapper.classList.add('hidden');
+                }
+
+                // Re-process if image is loaded
+                if (imagePreview.src && !imagePreview.classList.contains('hidden')) {
+                    // Clear existing text immediately
+                    resultText.value = '';
+                    runOCR(imagePreview.src);
+                }
+            });
+
+            // Re-process on task change (for Florence-2)
+            taskSelect.addEventListener('change', () => {
+                if (currentModel.includes('Florence-2') && imagePreview.src && !imagePreview.classList.contains('hidden')) {
+                    resultText.value = '';
+                    runOCR(imagePreview.src);
+                }
+            });
+
+            // File Input
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Drag & Drop
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            // Copy Button
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(resultText.value);
+                const originalIcon = copyBtn.innerHTML;
+                copyBtn.innerHTML = `<i class="fa-solid fa-check text-green-500"></i>`;
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalIcon;
+                }, 2000);
+            });
+        }
+
+        function handleFileSelect(e) {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload an image file.');
+                return;
+            }
+
+            // Show Preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+                uploadContent.classList.add('hidden');
+
+                // Run OCR
+                runOCR(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function loadModel() {
+            progressContainer.classList.remove('hidden');
+
+            const config = MODEL_CONFIG[currentModel] || { dtype: 'fp16' }; // Fallback
+
+            const device = await getDevice();
+            console.log(`Using device: ${device}`);
+
+            let currentDtype = config.dtype;
+            if (device === 'wasm' && currentDtype === 'fp16') {
+                console.log("WASM device detected, falling back to fp32 from fp16");
+                currentDtype = 'fp32';
+            }
+
+            const loadOptions = {
+                dtype: currentDtype,
+                device: device,
+                progress_callback: (data) => {
+                    if (data.status === 'progress') {
+                        const progress = Math.round(data.progress * 100);
+                        if (data.file) updateStatus(`Downloading ${data.file}...`, progress);
+                    }
+                }
+            };
+
+            try {
+                if (currentModel.includes('Florence-2') || currentModel.includes('Qwen2-VL') || currentModel.includes('moondream') || currentModel.includes('SmolVLM')) {
+                    if (!ocrModel) {
+                        if (currentModel.includes('Florence-2')) {
+                            ocrModel = await Florence2ForConditionalGeneration.from_pretrained(currentModel, loadOptions);
+                        } else {
+                            ocrModel = await AutoModel.from_pretrained(currentModel, loadOptions);
+                        }
+                        ocrProcessor = await AutoProcessor.from_pretrained(currentModel);
+                        // Initialize tokenizer if needed, though AutoProcessor usually handles it for VLMs
+                        ocrTokenizer = await AutoTokenizer.from_pretrained(currentModel);
+                    }
+
+                    // Show task wrapper only for Florence-2 as others might not use it the same way or use default prompt
+                    if (currentModel.includes('Florence-2')) {
+                        taskWrapper.classList.remove('hidden');
+                    } else {
+                        taskWrapper.classList.add('hidden');
+                    }
+
+                    updateStatus(`${currentModel.split('/')[1]} Loaded`, 100);
+                    return { type: 'vlm', model: ocrModel, processor: ocrProcessor, tokenizer: ocrTokenizer };
+
+                } else {
+                    // Standard pipeline for legacy models (if any)
+                    if (!ocrPipeline) {
+                        ocrPipeline = await pipeline('image-to-text', currentModel, loadOptions);
+                    }
+                    updateStatus('Model Loaded', 100);
+                    return { type: 'pipeline', pipe: ocrPipeline };
+                }
+            } catch (error) {
+                console.error("LOAD_MODEL_ERROR:", error.message, error.stack);
+                updateStatus('Error loading model: ' + error.message, 0);
+                throw error;
+            }
+        }
+
+        async function runOCR(imageUrl) {
+            if (isProcessing) return;
+            isProcessing = true;
+            resultText.value = '';
+
+            updateStatus('Recognizing text...', 100);
+            progressBar.style.width = '100%';
+            progressBar.classList.add('pulse');
+
+            try {
+                const loaded = await loadModel();
+
+                if (loaded.type === 'vlm') {
+                    const { model, processor, tokenizer } = loaded;
+                    let prompt = "";
+                    let inputs;
+
+                    const image = await RawImage.fromURL(imageUrl);
+
+                    if (currentModel.includes('Florence-2')) {
+                        prompt = taskSelect.value;
+                        inputs = await processor(image, prompt);
+                    } else if (currentModel.includes('Qwen2-VL') || currentModel.includes('SmolVLM')) {
+                        // Qwen2-VL and SmolVLM-Instruct default prompt
+                        prompt = "Read the text in the image.";
+                        const messages = [
+                            {
+                                role: "user", content: [
+                                    { type: "image", image: image },
+                                    { type: "text", text: prompt }
+                                ]
+                            }
+                        ];
+                        const text = processor.apply_chat_template(messages);
+                        inputs = await processor(image, text);
+                    } else if (currentModel.includes('moondream')) {
+                        // Moondream prompt
+                        prompt = "Read the text in the image.";
+                        inputs = await processor(image, prompt);
+                    }
+
+                    const outputs = await model.generate({
+                        ...inputs,
+                        max_new_tokens: 1024,
+                        do_sample: false,
+                    });
+
+                    const generatedText = tokenizer.batch_decode(outputs, { skip_special_tokens: false })[0];
+
+                    // Post-process
+                    let finalText = generatedText;
+
+                    if (currentModel.includes('Florence-2')) {
+                        finalText = finalText.replace(/<\/?s>/g, '').replace(prompt, '').trim();
+                    } else {
+                        // Basic cleanup for others, might need model specific tuning
+                        // Qwen/Moondream might output full chat structure, need to check
+                        // For now, doing simple special token cleanup
+                        finalText = finalText.replace(/<\|.*?\|>/g, '').trim(); // Remove Qwen special tokens
+                    }
+
+                    resultText.value = finalText;
+
+                } else {
+                    // Standard Pipeline for legacy
+                    const args = { max_new_tokens: 256, do_sample: false };
+                    const result = await loaded.pipe(imageUrl, args);
+
+                    if (result && result[0] && result[0].generated_text) {
+                        resultText.value = result[0].generated_text;
+                    } else {
+                        resultText.value = 'No text detected.';
+                    }
+                }
+
+                updateStatus('Done', 100);
+
+            } catch (error) {
+                console.error(error);
+                resultText.value = 'Error: ' + error.message;
+                updateStatus('Error occurred', 0);
+            } finally {
+                isProcessing = false;
+                setTimeout(() => progressBar.classList.remove('pulse'), 500);
+            }
+        }
+
+        async function getDevice() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('device')) return params.get('device');
+
+            if (!navigator.gpu) return 'wasm';
+            try {
+                const adapter = await navigator.gpu.requestAdapter();
+                return adapter ? 'webgpu' : 'wasm';
+            } catch (e) {
+                return 'wasm';
+            }
+        }
+
+        function updateStatus(text, percent) {
+            statusText.textContent = text;
+            if (percent !== undefined) {
+                progressBar.style.width = `${percent}%`;
+            }
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+
+</html>

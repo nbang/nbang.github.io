@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-2QJTEKK89H');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free Online Photo Editor. Filter, Draw, and edit your photos with ease.">
+    <title>Photo Editor - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <style> body { font-family: 'Inter', sans-serif; } h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; } </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-purple-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-indigo-200/40 blur-[100px]"></div>
+    </div>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+        <header class="flex items-center justify-between mb-8 animate-[fadeIn_0.6s_ease-out]">
+            <a href="index.html" class="flex items-center gap-2 text-gray-500 hover:text-purple-600 transition-colors">
+                <i class="fa-solid fa-arrow-left"></i> <span class="font-medium">All Tools</span>
+            </a>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Photo Editor</h1>
+            <div class="w-20"></div>
+        </header>
+
+        <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden animate-[fadeIn_0.7s_ease-out] min-h-[700px] flex flex-col">
+            <!-- Upload -->
+            <div id="uploadView" class="flex-1 flex flex-col items-center justify-center p-12 text-center transition-all">
+                <div class="w-full max-w-xl">
+                    <label for="fileInput" class="group block border-3 border-dashed border-gray-300 rounded-3xl p-16 cursor-pointer hover:border-purple-500 hover:bg-purple-50/50 transition-all duration-300">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-purple-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-wand-magic-sparkles text-3xl text-purple-600"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-700 mb-2 group-hover:text-purple-600 transition-colors">Select Photo</h2>
+                        <p class="text-gray-400 text-lg">JPG, PNG or GIF</p>
+                        <input type="file" id="fileInput" accept="image/*" class="hidden">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Workspace -->
+            <div id="workspaceView" class="hidden flex-1 flex flex-col lg:flex-row h-full">
+                <!-- Toolbar -->
+                <div class="w-full lg:w-20 bg-white border-r border-gray-200 flex lg:flex-col items-center p-2 gap-2 overflow-x-auto lg:overflow-visible z-10">
+                   <button onclick="setMode('filter')" class="tool-btn active p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all" title="Filters"><i class="fa-solid fa-wand-magic-sparkles text-xl"></i></button>
+                   <button onclick="setMode('draw')" class="tool-btn p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all" title="Draw"><i class="fa-solid fa-paintbrush text-xl"></i></button>
+                   <button onclick="setMode('text')" class="tool-btn p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all" title="Text"><i class="fa-solid fa-font text-xl"></i></button>
+                   <div class="lg:mt-auto"></div>
+                   <button onclick="deleteActive()" class="p-3 rounded-xl hover:bg-red-50 text-gray-500 hover:text-red-600 transition-all" title="Delete Selected"><i class="fa-solid fa-trash text-xl"></i></button>
+                </div>
+
+                <!-- Canvas -->
+                <div class="flex-1 bg-gray-50/50 flex flex-col items-center justify-center p-4 overflow-hidden relative" id="canvasContainer">
+                     <canvas id="canvas"></canvas>
+                </div>
+                
+                <!-- Properties Panel -->
+                <div class="w-full lg:w-80 p-6 flex flex-col gap-6 bg-white/50 backdrop-blur-sm border-l border-gray-200">
+                    <div id="panelContent">
+                        <!-- Dynamic Content injected here -->
+                    </div>
+
+                    <div class="mt-auto space-y-4">
+                        <button id="btnSave" class="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-lg shadow-purple-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <span id="btnText">Save Image</span> <i class="fa-solid fa-floppy-disk"></i>
+                        </button>
+                        <a id="downloadLink" class="hidden w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            Download <i class="fa-solid fa-download"></i>
+                        </a>
+                        <button id="btnReset" class="w-full py-2.5 text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">Close Editor</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadView = document.getElementById('uploadView');
+        const workspaceView = document.getElementById('workspaceView');
+        const panelContent = document.getElementById('panelContent');
+        const btnSave = document.getElementById('btnSave');
+        const downloadLink = document.getElementById('downloadLink');
+        const btnReset = document.getElementById('btnReset');
+        
+        let canvas;
+        let originalFile = null;
+        let currentMode = 'filter';
+
+        // Filters HTML
+        const filtersHTML = `
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i> Filters</h3>
+            <div class="space-y-3">
+                <button onclick="applyFilter('grayscale')" class="w-full py-2 px-4 rounded-lg border border-gray-200 bg-white hover:border-purple-500 text-left text-sm font-medium transition-all">Grayscale</button>
+                <button onclick="applyFilter('sepia')" class="w-full py-2 px-4 rounded-lg border border-gray-200 bg-white hover:border-purple-500 text-left text-sm font-medium transition-all">Sepia</button>
+                <button onclick="applyFilter('invert')" class="w-full py-2 px-4 rounded-lg border border-gray-200 bg-white hover:border-purple-500 text-left text-sm font-medium transition-all">Invert</button>
+                <button onclick="applyFilter('none')" class="w-full py-2 px-4 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 text-left text-sm font-medium transition-all">Remove Filters</button>
+            </div>
+        `;
+        
+        const drawHTML = `
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-paintbrush text-purple-600"></i> Drawing</h3>
+            <div class="space-y-4">
+                 <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Brush Color</label>
+                    <input type="color" id="brushColor" value="#9333ea" class="w-full h-10 rounded cursor-pointer" onchange="updateBrush()">
+                </div>
+                 <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Brush Size</label>
+                    <input type="range" id="brushSize" min="1" max="50" value="5" class="w-full accent-purple-600" oninput="updateBrush()">
+                </div>
+                <div class="flex items-center gap-2 mt-4">
+                     <input type="checkbox" id="drawingModeToggle" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 border-gray-300" onchange="toggleDrawing(this.checked)">
+                     <label for="drawingModeToggle" class="font-medium text-gray-700">Enable Drawing</label>
+                </div>
+            </div>
+        `;
+
+        const textHTML = `
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-font text-purple-600"></i> Add Text</h3>
+             <div class="space-y-4">
+                <input type="text" id="newTextVal" placeholder="Text Content" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-purple-500 outline-none">
+                <button onclick="addNewText()" class="w-full py-2 bg-purple-100 text-purple-600 rounded-lg text-sm font-medium hover:bg-purple-200">Add to Canvas</button>
+            </div>
+        `;
+
+        // Init
+        fileInput.addEventListener('change', initCanvas);
+        btnReset.addEventListener('click', () => location.reload());
+        btnSave.addEventListener('click', saveImage);
+
+        // Drag Drop (Main)
+        const dropZone = document.querySelector('label[for="fileInput"]');
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-purple-500', 'bg-purple-50/50'); });
+        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('border-purple-500', 'bg-purple-50/50'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-purple-500', 'bg-purple-50/50');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                initCanvas({ target: fileInput });
+            }
+        });
+
+        function initCanvas(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            originalFile = file;
+
+            const reader = new FileReader();
+            reader.onload = (f) => {
+                fabric.Image.fromURL(f.target.result, (img) => {
+                    uploadView.classList.add('hidden');
+                    workspaceView.classList.remove('hidden');
+                    
+                    const container = document.getElementById('canvasContainer');
+                    const maxWidth = container.clientWidth - 40; 
+                    const maxHeight = window.innerHeight * 0.7;
+                    
+                    let scale = 1;
+                    if (img.width > maxWidth || img.height > maxHeight) {
+                        scale = Math.min(maxWidth / img.width, maxHeight / img.height);
+                    }
+                    
+                    // Create canvas
+                    canvas = new fabric.Canvas('canvas');
+                    canvas.setWidth(img.width * scale);
+                    canvas.setHeight(img.height * scale);
+                    
+                    img.scale(scale);
+                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                    
+                    setMode('filter'); // Default mode
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            // UI Update
+            document.querySelectorAll('.tool-btn').forEach(b => {
+                b.classList.remove('text-purple-600', 'bg-purple-50', 'ring-2', 'ring-purple-100');
+                b.classList.add('text-gray-500');
+            });
+            // Highlight active (simple check based on onclick)
+            const activeBtn = Array.from(document.querySelectorAll('.tool-btn')).find(b => b.onclick.toString().includes(mode));
+            if(activeBtn) activeBtn.classList.add('text-purple-600', 'bg-purple-50', 'ring-2', 'ring-purple-100');
+
+            // Disable drawing mode on mode switch
+            if (canvas) canvas.isDrawingMode = false;
+
+            // Content Update
+            if (mode === 'filter') panelContent.innerHTML = filtersHTML;
+            if (mode === 'draw') panelContent.innerHTML = drawHTML;
+            if (mode === 'text') panelContent.innerHTML = textHTML;
+        }
+
+        // --- Logic ---
+        function applyFilter(type) {
+            const img = canvas.backgroundImage;
+            img.filters = []; // clear
+            
+            if (type === 'grayscale') img.filters.push(new fabric.Image.filters.Grayscale());
+            if (type === 'sepia') img.filters.push(new fabric.Image.filters.Sepia());
+            if (type === 'invert') img.filters.push(new fabric.Image.filters.Invert());
+            
+            img.applyFilters();
+            canvas.renderAll();
+        }
+
+        function toggleDrawing(enable) {
+            canvas.isDrawingMode = enable;
+            if (enable) updateBrush();
+        }
+
+        function updateBrush() {
+            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+            canvas.freeDrawingBrush.color = document.getElementById('brushColor').value;
+            canvas.freeDrawingBrush.width = parseInt(document.getElementById('brushSize').value);
+        }
+
+        function addNewText() {
+            const val = document.getElementById('newTextVal').value || 'Text';
+            const text = new fabric.IText(val, {
+                left: canvas.width / 2,
+                top: canvas.height / 2,
+                originX: 'center',
+                originY: 'center',
+                fontSize: 30,
+                fill: '#000000'
+            });
+            canvas.add(text);
+            canvas.setActiveObject(text);
+        }
+
+        function deleteActive() {
+            const active = canvas.getActiveObject();
+            if (active) canvas.remove(active);
+        }
+
+        function saveImage() {
+           btnSave.disabled = true;
+            btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            
+            const bg = canvas.backgroundImage;
+            const multiplier = 1 / bg.scaleX;
+            
+            const dataURL = canvas.toDataURL({
+                format: 'jpeg',
+                quality: 0.9,
+                multiplier: multiplier
+            });
+            
+            downloadLink.href = dataURL;
+            downloadLink.download = `edited_${originalFile.name}`;
+            
+            btnSave.classList.add('hidden');
+            downloadLink.classList.remove('hidden');
+            btnSave.disabled = false;
+            btnSave.innerHTML = 'Save Image <i class="fa-solid fa-floppy-disk"></i>'; 
+        }
+
+    </script>
+</body>
+</html>
