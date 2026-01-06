@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-2QJTEKK89H');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free For Dev | Developers' Resource</title>
+
+    <!-- Meta -->
+    <meta name="description"
+        content="A list of software (SaaS, PaaS, IaaS, etc.) and other offerings that have free tiers for developers.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --color-primary-50: #f0f9ff;
+            --color-primary-100: #e0f2fe;
+            --color-primary-200: #bae6fd;
+            --color-primary-300: #7dd3fc;
+            --color-primary-400: #38bdf8;
+            --color-primary-500: #0ea5e9;
+            --color-primary-600: #0284c7;
+            --color-primary-700: #0369a1;
+            --color-primary-800: #075985;
+            --color-primary-900: #0c4a6e;
+            --color-primary-950: #082f49;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            @apply bg-slate-900;
+        }
+        ::-webkit-scrollbar-thumb {
+            @apply bg-slate-700 rounded-full hover:bg-slate-600 transition-colors;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen selection:bg-primary-500/30 selection:text-primary-200">
+
+    <!-- Background Gradients -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2">
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 shrink-0">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center shadow-lg shadow-primary-500/20">
+                    <i class="fa-solid fa-code text-white text-lg"></i>
+                </div>
+                <h1
+                    class="font-heading font-bold text-2xl tracking-tight bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent hidden sm:block">
+                    FreeForDev
+                </h1>
+            </div>
+
+            <!-- Search -->
+            <div class="flex-1 max-w-2xl">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i
+                            class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-primary-400 transition-colors"></i>
+                    </div>
+                    <input type="text" id="searchInput"
+                        class="w-full bg-slate-900/50 border border-slate-700 text-slate-200 text-sm rounded-xl pl-11 pr-4 py-2.5 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 outline-none transition-all placeholder:text-slate-500 shadow-sm"
+                        placeholder="Search for tools, categories, or keywords... (e.g. 'AWS', 'Hosting')">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <kbd
+                            class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded border border-slate-700 bg-slate-800 text-xs text-slate-400 font-mono">
+                            <span class="text-xs">/</span>
+                        </kbd>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Link -->
+            <a href="https://github.com/ripienaar/free-for-dev" target="_blank"
+                class="shrink-0 p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                title="View Source on GitHub">
+                <i class="fa-brands fa-github text-xl"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- Stats / Intro -->
+        <div class="mb-12 text-center max-w-3xl mx-auto">
+            <h2
+                class="font-heading text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white via-primary-200 to-slate-400 bg-clip-text text-transparent">
+                Unlock the Best Free Tier Services
+            </h2>
+            <p class="text-slate-400 text-lg">
+                Curated list of software (SaaS, PaaS, IaaS) with free tiers for developers.
+                <br>
+                <span
+                    class="text-sm mt-2 inline-block px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400">
+                    <span id="totalResources" class="font-bold text-primary-400">0</span> resources across <span
+                        id="totalCategories" class="font-bold text-primary-400">0</span> categories
+                </span>
+            </p>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="hidden text-center py-20">
+            <div class="w-16 h-16 mx-auto bg-slate-800/50 rounded-full flex items-center justify-center mb-4">
+                <i class="fa-solid fa-ghost text-2xl text-slate-500"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-slate-300 mb-2">No results found</h3>
+            <p class="text-slate-500">Try adjusting your search terms.</p>
+        </div>
+
+        <!-- Categories Container -->
+        <div id="contentContainer" class="space-y-12">
+            <!-- Dynamic Content -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-slate-800 bg-slate-950 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
+            <p>Data sourced from <a href="https://github.com/ripienaar/free-for-dev"
+                    class="text-primary-400 hover:text-primary-300 underline underline-offset-2">free-for-dev</a>.</p>
+            <p class="mt-2 text-xs">Built with Tailwind CSS v4.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="backToTop"
+        class="fixed bottom-8 right-8 z-50 p-3 bg-primary-600 text-white rounded-full shadow-lg shadow-primary-600/30 translate-y-20 opacity-0 transition-all hover:bg-primary-500 hover:-translate-y-1 focus:outline-none">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Data -->
+    <script src="freefordev-data.js"></script>
+    <!-- Logic -->
+    <script src="freefordev.js"></script>
+</body>
+
+</html>
