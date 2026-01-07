@@ -1,5 +1,3 @@
-// freefordev.js
-
 document.addEventListener('DOMContentLoaded', () => {
 
     // Check if data is loaded

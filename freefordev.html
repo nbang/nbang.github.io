@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -6,33 +6,32 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-2QJTEKK89H');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Free For Dev | Developers' Resource</title>
 
     <!-- Meta -->
-    <meta name="description"
-        content="A list of software (SaaS, PaaS, IaaS, etc.) and other offerings that have free tiers for developers.">
+    <meta name="description" content="A list of software (SaaS, PaaS, IaaS, etc.) and other offerings that have free tiers for developers." />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+    <style>
         @theme {
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-heading: 'Outfit', sans-serif;
+            --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+            --font-heading: "Outfit", sans-serif;
             --color-primary-50: #f0f9ff;
             --color-primary-100: #e0f2fe;
             --color-primary-200: #bae6fd;
@@ -45,15 +44,25 @@
             --color-primary-900: #0c4a6e;
             --color-primary-950: #082f49;
         }
-        h1,h2,h3,h4,h5,h6 { font-family: var(--font-heading); }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-heading);
+        }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
             @apply bg-slate-900;
         }
+
         ::-webkit-scrollbar-thumb {
             @apply bg-slate-700 rounded-full hover:bg-slate-600 transition-colors;
         }
@@ -61,14 +70,11 @@
 </head>
 
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen selection:bg-primary-500/30 selection:text-primary-200">
-
     <!-- Background Gradients -->
     <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div
-            class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2">
         </div>
-        <div
-            class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2">
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2">
         </div>
     </div>
 
@@ -91,12 +97,11 @@
             <div class="flex-1 max-w-2xl">
                 <div class="relative group">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i
-                            class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-primary-400 transition-colors"></i>
+                        <i class="fa-solid fa-magnifying-glass text-slate-400 group-focus-within:text-primary-400 transition-colors"></i>
                     </div>
                     <input type="text" id="searchInput"
                         class="w-full bg-slate-900/50 border border-slate-700 text-slate-200 text-sm rounded-xl pl-11 pr-4 py-2.5 focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 outline-none transition-all placeholder:text-slate-500 shadow-sm"
-                        placeholder="Search for tools, categories, or keywords... (e.g. 'AWS', 'Hosting')">
+                        placeholder="Search for tools, categories, or keywords... (e.g. 'AWS', 'Hosting')" />
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                         <kbd
                             class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded border border-slate-700 bg-slate-800 text-xs text-slate-400 font-mono">
@@ -108,8 +113,7 @@
 
             <!-- GitHub Link -->
             <a href="https://github.com/ripienaar/free-for-dev" target="_blank"
-                class="shrink-0 p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-                title="View Source on GitHub">
+                class="shrink-0 p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors" title="View Source on GitHub">
                 <i class="fa-brands fa-github text-xl"></i>
             </a>
         </div>
@@ -117,20 +121,17 @@
 
     <!-- Main Content -->
     <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-
         <!-- Stats / Intro -->
         <div class="mb-12 text-center max-w-3xl mx-auto">
-            <h2
-                class="font-heading text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white via-primary-200 to-slate-400 bg-clip-text text-transparent">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white via-primary-200 to-slate-400 bg-clip-text text-transparent">
                 Unlock the Best Free Tier Services
             </h2>
             <p class="text-slate-400 text-lg">
                 Curated list of software (SaaS, PaaS, IaaS) with free tiers for developers.
-                <br>
-                <span
-                    class="text-sm mt-2 inline-block px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400">
-                    <span id="totalResources" class="font-bold text-primary-400">0</span> resources across <span
-                        id="totalCategories" class="font-bold text-primary-400">0</span> categories
+                <br />
+                <span class="text-sm mt-2 inline-block px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400">
+                    <span id="totalResources" class="font-bold text-primary-400">0</span> resources across
+                    <span id="totalCategories" class="font-bold text-primary-400">0</span> categories
                 </span>
             </p>
         </div>
@@ -148,14 +149,16 @@
         <div id="contentContainer" class="space-y-12">
             <!-- Dynamic Content -->
         </div>
-
     </main>
 
     <!-- Footer -->
     <footer class="relative z-10 border-t border-slate-800 bg-slate-950 py-8 mt-12">
         <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
-            <p>Data sourced from <a href="https://github.com/ripienaar/free-for-dev"
-                    class="text-primary-400 hover:text-primary-300 underline underline-offset-2">free-for-dev</a>.</p>
+            <p>
+                Data sourced from
+                <a href="https://github.com/ripienaar/free-for-dev"
+                    class="text-primary-400 hover:text-primary-300 underline underline-offset-2">free-for-dev</a>.
+            </p>
             <p class="mt-2 text-xs">Built with Tailwind CSS v4.</p>
         </div>
     </footer>

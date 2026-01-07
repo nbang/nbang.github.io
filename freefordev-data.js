@@ -450,7 +450,7 @@ window.freeForDevData = [
       {
         "name": "APIVerve",
         "link": "https://apiverve.com",
-        "description": "Get instant access to over 120+ APIs for free, built with quality, consistency, and reliability in mind. The free plan covers up to 50 API Tokens per month. (Possibly taken down, 2025-06-25)"
+        "description": "Get instant access to over 120+ APIs for free, built with quality, consistency, and reliability in mind. The free plan covers up to 50 API Tokens per month. (Possibly taken down, 2026-06-25)"
       },
       {
         "name": "Arize AI",

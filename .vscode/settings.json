@@ -1,0 +1,28 @@
+{
+    "editor.tabSize": 4,
+    "editor.indentSize": 4,
+    "editor.detectIndentation": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features",
+        "editor.tabSize": 4,
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 160
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.tabSize": 4,
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 160
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.tabSize": 2
+    },
+    "html.format.wrapLineLength": 160,
+    "editor.wordWrapColumn": 160,
+    "editor.wordWrap": "wordWrapColumn"
+}

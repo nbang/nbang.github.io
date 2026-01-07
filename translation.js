@@ -56,7 +56,7 @@ function loadConfig() {
     document.getElementById('llm-provider').value = localStorage.getItem('llm_provider') || 'google';
     document.getElementById('llm-model').value = localStorage.getItem('llm_model') || 'gemini-2.5-pro';
     document.getElementById('llm-api-key').value = localStorage.getItem('llm_api_key') || '';
-    
+
     const activeTab = localStorage.getItem('activeTab') || 'config';
     openTab(activeTab);
 }
@@ -65,7 +65,14 @@ document.querySelectorAll('input, select').forEach(el => {
     el.addEventListener('change', saveConfig);
 });
 
-document.addEventListener('DOMContentLoaded', loadConfig);
+document.addEventListener('DOMContentLoaded', () => {
+    loadConfig();
+    document.getElementById('save-btn').addEventListener('click', saveFileContent);
+    document.getElementById('btn-scraper').addEventListener('click', triggerScraper);
+    document.getElementById('btn-translator').addEventListener('click', triggerTranslator);
+    document.getElementById('btn-editor').addEventListener('click', triggerEditor);
+    document.getElementById('folder-select').addEventListener('change', loadFileList);
+});
 
 function getHeaders(token) {
     return {
@@ -246,11 +253,11 @@ async function loadFileList() {
 
     const folder = document.getElementById('folder-select').value;
     let baseDir = config.baseDir;
-    
+
     // Construct path based on selection and baseDir
     // If baseDir is empty, we might have issues, but let's assume it's set or we just use the folder
     let path = baseDir;
-    
+
     if (folder) {
         // If a subfolder is selected, append it
         // Ensure we don't have double slashes if baseDir ends with /
@@ -259,7 +266,7 @@ async function loadFileList() {
         }
         path += folder;
     }
-    
+
     // If path is empty (no baseDir and root selected), it lists root of repo
     // If path is just baseDir (root selected), it lists baseDir
 
@@ -294,11 +301,11 @@ async function loadFileList() {
                 list.appendChild(li);
             }
         });
-        
+
         if (files.length === 0) {
-             list.innerHTML = '<li class="px-4 py-8 text-center text-gray-500 text-sm italic">No files found in this folder.</li>';
+            list.innerHTML = '<li class="px-4 py-8 text-center text-gray-500 text-sm italic">No files found in this folder.</li>';
         }
-        
+
     } catch (error) {
         console.error(error);
         showToast('Error loading files: ' + error.message, true);

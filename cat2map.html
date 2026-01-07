@@ -1,85 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-2QJTEKK89H');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cat-2-Map | DXF to GIS Converter</title>
 
     <!-- Meta -->
-    <meta name="description" content="Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000 support.">
+    <meta name="description" content="Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000 support." />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" />
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="" />
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+    <style>
         @theme {
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+            --font-mono: "JetBrains Mono", monospace;
         }
 
-        h1,h2,h3,h4,h5,h6 { 
-            font-family: 'Outfit', sans-serif; 
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
         }
     </style>
 
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 
 <body class="bg-slate-950 text-slate-50 font-sans h-screen w-screen overflow-hidden relative">
-
     <!-- Map Container -->
     <div id="map" class="absolute inset-0 z-0"></div>
 
     <!-- UI Overlay -->
     <div class="relative z-10 w-full h-full p-4 md:p-6 pointer-events-none flex flex-col justify-between">
-
         <!-- Left Sidebar -->
         <div
             class="pointer-events-auto w-full md:w-80 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl rounded-2xl flex flex-col max-h-[calc(100vh-8rem)]">
-
             <!-- Header -->
             <div class="p-5 border-b border-slate-800 flex items-center gap-3 shrink-0">
                 <i class="fa-solid fa-map-location-dot text-2xl text-blue-500"></i>
-                <div
-                    class="font-bold text-xl bg-gradient-to-br from-blue-400 to-emerald-400 bg-clip-text text-transparent">
-                    Cat-2-Map
-                </div>
+                <div class="font-bold text-xl bg-gradient-to-br from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                    Cat-2-Map</div>
             </div>
 
             <!-- Content -->
             <div class="p-5 overflow-y-auto space-y-6 custom-scrollbar">
-
                 <!-- Data Source -->
                 <div class="space-y-3">
                     <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">Data Source</div>
                     <label for="fileInput"
                         class="group block border-2 border-dashed border-slate-700 rounded-xl p-8 text-center cursor-pointer bg-slate-800/30 hover:bg-blue-500/5 hover:border-blue-500 transition-all duration-200">
-                        <i
-                            class="fa-solid fa-cloud-arrow-up text-3xl text-slate-500 group-hover:text-blue-500 mb-3 transition-colors"></i>
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-500 group-hover:text-blue-500 mb-3 transition-colors"></i>
                         <span class="block text-sm text-slate-400 group-hover:text-slate-200">Click to upload .DXF
                             file</span>
-                        <input type="file" id="fileInput" accept=".dxf" class="hidden">
+                        <input type="file" id="fileInput" accept=".dxf" class="hidden" />
                     </label>
                 </div>
 
@@ -95,7 +95,7 @@
                     </div>
                     <div class="flex items-center gap-3 pt-1">
                         <input type="checkbox" id="swapXY" checked
-                            class="w-4 h-4 text-blue-600 bg-slate-800 border-slate-600 rounded focus:ring-blue-600 ring-offset-slate-900 cursor-pointer">
+                            class="w-4 h-4 text-blue-600 bg-slate-800 border-slate-600 rounded focus:ring-blue-600 ring-offset-slate-900 cursor-pointer" />
                         <label for="swapXY" class="text-sm text-slate-300 cursor-pointer select-none">Swap X/Y Axis
                             (Standard)</label>
                     </div>
@@ -123,14 +123,12 @@
                         <!-- Layer items -->
                     </div>
                 </div>
-
             </div>
         </div>
 
         <!-- Right Sidebar (Stats/Logs) -->
         <div class="hidden md:flex absolute top-6 right-6 pointer-events-none flex-col gap-4 w-72">
-            <div
-                class="pointer-events-auto bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl rounded-2xl p-5">
+            <div class="pointer-events-auto bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 shadow-2xl rounded-2xl p-5">
                 <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Info</div>
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between items-center">
@@ -142,8 +140,7 @@
                         <span id="projName" class="font-mono font-medium text-slate-200 text-xs">WGS84</span>
                     </div>
                 </div>
-                <div id="logContainer"
-                    class="mt-4 font-mono text-xs max-h-32 overflow-y-auto space-y-1 text-slate-400 custom-scrollbar">
+                <div id="logContainer" class="mt-4 font-mono text-xs max-h-32 overflow-y-auto space-y-1 text-slate-400 custom-scrollbar">
                     <div class="pl-2 border-l-2 border-blue-500">System ready...</div>
                 </div>
             </div>
@@ -169,7 +166,6 @@
                 <i class="fa-solid fa-layer-group"></i>
             </button>
         </div>
-
     </div>
 
     <!-- Spinner Style Override in Tailwind -->
@@ -195,8 +191,7 @@
 
     <!-- Libraries -->
     <!-- Leaflet -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <!-- Proj4js & Proj4Leaflet -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>

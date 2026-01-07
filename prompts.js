@@ -92,7 +92,7 @@ function renderPrompts(prompts) {
         return;
     }
 
-    prompts.forEach((prompt, index) => {
+    prompts.forEach(prompt => {
         const card = document.createElement('div');
         card.className = 'group bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 cursor-pointer flex flex-col h-full animate-[fadeIn_0.5s_ease-out]';
         card.onclick = () => openEditor(prompt);

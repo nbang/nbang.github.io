@@ -1,25 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-2QJTEKK89H');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Convert PNG, GIF, BMP, WEBP images to JPG format for free.">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Convert PNG, GIF, BMP, WEBP images to JPG format for free." />
     <title>Convert to JPG - Bang's Tools</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style> body { font-family: 'Inter', sans-serif; } h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; } </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
         <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-orange-200/40 blur-[100px]"></div>
@@ -30,21 +47,26 @@
             <a href="index.html" class="flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors">
                 <i class="fa-solid fa-arrow-left"></i> <span class="font-medium">All Tools</span>
             </a>
-            <h1 class="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Convert to JPG</h1>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                Convert to JPG</h1>
             <div class="w-20"></div>
         </header>
 
-        <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden animate-[fadeIn_0.7s_ease-out] min-h-[600px] flex flex-col">
+        <div
+            class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden animate-[fadeIn_0.7s_ease-out] min-h-[600px] flex flex-col">
             <!-- Upload -->
             <div id="uploadView" class="flex-1 flex flex-col items-center justify-center p-12 text-center transition-all">
                 <div class="w-full max-w-xl">
-                    <label for="fileInput" class="group block border-3 border-dashed border-gray-300 rounded-3xl p-16 cursor-pointer hover:border-orange-500 hover:bg-orange-50/50 transition-all duration-300">
-                        <div class="w-20 h-20 mx-auto mb-6 bg-orange-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <label for="fileInput"
+                        class="group block border-3 border-dashed border-gray-300 rounded-3xl p-16 cursor-pointer hover:border-orange-500 hover:bg-orange-50/50 transition-all duration-300">
+                        <div
+                            class="w-20 h-20 mx-auto mb-6 bg-orange-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-regular fa-image text-3xl text-orange-600"></i>
                         </div>
-                        <h2 class="text-3xl font-bold text-gray-700 mb-2 group-hover:text-orange-600 transition-colors">Select Image</h2>
+                        <h2 class="text-3xl font-bold text-gray-700 mb-2 group-hover:text-orange-600 transition-colors">
+                            Select Image</h2>
                         <p class="text-gray-400 text-lg">PNG, GIF, BMP, WEBP or SVG</p>
-                        <input type="file" id="fileInput" accept="image/png, image/gif, image/bmp, image/webp, image/svg+xml" class="hidden">
+                        <input type="file" id="fileInput" accept="image/png, image/gif, image/bmp, image/webp, image/svg+xml" class="hidden" />
                     </label>
                 </div>
             </div>
@@ -52,34 +74,41 @@
             <!-- Workspace -->
             <div id="workspaceView" class="hidden flex-1 flex flex-col lg:flex-row h-full">
                 <div class="flex-1 p-8 bg-gray-50/50 flex flex-col items-center justify-center relative border-b lg:border-b-0 lg:border-r border-gray-200">
-                    <img id="previewImage" class="max-w-full max-h-[60vh] object-contain rounded-lg shadow-sm" src="" alt="Preview">
-                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm text-xs font-medium text-gray-500 border border-white/50" id="fileInfo"></div>
+                    <img id="previewImage" class="max-w-full max-h-[60vh] object-contain rounded-lg shadow-sm" src="" alt="Preview" />
+                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm text-xs font-medium text-gray-500 border border-white/50"
+                        id="fileInfo"></div>
                 </div>
                 <div class="w-full lg:w-80 p-6 flex flex-col gap-6 bg-white/50 backdrop-blur-sm">
                     <div>
                         <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-sliders text-orange-600"></i> Options</h3>
                         <div class="space-y-4">
-                           <div>
+                            <div>
                                 <div class="flex justify-between text-sm mb-1.5">
                                     <span class="text-gray-600 font-medium">JPEG Quality</span>
                                     <span id="qualityValue" class="text-orange-600 font-bold">90%</span>
                                 </div>
-                                <input type="range" id="qualityRange" min="0.1" max="1" step="0.1" value="0.9" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
+                                <input type="range" id="qualityRange" min="0.1" max="1" step="0.1" value="0.9"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-600" />
                             </div>
                             <div class="flex items-center gap-2">
-                                <input type="checkbox" id="fillBg" checked class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500 border-gray-300">
-                                <label for="fillBg" class="text-sm text-gray-600 select-none">Fill Transparent Background (White)</label>
+                                <input type="checkbox" id="fillBg" checked class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500 border-gray-300" />
+                                <label for="fillBg" class="text-sm text-gray-600 select-none">Fill Transparent
+                                    Background (White)</label>
                             </div>
                         </div>
                     </div>
                     <div class="mt-auto space-y-4">
-                        <button id="btnConvert" class="w-full py-3.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <button id="btnConvert"
+                            class="w-full py-3.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
                             <span id="btnText">Convert to JPG</span> <i class="fa-solid fa-bolt"></i>
                         </button>
-                        <a id="downloadLink" class="hidden w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <a id="downloadLink"
+                            class="hidden w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
                             Download JPG <i class="fa-solid fa-download"></i>
                         </a>
-                        <button id="btnReset" class="w-full py-2.5 text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">Upload Different Image</button>
+                        <button id="btnReset" class="w-full py-2.5 text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">
+                            Upload Different Image
+                        </button>
                     </div>
                 </div>
             </div>
@@ -87,33 +116,39 @@
     </main>
 
     <script>
-        const fileInput = document.getElementById('fileInput');
-        const uploadView = document.getElementById('uploadView');
-        const workspaceView = document.getElementById('workspaceView');
-        const previewImage = document.getElementById('previewImage');
-        const fileInfo = document.getElementById('fileInfo');
-        const qualityRange = document.getElementById('qualityRange');
-        const qualityValue = document.getElementById('qualityValue');
-        const fillBg = document.getElementById('fillBg');
-        const btnConvert = document.getElementById('btnConvert');
-        const downloadLink = document.getElementById('downloadLink');
-        const btnReset = document.getElementById('btnReset');
+        const fileInput = document.getElementById("fileInput");
+        const uploadView = document.getElementById("uploadView");
+        const workspaceView = document.getElementById("workspaceView");
+        const previewImage = document.getElementById("previewImage");
+        const fileInfo = document.getElementById("fileInfo");
+        const qualityRange = document.getElementById("qualityRange");
+        const qualityValue = document.getElementById("qualityValue");
+        const fillBg = document.getElementById("fillBg");
+        const btnConvert = document.getElementById("btnConvert");
+        const downloadLink = document.getElementById("downloadLink");
+        const btnReset = document.getElementById("btnReset");
 
         let originalFile = null;
         let originalImage = new Image();
 
-        fileInput.addEventListener('change', handleFile);
-        qualityRange.addEventListener('input', (e) => qualityValue.textContent = Math.round(e.target.value * 100) + '%');
-        btnReset.addEventListener('click', resetUI);
-        btnConvert.addEventListener('click', convertImage);
-        
+        fileInput.addEventListener("change", handleFile);
+        qualityRange.addEventListener("input", (e) => (qualityValue.textContent = Math.round(e.target.value * 100) + "%"));
+        btnReset.addEventListener("click", resetUI);
+        btnConvert.addEventListener("click", convertImage);
+
         // Drag Drop
         const dropZone = document.querySelector('label[for="fileInput"]');
-        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-orange-500', 'bg-orange-50/50'); });
-        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('border-orange-500', 'bg-orange-50/50'); });
-        dropZone.addEventListener('drop', (e) => {
+        dropZone.addEventListener("dragover", (e) => {
             e.preventDefault();
-            dropZone.classList.remove('border-orange-500', 'bg-orange-50/50');
+            dropZone.classList.add("border-orange-500", "bg-orange-50/50");
+        });
+        dropZone.addEventListener("dragleave", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("border-orange-500", "bg-orange-50/50");
+        });
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("border-orange-500", "bg-orange-50/50");
             if (e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;
                 handleFile({ target: fileInput });
@@ -124,14 +159,14 @@
             const file = e.target.files[0];
             if (!file) return;
             originalFile = file;
-            
+
             const reader = new FileReader();
             reader.onload = (ev) => {
                 originalImage.onload = () => {
                     previewImage.src = originalImage.src;
-                    fileInfo.textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB)`;
-                    uploadView.classList.add('hidden');
-                    workspaceView.classList.remove('hidden');
+                    fileInfo.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                    uploadView.classList.add("hidden");
+                    workspaceView.classList.remove("hidden");
                 };
                 originalImage.src = ev.target.result;
             };
@@ -141,40 +176,45 @@
         function convertImage() {
             btnConvert.disabled = true;
             btnConvert.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Converting...';
-            
+
             setTimeout(() => {
-                const canvas = document.createElement('canvas');
+                const canvas = document.createElement("canvas");
                 canvas.width = originalImage.width;
                 canvas.height = originalImage.height;
-                const ctx = canvas.getContext('2d');
+                const ctx = canvas.getContext("2d");
 
                 if (fillBg.checked) {
-                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillStyle = "#FFFFFF";
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                 }
-                
+
                 ctx.drawImage(originalImage, 0, 0);
-                
-                canvas.toBlob((blob) => {
-                    const url = URL.createObjectURL(blob);
-                    downloadLink.href = url;
-                    downloadLink.download = originalFile.name.split('.')[0] + '.jpg';
-                    
-                    btnConvert.classList.add('hidden');
-                    downloadLink.classList.remove('hidden');
-                    btnConvert.disabled = false;
-                    btnConvert.innerHTML = 'Convert to JPG <i class="fa-solid fa-bolt"></i>';
-                }, 'image/jpeg', parseFloat(qualityRange.value));
+
+                canvas.toBlob(
+                    (blob) => {
+                        const url = URL.createObjectURL(blob);
+                        downloadLink.href = url;
+                        downloadLink.download = originalFile.name.split(".")[0] + ".jpg";
+
+                        btnConvert.classList.add("hidden");
+                        downloadLink.classList.remove("hidden");
+                        btnConvert.disabled = false;
+                        btnConvert.innerHTML = 'Convert to JPG <i class="fa-solid fa-bolt"></i>';
+                    },
+                    "image/jpeg",
+                    parseFloat(qualityRange.value),
+                );
             }, 50);
         }
 
         function resetUI() {
-            fileInput.value = '';
-            uploadView.classList.remove('hidden');
-            workspaceView.classList.add('hidden');
-            downloadLink.classList.add('hidden');
-            btnConvert.classList.remove('hidden');
+            fileInput.value = "";
+            uploadView.classList.remove("hidden");
+            workspaceView.classList.add("hidden");
+            downloadLink.classList.add("hidden");
+            btnConvert.classList.remove("hidden");
         }
     </script>
 </body>
+
 </html>

@@ -3402,7 +3402,7 @@ const promptData = [
         "Title": "When to clear the snow",
         "User": "Everyone",
         "Category": "General",
-        "Prompt": "[When to clear the driveway and how]\n[Last modified: 12-14-2025 1:00 PM]\n\nStart by summarizing precipitation conditions for [INSERT YOUR LOCATION HERE — city and state recommended], including:\n- Total snowfall and any mixed precipitation over the previous 24 hours\n- Forecasted snowfall, precipitation type, and intensity over the next 24 hours\n\nBased on the recent and forecasted precipitation and temperatures, determine the most effective time to clear snow. Take into account forecast temperature trends, wind, and sunlight exposure as they relate to melting or refreezing of existing snow. Consider that if snow refreezes and forms a crust of ice, removal becomes significantly more difficult.\n\nAdvise whether ice melt should be used, and if so, when and how.\n\nAdditional context about the driveway:\n[DESCRIBE YOUR DRIVEWAY HERE — include slope, length, curves, surface material, areas where snow can or cannot be pushed, and any obstacles such as walls, trees, or parked vehicles.]\n\nIf helpful, compare two scenarios: clearing immediately versus waiting for passive melting, and explain the tradeoffs.\n\nAfter considering all factors, produce a concise summary of the recommended action and timing.",
+        "Prompt": "[When to clear the driveway and how]\n[Last modified: 12-14-2026 1:00 PM]\n\nStart by summarizing precipitation conditions for [INSERT YOUR LOCATION HERE — city and state recommended], including:\n- Total snowfall and any mixed precipitation over the previous 24 hours\n- Forecasted snowfall, precipitation type, and intensity over the next 24 hours\n\nBased on the recent and forecasted precipitation and temperatures, determine the most effective time to clear snow. Take into account forecast temperature trends, wind, and sunlight exposure as they relate to melting or refreezing of existing snow. Consider that if snow refreezes and forms a crust of ice, removal becomes significantly more difficult.\n\nAdvise whether ice melt should be used, and if so, when and how.\n\nAdditional context about the driveway:\n[DESCRIBE YOUR DRIVEWAY HERE — include slope, length, curves, surface material, areas where snow can or cannot be pushed, and any obstacles such as walls, trees, or parked vehicles.]\n\nIf helpful, compare two scenarios: clearing immediately versus waiting for passive melting, and explain the tradeoffs.\n\nAfter considering all factors, produce a concise summary of the recommended action and timing.",
         "Parameters": [],
         "Type": "TEXT"
     },
@@ -4338,7 +4338,7 @@ const promptData = [
             "company_name:Tesla Inc.",
             "card_number:#0006",
             "revenue:$96.8B",
-            "year:2025"
+            "year:2026"
         ],
         "Type": "IMAGE"
     },
@@ -5394,10 +5394,10 @@ const promptData = [
     },
     {
         "Id": "HRM-009",
-        "Title": "Explore top HR tech trends for 2025",
+        "Title": "Explore top HR tech trends for 2026",
         "User": "HR",
         "Category": "HRM",
-        "Prompt": "{{you_are_briefing_hr_leadership_on_tech_trends}} Research and summarize the top 5 HR technology trends expected to shape 2025. Include use cases, vendor examples, and implications for mid-sized companies. Synthesize insights into a short executive briefing with citations and actionable recommendations.",
+        "Prompt": "{{you_are_briefing_hr_leadership_on_tech_trends}} Research and summarize the top 5 HR technology trends expected to shape 2026. Include use cases, vendor examples, and implications for mid-sized companies. Synthesize insights into a short executive briefing with citations and actionable recommendations.",
         "Parameters": [
             "you_are_briefing_hr_leadership_on_tech_trends"
         ],
@@ -5494,7 +5494,7 @@ const promptData = [
         "Title": "Research global HR compliance updates",
         "User": "HR",
         "Category": "Research",
-        "Prompt": "Research the latest 2024–2025 HR compliance changes in the EU, US, and APAC (focus on remote work laws, employee classification, and data privacy). Provide links to official sources and summarize in plain language. Present findings in a 3-region comparison table with a 1-paragraph summary per region.",
+        "Prompt": "Research the latest 2024–2026 HR compliance changes in the EU, US, and APAC (focus on remote work laws, employee classification, and data privacy). Provide links to official sources and summarize in plain language. Present findings in a 3-region comparison table with a 1-paragraph summary per region.",
         "Parameters": [],
         "Type": "TEXT"
     },
@@ -5670,7 +5670,7 @@ const promptData = [
         "Title": "Analyze remote access tools",
         "User": "IT",
         "Category": "Evaluation",
-        "Prompt": "As an IT Service Delivery Lead, I need a secure, scalable remote access tool for our hybrid team. Compare current vendors (e.g., BeyondTrust, TeamViewer Tensor, Chrome Remote Desktop) for enterprise use in 2025. Focus on SSO support, encryption, session logging, and pricing. Provide a security-focused executive summary with links to primary sources.",
+        "Prompt": "As an IT Service Delivery Lead, I need a secure, scalable remote access tool for our hybrid team. Compare current vendors (e.g., BeyondTrust, TeamViewer Tensor, Chrome Remote Desktop) for enterprise use in 2026. Focus on SSO support, encryption, session logging, and pricing. Provide a security-focused executive summary with links to primary sources.",
         "Parameters": [],
         "Type": "TEXT"
     },
@@ -5699,7 +5699,7 @@ const promptData = [
         "Title": "Compare AI observability tools",
         "User": "IT",
         "Category": "Evaluation",
-        "Prompt": "I'm an IT Manager at {{company}}. I’m evaluating observability platforms. Research current offerings, pricing, supported environments, and key differentiators in 2025. Include citations and summarize insights in a comparison table with a recommendation for a mid-size engineering org.",
+        "Prompt": "I'm an IT Manager at {{company}}. I’m evaluating observability platforms. Research current offerings, pricing, supported environments, and key differentiators in 2026. Include citations and summarize insights in a comparison table with a recommendation for a mid-size engineering org.",
         "Parameters": [
             "company"
         ],
@@ -5710,7 +5710,7 @@ const promptData = [
         "Title": "Compare cloud providers",
         "User": "IT",
         "Category": "Evaluation",
-        "Prompt": "Compare AWS, Azure, and GCP for our use case: {{workload_or_environment}}. Consider cost, uptime, global availability, and ease of integration. Research using 2025 data, and present a table comparing each provider with a recommendation at the end.",
+        "Prompt": "Compare AWS, Azure, and GCP for our use case: {{workload_or_environment}}. Consider cost, uptime, global availability, and ease of integration. Research using 2026 data, and present a table comparing each provider with a recommendation at the end.",
         "Parameters": [
             "workload_or_environment"
         ],
@@ -5730,7 +5730,7 @@ const promptData = [
         "Title": "Generate vendor comparison chart",
         "User": "IT",
         "Category": "Evaluation",
-        "Prompt": "Research and compare remote access vendors for enterprise use. Focus on features, pricing, integrations, and support quality. Use 2025 data, and summarize the findings in a comparison table with notes.",
+        "Prompt": "Research and compare remote access vendors for enterprise use. Focus on features, pricing, integrations, and support quality. Use 2026 data, and summarize the findings in a comparison table with notes.",
         "Parameters": [],
         "Type": "TEXT"
     },
@@ -5748,7 +5748,7 @@ const promptData = [
         "Title": "Investigate zero trust frameworks",
         "User": "IT",
         "Category": "Evaluation",
-        "Prompt": "I'm a Security Architect working on adopting a zero trust model. Research leading frameworks (e.g., NIST 800-207) and recent updates to best practices in 2024–2025. Include real-world implementation case studies where possible. Provide a summarized comparison and an executive-ready briefing.",
+        "Prompt": "I'm a Security Architect working on adopting a zero trust model. Research leading frameworks (e.g., NIST 800-207) and recent updates to best practices in 2024–2026. Include real-world implementation case studies where possible. Provide a summarized comparison and an executive-ready briefing.",
         "Parameters": [],
         "Type": "TEXT"
     },
@@ -5795,7 +5795,7 @@ const promptData = [
         "Title": "Assess global data residency laws",
         "User": "IT",
         "Category": "Research",
-        "Prompt": "I’m an IT Compliance Lead planning a global data storage architecture. Research 2025 data residency requirements across the EU, US, APAC, and LATAM. Include regulatory restrictions and preferred cloud regions. Cite official documentation and summarize findings in a table grouped by region.",
+        "Prompt": "I’m an IT Compliance Lead planning a global data storage architecture. Research 2026 data residency requirements across the EU, US, APAC, and LATAM. Include regulatory restrictions and preferred cloud regions. Cite official documentation and summarize findings in a table grouped by region.",
         "Parameters": [],
         "Type": "TEXT"
     },

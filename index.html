@@ -1,517 +1,255 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"
-    ></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-2QJTEKK89H");
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Bang's Tools - A collection of utilities including Vietnam Admin Data, Translation Workflow, and AI OCR."
-    />
+    <meta name="description" content="Bang's Tools - A collection of utilities including Vietnam Admin Data, Translation Workflow, and AI OCR." />
     <title>Bang's Tools</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-      body {
-        font-family: "Inter", sans-serif;
-      }
+        body {
+            font-family: "Inter", sans-serif;
+        }
 
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-family: "Outfit", sans-serif;
-      }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
     </style>
-  </head>
+</head>
 
-  <body
-    class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden"
-  >
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
     <!-- Dynamic background -->
-    <div
-      class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50"
-    >
-      <div
-        class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-sky-200/40 blur-[100px]"
-      ></div>
-      <div
-        class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-indigo-200/40 blur-[100px]"
-      ></div>
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-sky-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-indigo-200/40 blur-[100px]"></div>
     </div>
 
     <main class="flex-grow container mx-auto px-4 py-12 max-w-6xl">
-      <header class="text-center mb-16 animate-[fadeIn_0.6s_ease-out]">
-        <h1
-          class="text-5xl font-extrabold mb-4 pb-2 tracking-tight bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent"
-        >
-          Bang's Tools
-        </h1>
-        <p class="text-xl text-gray-500">
-          A collection of utilities and dashboards.
-        </p>
-      </header>
+        <header class="text-center mb-16 animate-[fadeIn_0.6s_ease-out]">
+            <h1 class="text-5xl font-extrabold mb-4 pb-2 tracking-tight bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
+                Bang's Tools
+            </h1>
+            <p class="text-xl text-gray-500">A collection of utilities and dashboards.</p>
+        </header>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Card 1 -->
-        <a
-          href="hcm-admin.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_0.8s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors"
-            >
-              HCM Merger Data
-            </h2>
-            <div
-              class="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-blue-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            View and filter detailed data regarding the merger of administrative
-            units in Ho Chi Minh City.
-          </p>
-          <div class="mt-6 flex items-center text-blue-600 font-medium">
-            <span>Open Dashboard</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <a href="hcm-admin.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_0.8s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">HCM Merger
+                        Data</h2>
+                    <div class="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">View and filter detailed data regarding the merger of
+                    administrative units in Ho Chi Minh City.</p>
+                <div class="mt-6 flex items-center text-blue-600 font-medium">
+                    <span>Open Dashboard</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
 
-        <!-- Card 2 -->
-        <a
-          href="vietnam-admin.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_0.9s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors"
-            >
-              Vietnam Admin Data
-            </h2>
-            <div
-              class="p-2 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 7m0 13V7"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            Comprehensive dataset of administrative units across all provinces
-            in Vietnam.
-          </p>
-          <div class="mt-6 flex items-center text-green-600 font-medium">
-            <span>Open Dashboard</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
+            <!-- Card 2 -->
+            <a href="vietnam-admin.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_0.9s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">Vietnam
+                        Admin Data</h2>
+                    <div class="p-2 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 7m0 13V7" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">Comprehensive dataset of administrative units across all
+                    provinces in Vietnam.</p>
+                <div class="mt-6 flex items-center text-green-600 font-medium">
+                    <span>Open Dashboard</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
 
-        <!-- Card 3 -->
-        <a
-          href="translation.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.0s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors"
-            >
-              Translation Workflow
-            </h2>
-            <div
-              class="p-2 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-purple-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            Manage your book translation pipeline, scrape chapters, translate
-            content, and edit files.
-          </p>
-          <div class="mt-6 flex items-center text-purple-600 font-medium">
-            <span>Open Dashboard</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
+            <!-- Card 3 -->
+            <a href="translation.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.0s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
+                        Translation Workflow</h2>
+                    <div class="p-2 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">Manage your book translation pipeline, scrape chapters,
+                    translate content, and edit files.</p>
+                <div class="mt-6 flex items-center text-purple-600 font-medium">
+                    <span>Open Dashboard</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
 
-        <!-- Card 4: OCR -->
-        <a
-          href="image_tools/ocr.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.1s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-sky-600 transition-colors"
-            >
-              AI In-Browser OCR
-            </h2>
-            <div
-              class="p-2 bg-sky-50 rounded-lg group-hover:bg-sky-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-sky-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            Extract text from images locally using powerful Transformer models
-            directly in your browser.
-          </p>
-          <div class="mt-6 flex items-center text-sky-600 font-medium">
-            <span>Open Tool</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
+            <!-- Card 4: OCR -->
+            <a href="image_tools/ocr.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.1s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-sky-600 transition-colors">AI
+                        In-Browser OCR</h2>
+                    <div class="p-2 bg-sky-50 rounded-lg group-hover:bg-sky-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">Extract text from images locally using powerful Transformer
+                    models directly in your browser.</p>
+                <div class="mt-6 flex items-center text-sky-600 font-medium">
+                    <span>Open Tool</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
 
-        <!-- Card 5: Prompts Library -->
-        <a
-          href="prompt.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.2s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors"
-            >
-              AI Prompts Library
-            </h2>
-            <div
-              class="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-indigo-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            Browse, search, and customize a collection of useful AI prompts for
-            various tasks.
-          </p>
-          <div class="mt-6 flex items-center text-indigo-600 font-medium">
-            <span>Open Library</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
+            <!-- Card 5: Prompts Library -->
+            <a href="prompt.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.2s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">AI
+                        Prompts Library</h2>
+                    <div class="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">Browse, search, and customize a collection of useful AI prompts
+                    for various tasks.</p>
+                <div class="mt-6 flex items-center text-indigo-600 font-medium">
+                    <span>Open Library</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
 
-        <!-- Card 6: Cat-2-Map -->
-        <a
-          href="cat2map.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.3s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-amber-600 transition-colors"
-            >
-              Cat-2-Map (GIS)
-            </h2>
-            <div
-              class="p-2 bg-amber-50 rounded-lg group-hover:bg-amber-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-amber-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 7m0 13V7"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000
-            coordinate support.
-          </p>
-          <div class="mt-6 flex items-center text-amber-600 font-medium">
-            <span>Open Tool</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
+            <!-- Card 6: Cat-2-Map -->
+            <a href="cat2map.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.3s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-amber-600 transition-colors">Cat-2-Map
+                        (GIS)</h2>
+                    <div class="p-2 bg-amber-50 rounded-lg group-hover:bg-amber-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 7m0 13V7" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000
+                    coordinate support.</p>
+                <div class="mt-6 flex items-center text-amber-600 font-medium">
+                    <span>Open Tool</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
 
-        <!-- Card 7: Free-For-Dev -->
-        <a
-          href="freefordev.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.4s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors"
-            >
-              Free For Dev
-            </h2>
-            <div
-              class="p-2 bg-cyan-50 rounded-lg group-hover:bg-cyan-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-cyan-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            A curated list of software (SaaS, PaaS, IaaS) with free tiers for
-            developers.
-          </p>
-          <div class="mt-6 flex items-center text-cyan-600 font-medium">
-            <span>Opening Resources</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
+            <!-- Card 7: Free-For-Dev -->
+            <a href="freefordev.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.4s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">Free For
+                        Dev</h2>
+                    <div class="p-2 bg-cyan-50 rounded-lg group-hover:bg-cyan-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">A curated list of software (SaaS, PaaS, IaaS) with free tiers
+                    for developers.</p>
+                <div class="mt-6 flex items-center text-cyan-600 font-medium">
+                    <span>Opening Resources</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
 
-        <!-- Card 8: Image Tools -->
-        <a
-          href="image_tools/index.html"
-          class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.5s_ease-out]"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-2xl font-bold text-gray-900 group-hover:text-pink-600 transition-colors"
-            >
-              Image Tools
-            </h2>
-            <div
-              class="p-2 bg-pink-50 rounded-lg group-hover:bg-pink-100 transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-pink-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
-          </div>
-          <p class="text-gray-600 leading-relaxed">
-            A suite of image manipulation tools: Compress, Resize, convert, and
-            more.
-          </p>
-          <div class="mt-6 flex items-center text-pink-600 font-medium">
-            <span>Open Tools</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </div>
-        </a>
-      </div>
+            <!-- Card 8: Image Tools -->
+            <a href="image_tools/index.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-8 animate-[fadeIn_1.5s_ease-out]">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-pink-600 transition-colors">Image Tools
+                    </h2>
+                    <div class="p-2 bg-pink-50 rounded-lg group-hover:bg-pink-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">A suite of image manipulation tools: Compress, Resize, convert,
+                    and more.</p>
+                <div class="mt-6 flex items-center text-pink-600 font-medium">
+                    <span>Open Tools</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </div>
+            </a>
+        </div>
     </main>
 
-    <footer class="text-center py-8 text-gray-500 text-sm relative z-10">
-      &copy; 2025 Bang's Tools. All rights reserved.
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10">&copy; 2026 Bang's Tools. All rights reserved.
     </footer>
-  </body>
+</body>
+
 </html>

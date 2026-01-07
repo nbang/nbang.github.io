@@ -89,7 +89,7 @@ const AppState = {
 function initMap() {
     // Basic Leaflet Map with Google Hybrid look-alike (using Esri or similar free satellite provider)
     // Note: Google Tiles require API Key or specific URL patterns. Using Esri Satellite as a reliable alternative.
-    
+
     const map = L.map('map', {
         zoomControl: false,
         attributionControl: false
@@ -112,7 +112,7 @@ function initMap() {
 
     // Zoom Control Bottom Left
     L.control.zoom({ position: 'bottomleft' }).addTo(map);
-    
+
     // Scale
     L.control.scale().addTo(map);
 
@@ -133,11 +133,11 @@ function initUI() {
 
     // File Input Listener
     document.getElementById('fileInput').addEventListener('change', handleFileUpload);
-    
+
     // UI Event Listeners for Export
     document.getElementById('btnExportGeoJSON').addEventListener('click', downloadGeoJSON);
     document.getElementById('btnExportKML').addEventListener('click', downloadKML);
-    
+
     // Toolbar
     document.getElementById('toolFit').addEventListener('click', fitToData);
 }
@@ -185,7 +185,6 @@ function processDxf(dxf) {
     const cm = parseFloat(document.getElementById('provinceSelect').value);
     const swapXY = document.getElementById('swapXY').checked;
     const fromProj = getProjString(cm);
-    const toProj = 'EPSG:4326'; // WGS84
 
     log(`Processing with CM ${cm}, SwapXY: ${swapXY}`);
 
@@ -195,7 +194,7 @@ function processDxf(dxf) {
     dxf.entities.forEach(entity => {
         // We focus on basic geometries: LINE, LWPOLYLINE, POLYLINE, CIRCLE, POINT
         // TEXT/MTEXT could be added as points with properties?
-        
+
         let geometry = null;
 
         // Extract vertices based on type
@@ -204,7 +203,7 @@ function processDxf(dxf) {
             const p1 = convertPoint(entity.vertices[0], fromProj, swapXY);
             const p2 = convertPoint(entity.vertices[1], fromProj, swapXY);
             geometry = { type: 'LineString', coordinates: [p1, p2] };
-        } 
+        }
         else if (entity.type === 'LWPOLYLINE' || entity.type === 'POLYLINE') {
             const coords = entity.vertices.map(v => convertPoint(v, fromProj, swapXY));
             if (entity.shape) { // Closed polygon?
@@ -222,10 +221,10 @@ function processDxf(dxf) {
             geometry = { type: 'Point', coordinates: center };
         }
         else if (entity.type === 'POINT') {
-           if(entity.position){
-               const p = convertPoint(entity.position, fromProj, swapXY);
-               geometry = { type: 'Point', coordinates: p };
-           }
+            if (entity.position) {
+                const p = convertPoint(entity.position, fromProj, swapXY);
+                geometry = { type: 'Point', coordinates: p };
+            }
         }
 
         if (geometry) {
@@ -239,7 +238,7 @@ function processDxf(dxf) {
                 geometry: geometry
             };
             geoJsonFeatures.push(feature);
-            
+
             // Group by layer
             if (!layers[feature.properties.layer]) layers[feature.properties.layer] = [];
             layers[feature.properties.layer].push(feature);
@@ -247,17 +246,17 @@ function processDxf(dxf) {
     });
 
     log(`Converted ${geoJsonFeatures.length} valid features.`);
-    
+
     // Update State
     AppState.geoJsonData = { type: 'FeatureCollection', features: geoJsonFeatures };
-    
+
     // Render
     renderToMap(layers);
-    
+
     // Update Stats
     document.getElementById('featureCount').textContent = geoJsonFeatures.length;
     document.getElementById('projName').textContent = `VN2000 WGS84 (CM ${cm})`;
-    
+
     // Enable Exports
     document.getElementById('btnExportGeoJSON').disabled = false;
     document.getElementById('btnExportKML').disabled = false;
@@ -269,10 +268,10 @@ function convertPoint(v, fromProj, swapXY) {
     // In many CAD survey files in VN, they follow the mathematical Axes: X is Easting, Y is Northing.
     // However, sometimes they are swapped (X=North, Y=East) to follow formatting standards.
     // Standard Proj4 expects [x, y].
-    
+
     let x = v.x;
     let y = v.y;
-    
+
     if (swapXY) {
         // User indicates the Input CAD has Swapped axes relative to standard [Easting, Northing]
         // Usually this means Input X is actually Northing, Input Y is Easting.
@@ -292,23 +291,23 @@ function renderToMap(layerMap) {
 
     const layerListEl = document.getElementById('layerList');
     layerListEl.innerHTML = '';
-    
+
     // Show layer section
     document.getElementById('layerSection').style.display = 'block';
 
     Object.keys(layerMap).forEach(layerName => {
         const features = layerMap[layerName];
         const color = colors[colorIdx % colors.length];
-        
+
         const geoJsonLayer = L.geoJSON(features, {
             style: { color: color, weight: 2 },
             pointToLayer: (feature, latlng) => {
                 return L.circleMarker(latlng, { radius: 4, color: color, fillColor: color, fillOpacity: 0.5 });
             }
         }).addTo(map);
-        
+
         AppState.layers.set(layerName, geoJsonLayer);
-        
+
         // Add to UI
         const div = document.createElement('div');
         div.className = 'layer-item';
@@ -318,10 +317,10 @@ function renderToMap(layerMap) {
             <span>${layerName} (${features.length})</span>
         `;
         layerListEl.appendChild(div);
-        
+
         colorIdx++;
     });
-    
+
     fitToData();
 }
 
@@ -364,7 +363,7 @@ function log(msg, type = 'info') {
 
 function downloadGeoJSON() {
     if (!AppState.geoJsonData) return;
-    const blob = new Blob([JSON.stringify(AppState.geoJsonData)], {type: "application/json"});
+    const blob = new Blob([JSON.stringify(AppState.geoJsonData)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -378,14 +377,14 @@ function downloadKML() {
     // tokml is a global from the library
     try {
         const kml = tokml(AppState.geoJsonData);
-        const blob = new Blob([kml], {type: "application/vnd.google-earth.kml+xml"});
+        const blob = new Blob([kml], { type: "application/vnd.google-earth.kml+xml" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = "export.kml";
         a.click();
         log("Downloaded KML");
-    } catch(e) {
+    } catch (e) {
         log("KML Export failed: " + e.message, 'error');
     }
 }

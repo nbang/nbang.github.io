@@ -1,26 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-2QJTEKK89H');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Add watermark to images. Protect your copyright with text or image stamps.">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Add watermark to images. Protect your copyright with text or image stamps." />
     <title>Watermark Image - Bang's Tools</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-    <style> body { font-family: 'Inter', sans-serif; } h1,h2,h3,h4,h5,h6 { font-family: 'Outfit', sans-serif; } </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
         <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-red-200/40 blur-[100px]"></div>
@@ -35,75 +52,94 @@
             <div class="w-20"></div>
         </header>
 
-        <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden animate-[fadeIn_0.7s_ease-out] min-h-[600px] flex flex-col">
+        <div
+            class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden animate-[fadeIn_0.7s_ease-out] min-h-[600px] flex flex-col">
             <!-- Upload -->
             <div id="uploadView" class="flex-1 flex flex-col items-center justify-center p-12 text-center transition-all">
                 <div class="w-full max-w-xl">
-                    <label for="fileInput" class="group block border-3 border-dashed border-gray-300 rounded-3xl p-16 cursor-pointer hover:border-red-500 hover:bg-red-50/50 transition-all duration-300">
-                        <div class="w-20 h-20 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <label for="fileInput"
+                        class="group block border-3 border-dashed border-gray-300 rounded-3xl p-16 cursor-pointer hover:border-red-500 hover:bg-red-50/50 transition-all duration-300">
+                        <div
+                            class="w-20 h-20 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                             <i class="fa-solid fa-stamp text-3xl text-red-600"></i>
                         </div>
                         <h2 class="text-3xl font-bold text-gray-700 mb-2 group-hover:text-red-600 transition-colors">Select Image</h2>
                         <p class="text-gray-400 text-lg">JPG, PNG or GIF</p>
-                        <input type="file" id="fileInput" accept="image/*" class="hidden">
+                        <input type="file" id="fileInput" accept="image/*" class="hidden" />
                     </label>
                 </div>
             </div>
 
             <!-- Workspace -->
             <div id="workspaceView" class="hidden flex-1 flex flex-col lg:flex-row h-full">
-                <div class="flex-1 p-8 bg-gray-50/50 flex flex-col items-center justify-center relative border-b lg:border-b-0 lg:border-r border-gray-200 overflow-hidden" id="canvasContainer">
-                     <canvas id="canvas"></canvas>
+                <div class="flex-1 p-8 bg-gray-50/50 flex flex-col items-center justify-center relative border-b lg:border-b-0 lg:border-r border-gray-200 overflow-hidden"
+                    id="canvasContainer">
+                    <canvas id="canvas"></canvas>
                 </div>
                 <div class="w-full lg:w-80 p-6 flex flex-col gap-6 bg-white/50 backdrop-blur-sm">
                     <div>
                         <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-sliders text-red-600"></i> Watermark</h3>
-                        
+
                         <!-- Tabs -->
                         <div class="flex p-1 bg-gray-200/50 rounded-xl mb-4">
-                            <button id="tabText" class="flex-1 py-1.5 text-sm font-medium rounded-lg bg-white shadow-sm text-red-600 transition-all">Text</button>
-                            <button id="tabImage" class="flex-1 py-1.5 text-sm font-medium rounded-lg text-gray-500 hover:text-red-600 transition-all">Image</button>
+                            <button id="tabText" class="flex-1 py-1.5 text-sm font-medium rounded-lg bg-white shadow-sm text-red-600 transition-all">
+                                Text
+                            </button>
+                            <button id="tabImage" class="flex-1 py-1.5 text-sm font-medium rounded-lg text-gray-500 hover:text-red-600 transition-all">
+                                Image
+                            </button>
                         </div>
 
                         <!-- Text Input -->
                         <div id="textControls" class="space-y-4">
-                            <input type="text" id="watermarkText" placeholder="Your Text Here" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-red-500 outline-none">
+                            <input type="text" id="watermarkText" placeholder="Your Text Here"
+                                class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-red-500 outline-none" />
                             <div class="flex gap-2">
-                                <button onclick="addText()" class="flex-1 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-medium hover:bg-red-200">Add Text</button>
+                                <button onclick="addText()" class="flex-1 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-medium hover:bg-red-200">
+                                    Add Text
+                                </button>
                             </div>
                         </div>
 
                         <!-- Image Input -->
                         <div id="imageControls" class="hidden space-y-4">
-                             <label class="block w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-center cursor-pointer hover:bg-gray-100 hover:border-red-500 text-gray-500">
+                            <label
+                                class="block w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-center cursor-pointer hover:bg-gray-100 hover:border-red-500 text-gray-500">
                                 <i class="fa-solid fa-upload mr-2"></i> Upload Logo
-                                <input type="file" id="watermarkImageInput" accept="image/*" class="hidden">
+                                <input type="file" id="watermarkImageInput" accept="image/*" class="hidden" />
                             </label>
                         </div>
-                        
-                        <hr class="border-gray-200 my-4">
+
+                        <hr class="border-gray-200 my-4" />
 
                         <!-- Common Controls -->
                         <div class="space-y-4">
-                             <div>
+                            <div>
                                 <div class="flex justify-between text-xs mb-1">
                                     <span class="text-gray-500 font-medium uppercase">Opacity</span>
                                     <span id="opacityValue" class="text-red-600 font-bold">100%</span>
                                 </div>
-                                <input type="range" id="opacityRange" min="0" max="1" step="0.1" value="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600">
+                                <input type="range" id="opacityRange" min="0" max="1" step="0.1" value="1"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-600" />
                             </div>
-                            <button onclick="deleteActiveObject()" class="w-full py-2 bg-gray-200 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-300 hover:text-red-600"><i class="fa-solid fa-trash mr-2"></i> Remove Selected</button>
+                            <button onclick="deleteActiveObject()"
+                                class="w-full py-2 bg-gray-200 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-300 hover:text-red-600">
+                                <i class="fa-solid fa-trash mr-2"></i> Remove Selected
+                            </button>
                         </div>
-
                     </div>
                     <div class="mt-auto space-y-4">
-                        <button id="btnSave" class="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <button id="btnSave"
+                            class="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
                             <span id="btnText">Watermark Image</span> <i class="fa-solid fa-stamp"></i>
                         </button>
-                        <a id="downloadLink" class="hidden w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <a id="downloadLink"
+                            class="hidden w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
                             Download Image <i class="fa-solid fa-download"></i>
                         </a>
-                        <button id="btnReset" class="w-full py-2.5 text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">Upload Different Image</button>
+                        <button id="btnReset" class="w-full py-2.5 text-gray-500 hover:text-gray-700 font-medium text-sm transition-colors">
+                            Upload Different Image
+                        </button>
                     </div>
                 </div>
             </div>
@@ -111,55 +147,55 @@
     </main>
 
     <script>
-        const fileInput = document.getElementById('fileInput');
-        const uploadView = document.getElementById('uploadView');
-        const workspaceView = document.getElementById('workspaceView');
-        const tabText = document.getElementById('tabText');
-        const tabImage = document.getElementById('tabImage');
-        const textControls = document.getElementById('textControls');
-        const imageControls = document.getElementById('imageControls');
-        const opacityRange = document.getElementById('opacityRange');
-        const opacityValue = document.getElementById('opacityValue');
-        const btnSave = document.getElementById('btnSave');
-        const downloadLink = document.getElementById('downloadLink');
-        const btnReset = document.getElementById('btnReset');
-        const watermarkImageInput = document.getElementById('watermarkImageInput');
-        
+        const fileInput = document.getElementById("fileInput");
+        const uploadView = document.getElementById("uploadView");
+        const workspaceView = document.getElementById("workspaceView");
+        const tabText = document.getElementById("tabText");
+        const tabImage = document.getElementById("tabImage");
+        const textControls = document.getElementById("textControls");
+        const imageControls = document.getElementById("imageControls");
+        const opacityRange = document.getElementById("opacityRange");
+        const opacityValue = document.getElementById("opacityValue");
+        const btnSave = document.getElementById("btnSave");
+        const downloadLink = document.getElementById("downloadLink");
+        const btnReset = document.getElementById("btnReset");
+        const watermarkImageInput = document.getElementById("watermarkImageInput");
+
         let canvas;
         let originalFile = null;
 
         // Init
-        fileInput.addEventListener('change', initCanvas);
-        btnReset.addEventListener('click', () => location.reload()); // Simple reset
-        
+        fileInput.addEventListener("change", initCanvas);
+        btnReset.addEventListener("click", () => location.reload()); // Simple reset
+
         // Tabs
-        tabText.addEventListener('click', () => {
+        tabText.addEventListener("click", () => {
             tabText.className = "flex-1 py-1.5 text-sm font-medium rounded-lg bg-white shadow-sm text-red-600 transition-all";
             tabImage.className = "flex-1 py-1.5 text-sm font-medium rounded-lg text-gray-500 hover:text-red-600 transition-all";
-            textControls.classList.remove('hidden');
-            imageControls.classList.add('hidden');
+            textControls.classList.remove("hidden");
+            imageControls.classList.add("hidden");
         });
-        tabImage.addEventListener('click', () => {
+        tabImage.addEventListener("click", () => {
             tabImage.className = "flex-1 py-1.5 text-sm font-medium rounded-lg bg-white shadow-sm text-red-600 transition-all";
             tabText.className = "flex-1 py-1.5 text-sm font-medium rounded-lg text-gray-500 hover:text-red-600 transition-all";
-            imageControls.classList.remove('hidden');
-            textControls.classList.add('hidden');
+            imageControls.classList.remove("hidden");
+            textControls.classList.add("hidden");
         });
 
         // Controls
-        opacityRange.addEventListener('input', (e) => {
+        opacityRange.addEventListener("input", (e) => {
             const val = e.target.value;
-            opacityValue.textContent = Math.round(val * 100) + '%';
+            opacityValue.textContent = Math.round(val * 100) + "%";
             const active = canvas.getActiveObject();
             if (active) {
-                active.set('opacity', parseFloat(val));
+                active.set("opacity", parseFloat(val));
                 canvas.requestRenderAll();
             }
         });
 
-        watermarkImageInput.addEventListener('change', (e) => {
+        watermarkImageInput.addEventListener("change", (e) => {
             const file = e.target.files[0];
-            if(!file) return;
+            if (!file) return;
             const reader = new FileReader();
             reader.onload = (f) => {
                 fabric.Image.fromURL(f.target.result, (img) => {
@@ -169,18 +205,24 @@
                 });
             };
             reader.readAsDataURL(file);
-            watermarkImageInput.value = '';
+            watermarkImageInput.value = "";
         });
 
-        btnSave.addEventListener('click', saveImage);
+        btnSave.addEventListener("click", saveImage);
 
         // Drag Drop (Main)
         const dropZone = document.querySelector('label[for="fileInput"]');
-        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-red-500', 'bg-red-50/50'); });
-        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('border-red-500', 'bg-red-50/50'); });
-        dropZone.addEventListener('drop', (e) => {
+        dropZone.addEventListener("dragover", (e) => {
             e.preventDefault();
-            dropZone.classList.remove('border-red-500', 'bg-red-50/50');
+            dropZone.classList.add("border-red-500", "bg-red-50/50");
+        });
+        dropZone.addEventListener("dragleave", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("border-red-500", "bg-red-50/50");
+        });
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("border-red-500", "bg-red-50/50");
             if (e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;
                 initCanvas({ target: fileInput });
@@ -195,49 +237,49 @@
             const reader = new FileReader();
             reader.onload = (f) => {
                 fabric.Image.fromURL(f.target.result, (img) => {
-                    uploadView.classList.add('hidden');
-                    workspaceView.classList.remove('hidden');
-                    
+                    uploadView.classList.add("hidden");
+                    workspaceView.classList.remove("hidden");
+
                     // Logic to fit image in container basically
-                    const container = document.getElementById('canvasContainer');
+                    const container = document.getElementById("canvasContainer");
                     const maxWidth = container.clientWidth - 64; // padding
                     const maxHeight = window.innerHeight * 0.6;
-                    
+
                     let scale = 1;
                     if (img.width > maxWidth || img.height > maxHeight) {
                         scale = Math.min(maxWidth / img.width, maxHeight / img.height);
                     }
-                    
+
                     // Create canvas
-                    canvas = new fabric.Canvas('canvas');
+                    canvas = new fabric.Canvas("canvas");
                     canvas.setWidth(img.width * scale);
                     canvas.setHeight(img.height * scale);
-                    
+
                     img.scale(scale);
                     canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-                    
+
                     // Hook events
-                    canvas.on('selection:created', updateControlFromSelection);
-                    canvas.on('selection:updated', updateControlFromSelection);
+                    canvas.on("selection:created", updateControlFromSelection);
+                    canvas.on("selection:updated", updateControlFromSelection);
                 });
             };
             reader.readAsDataURL(file);
         }
 
         function addText() {
-            const text = document.getElementById('watermarkText').value || 'Watermark';
+            const text = document.getElementById("watermarkText").value || "Watermark";
             const itext = new fabric.IText(text, {
                 left: canvas.width / 2,
                 top: canvas.height / 2,
-                originX: 'center',
-                originY: 'center',
-                fill: '#ff0000',
-                fontSize: 40
+                originX: "center",
+                originY: "center",
+                fill: "#ff0000",
+                fontSize: 40,
             });
             canvas.add(itext);
             canvas.setActiveObject(itext);
         }
-        
+
         function deleteActiveObject() {
             const active = canvas.getActiveObject();
             if (active) canvas.remove(active);
@@ -247,33 +289,34 @@
             const obj = e.selected[0];
             if (obj) {
                 opacityRange.value = obj.opacity;
-                opacityValue.textContent = Math.round(obj.opacity * 100) + '%';
+                opacityValue.textContent = Math.round(obj.opacity * 100) + "%";
             }
         }
 
         function saveImage() {
             btnSave.disabled = true;
             btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
-            
+
             // Generate full res export
             // 1. Get original size multiplier
             const bg = canvas.backgroundImage;
             const multiplier = 1 / bg.scaleX;
-            
+
             const dataURL = canvas.toDataURL({
-                format: 'jpeg',
+                format: "jpeg",
                 quality: 0.9,
-                multiplier: multiplier
+                multiplier: multiplier,
             });
-            
+
             downloadLink.href = dataURL;
             downloadLink.download = `watermarked_${originalFile.name}`;
-            
-            btnSave.classList.add('hidden');
-            downloadLink.classList.remove('hidden');
+
+            btnSave.classList.add("hidden");
+            downloadLink.classList.remove("hidden");
             btnSave.disabled = false;
             btnSave.innerHTML = 'Watermark Image <i class="fa-solid fa-stamp"></i>';
         }
     </script>
 </body>
+
 </html>
