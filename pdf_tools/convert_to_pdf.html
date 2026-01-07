@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convert to PDF - Bang's Tools</title>
+    <meta name="description" content="Convert Word, Excel, PowerPoint, HTML, and Images to PDF." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Libraries (Lazy loaded or allowed to block if essential for universal tool) -->
+    <!-- Mammoth (Word) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <!-- SheetJS (Excel) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- PPTXjs dependencies (PowerPoint) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs@latest/dist/css/pptxjs.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs@latest/dist/css/nv.d3.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs@latest/dist/js/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs@latest/dist/js/nv.d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs@latest/dist/js/pptxjs.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs@latest/dist/js/divs2slides.js"></script>
+
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- Dynamic background matching main site -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-red-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-orange-200/40 blur-[100px]"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="container mx-auto px-4 py-6 flex items-center justify-between">
+        <a href="index.html" class="flex items-center text-gray-600 hover:text-red-600 transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i>
+            <span class="font-medium">All PDF Tools</span>
+        </a>
+        <div class="text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+            Convert to PDF
+        </div>
+        <div class="w-24"></div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl flex flex-col items-center justify-center text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-gray-900">Convert to PDF</h1>
+        <p class="text-xl text-gray-500 mb-12 max-w-2xl"> Convert Word, Excel, PowerPoint, HTML, and Images to PDF instantly. </p>
+
+        <!-- Upload Area -->
+        <div class="w-full max-w-3xl bg-white/80 backdrop-blur-xl rounded-3xl shadow-lg border-2 border-dashed border-red-300 hover:border-red-500 transition-all p-12 group cursor-pointer"
+            id="dropZone">
+            <div class="flex flex-col items-center justify-center">
+                <div
+                    class="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative">
+                    <i class="fa-solid fa-file-pdf text-4xl text-red-600 absolute"></i>
+                    <i class="fa-solid fa-arrows-rotate text-5xl text-red-200 absolute animate-[spin_10s_linear_infinite]"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Select any document</h3>
+                <p class="text-gray-500 mb-4">Supported formats:</p>
+                <div class="flex gap-2 mb-8 text-2xl text-gray-400 justify-center flex-wrap">
+                    <i class="fa-solid fa-file-word hover:text-blue-600" title="Word"></i>
+                    <i class="fa-solid fa-file-excel hover:text-green-600" title="Excel"></i>
+                    <i class="fa-solid fa-file-powerpoint hover:text-orange-600" title="PowerPoint"></i>
+                    <i class="fa-brands fa-html5 hover:text-orange-500" title="HTML"></i>
+                    <i class="fa-solid fa-image hover:text-purple-600" title="Images"></i>
+                </div>
+
+                <button
+                    class="bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center">
+                    <i class="fa-solid fa-plus mr-2"></i>
+                    Select File
+                </button>
+            </div>
+            <input type="file" class="hidden" accept=".doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.html,.htm,.jpg,.jpeg,.png,.webp" id="fileInput" />
+        </div>
+
+        <!-- Action Area (Hidden by default) -->
+        <div id="actionArea" class="hidden w-full max-w-6xl mt-8 animate-[fadeIn_0.5s_ease-out]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Preview & Convert</h3>
+                <button id="clearBtn" class="text-red-500 hover:text-red-700 font-medium text-sm">Clear</button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Preview Side -->
+                <div class="lg:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100 min-h-[500px] max-h-[800px] overflow-auto flex flex-col"
+                    id="previewContainer">
+                    <!-- Preview content injected here -->
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                        <i class="fa-solid fa-file-lines text-4xl mb-4 opacity-50"></i>
+                        <p>Document preview will appear here</p>
+                    </div>
+                </div>
+
+                <!-- Controls Side -->
+                <div class="flex flex-col gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-left">
+                        <h4 class="font-bold text-gray-800 mb-4">File Info</h4>
+                        <p id="fileName" class="text-gray-600 mb-2 truncate font-medium">document.ext</p>
+                        <p id="fileType" class="text-xs text-gray-400 uppercase mb-4">-</p>
+
+                        <!-- Dynamic Controls based on type -->
+                        <div id="controls-excel" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Sheet</label>
+                            <select id="sheetSelect" class="w-full p-2 border border-gray-300 rounded-lg outline-non focus:border-red-500">
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-left">
+                        <h4 class="font-bold text-gray-800 mb-4">Actions</h4>
+
+                        <div class="bg-yellow-50 text-yellow-800 text-xs p-3 rounded-lg border border-yellow-200 mb-4">
+                            <i class="fa-solid fa-circle-info mr-1"></i>
+                            Uses your browser's print engine. Ensure "Save as PDF" is selected.
+                        </div>
+
+                        <button id="printBtn"
+                            class="w-full bg-red-600 text-white py-4 rounded-xl font-bold text-xl shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+                            <i class="fa-solid fa-print mr-2"></i>
+                            Print / Save as PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10"><div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+    <div class="mt-2">
+        Contact: <a href="mailto:bangndd@gmail.com" class="hover:text-gray-900 transition-colors font-medium">bangndd@gmail.com</a>
+    </div></footer>
+
+    <script src="utils/pdf-libs.js"></script>
+    <script src="utils/ui-manager.js"></script>
+
+    <script>
+        let selectedFile = null;
+        let pPTXjsInstance = null; // Track if we need cleanup?
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await PDFGlobals.loadStandardLib();
+
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const actionArea = document.getElementById('actionArea');
+
+            const previewContainer = document.getElementById('previewContainer');
+            const fileNameDisplay = document.getElementById('fileName');
+            const fileTypeDisplay = document.getElementById('fileType');
+
+            const controlsExcel = document.getElementById('controls-excel');
+            const sheetSelect = document.getElementById('sheetSelect');
+
+            const clearBtn = document.getElementById('clearBtn');
+            const printBtn = document.getElementById('printBtn');
+
+            // Initialize UI
+            UIManager.setupDropZone('dropZone', 'fileInput', handleFile);
+
+            function handleFile(files) {
+                if (files.length === 0) return;
+
+                const file = files[0];
+                const ext = file.name.split('.').pop().toLowerCase();
+
+                selectedFile = file;
+                fileNameDisplay.textContent = file.name;
+                fileTypeDisplay.textContent = ext;
+
+                // Hide specific controls initially
+                controlsExcel.classList.add('hidden');
+
+                dropZone.classList.add('hidden');
+                actionArea.classList.remove('hidden');
+
+                processDocument(file, ext);
+            }
+
+            async function processDocument(file, ext) {
+                UIManager.showLoading('Rendering preview...');
+                previewContainer.innerHTML = '';
+
+                try {
+                    // Logic Switch based on Extension
+                    if (['doc', 'docx'].includes(ext)) {
+                        await processWord(file);
+                    } else if (['xls', 'xlsx', 'csv'].includes(ext)) {
+                        await processExcel(file);
+                    } else if (['ppt', 'pptx'].includes(ext)) {
+                        await processPowerPoint(file);
+                    } else if (['html', 'htm'].includes(ext)) {
+                        await processHtml(file);
+                    } else if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+                        await processImage(file);
+                    } else {
+                        throw new Error('Unsupported file type');
+                    }
+                } catch (error) {
+                    console.error(error);
+                    UIManager.showToast('Error processing file: ' + error.message, 'error');
+                    previewContainer.innerHTML = '<div class="text-red-500 text-center p-4">Error loading preview.</div>';
+                } finally {
+                    UIManager.hideLoading();
+                }
+            }
+
+            // --- Processors ---
+
+            async function processWord(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
+
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'prose max-w-none bg-white p-8 shadow rounded-lg';
+                previewDiv.innerHTML = result.value;
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(previewDiv);
+            }
+
+            async function processExcel(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+                controlsExcel.classList.remove('hidden');
+                sheetSelect.innerHTML = '';
+
+                workbook.SheetNames.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    sheetSelect.appendChild(option);
+                });
+
+                sheetSelect.onchange = () => {
+                    renderExcelSheet(workbook, sheetSelect.value);
+                };
+
+                renderExcelSheet(workbook, workbook.SheetNames[0]);
+            }
+
+            function renderExcelSheet(workbook, sheetName) {
+                const worksheet = workbook.Sheets[sheetName];
+                const html = XLSX.utils.sheet_to_html(worksheet);
+
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'overflow-auto bg-white p-4';
+                // Basic styling for the table
+                previewDiv.innerHTML = `
+                    <style>
+                        table { border-collapse: collapse; width: 100%; }
+                        td, th { border: 1px solid #ddd; padding: 8px; }
+                        tr:nth-child(even){background-color: #f2f2f2;}
+                        th { padding-top: 12px; padding-bottom: 12px; text-align: left; background-color: #4CAF50; color: white; }
+                    </style>
+                    ${html}
+                `;
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(previewDiv);
+            }
+
+            async function processPowerPoint(file) {
+                // Wrapper for PPTXjs
+                const wrapper = document.createElement('div');
+                wrapper.id = 'pptx-div';
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(wrapper);
+
+                const fileReader = new FileReader();
+                fileReader.onload = function () {
+                    $("#pptx-div").pptxToHtml({
+                        pptxFileUrl: fileReader.result,
+                        slidesScale: "50%",
+                        slideMode: false,
+                        keyBoardShortCut: false
+                    });
+                };
+                fileReader.readAsDataURL(file);
+                // Need to wait for reader, but UI handles async loading mostly via events inside library
+            }
+
+            async function processHtml(file) {
+                const text = await file.text();
+                // Create iframe or shadow DOM to isolate styles? 
+                // Simple div for now as requested for "preview"
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'bg-white p-4 w-full';
+                previewDiv.innerHTML = text;
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(previewDiv);
+            }
+
+            async function processImage(file) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.className = 'max-w-full h-auto shadow-lg mx-auto';
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(img);
+            }
+
+            function updateUI() {
+                dropZone.classList.remove('hidden');
+                actionArea.classList.add('hidden');
+                previewContainer.innerHTML = '';
+                controlsExcel.classList.add('hidden');
+                selectedFile = null;
+                // Cleanup inputs
+                fileInput.value = '';
+            }
+
+            clearBtn.addEventListener('click', updateUI);
+
+            // Universal Print Handler
+            printBtn.addEventListener('click', () => {
+                if (!previewContainer.firstChild) return;
+
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+
+                const content = previewContainer.innerHTML;
+
+                // Styles need to be injected into iframe
+                let style = `
+                    <style>
+                        body { font-family: sans-serif; margin: 20px; }
+                        img { max-width: 100%; page-break-inside: avoid; }
+                        table { width: 100%; border-collapse: collapse; }
+                        td, th { border: 1px solid #ccc; padding: 4px; }
+                        .slide { page-break-after: always; border: 1px solid #eee; margin-bottom: 20px; }
+                    </style>
+                `;
+
+                // If special CSS needed (e.g. PPTX)
+                let extraHead = '';
+                if (selectedFile.name.match(/\.(ppt|pptx)$/i)) {
+                    extraHead = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/meshesha/PPTXjs@latest/dist/css/pptxjs.css">';
+                }
+
+                iframe.contentDocument.write(`<html><head>${style}${extraHead}</head><body>${content}</body></html>`);
+                iframe.contentDocument.close();
+
+                setTimeout(() => {
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+
+                    // Cleanup
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                    }, 2000);
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+
+</html>

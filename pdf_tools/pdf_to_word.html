@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF to Word - Bang's Tools</title>
+    <meta name="description" content="Convert your PDF to WORD documents with incredible accuracy." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- Dynamic background matching main site -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-red-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-orange-200/40 blur-[100px]"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="container mx-auto px-4 py-6 flex items-center justify-between">
+        <a href="index.html" class="flex items-center text-gray-600 hover:text-red-600 transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i>
+            <span class="font-medium">All PDF Tools</span>
+        </a>
+        <div class="text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+            PDF to Word
+        </div>
+        <div class="w-24"></div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl flex flex-col items-center justify-center text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-gray-900">
+            PDF to Word
+        </h1>
+        <p class="text-xl text-gray-500 mb-12 max-w-2xl">
+            Convert your PDF to WORD documents with incredible accuracy.
+        </p>
+
+        <!-- Upload Area -->
+        <div class="w-full max-w-2xl bg-white/80 backdrop-blur-xl rounded-3xl shadow-lg border-2 border-dashed border-red-300 hover:border-red-500 transition-all p-12 group cursor-pointer"
+            id="dropZone">
+            <div class="flex flex-col items-center justify-center">
+                <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-file-word text-4xl text-blue-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Select PDF file</h3>
+                <p class="text-gray-500 mb-8">or drop PDF here</p>
+                <button
+                    class="bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center">
+                    <i class="fa-solid fa-plus mr-2"></i>
+                    Select PDF file
+                </button>
+            </div>
+            <input type="file" class="hidden" accept=".pdf" id="fileInput" />
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10"><div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+    <div class="mt-2">
+        Contact: <a href="mailto:bangndd@gmail.com" class="hover:text-gray-900 transition-colors font-medium">bangndd@gmail.com</a>
+    </div></footer>
+
+    <!-- Action Area (Hidden by default) -->
+    <div id="actionArea" class="hidden w-full max-w-4xl mt-8 animate-[fadeIn_0.5s_ease-out]">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-800">Preview & Convert</h3>
+            <button id="clearBtn" class="text-red-500 hover:text-red-700 font-medium text-sm">Clear</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Preview Side -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 min-h-[500px] overflow-y-auto max-h-[800px] prose prose-sm max-w-none text-left"
+                id="textPreview">
+                <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                    <i class="fa-solid fa-file-pdf text-4xl mb-4 opacity-50"></i>
+                    <p>Extracted text will appear here</p>
+                </div>
+            </div>
+
+            <!-- Controls Side -->
+            <div class="flex flex-col gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-left">
+                    <h4 class="font-bold text-gray-800 mb-4">File Info</h4>
+                    <p id="fileName" class="text-gray-600 mb-2 truncate font-medium">filename.pdf</p>
+                    <p class="text-sm text-gray-500">
+                        Pages: <span id="pageCount" class="font-semibold text-blue-600">-</span>
+                    </p>
+                    <div class="mt-4 bg-yellow-50 text-yellow-800 text-xs p-3 rounded-lg border border-yellow-200">
+                        <i class="fa-solid fa-circle-info mr-1"></i>
+                        This tool extracts <b>text and paragraphs</b> only. Images and complex layouts may be lost.
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-left">
+                    <h4 class="font-bold text-gray-800 mb-4">Actions</h4>
+
+                    <button id="convertBtn"
+                        class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-xl shadow-lg hover:bg-blue-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-file-word mr-3"></i>
+                        Download Word
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="utils/pdf-libs.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+    <script src="utils/ui-manager.js"></script>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+        let selectedFile = null;
+        let pdfDoc = null;
+        let extractedText = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await PDFGlobals.loadStandardLib();
+
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const actionArea = document.getElementById('actionArea');
+            const textPreview = document.getElementById('textPreview');
+            const fileNameDisplay = document.getElementById('fileName');
+            const pageCountDisplay = document.getElementById('pageCount');
+            const clearBtn = document.getElementById('clearBtn');
+            const convertBtn = document.getElementById('convertBtn');
+
+            // Initialize UI
+            UIManager.setupDropZone('dropZone', 'fileInput', handleFile);
+
+            function handleFile(files) {
+                if (files.length === 0) return;
+
+                const file = files[0];
+                if (file.type !== 'application/pdf') {
+                    UIManager.showToast('Please select a PDF file.', 'error');
+                    return;
+                }
+
+                selectedFile = file;
+                fileNameDisplay.textContent = file.name;
+                processDocument(file);
+            }
+
+            async function processDocument(file) {
+                try {
+                    UIManager.showLoading('Extracting text from PDF...');
+                    const arrayBuffer = await file.arrayBuffer();
+
+                    pdfDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    pageCountDisplay.textContent = pdfDoc.numPages;
+
+                    extractedText = [];
+                    let fullPreviewHtml = '';
+
+                    for (let i = 1; i <= pdfDoc.numPages; i++) {
+                        const page = await pdfDoc.getPage(i);
+                        const textContent = await page.getTextContent();
+
+                        // Simple text extraction logic
+                        // We join items with same Y to form lines, and separate items to text chunks
+                        // This is a naive extraction.
+
+                        const textItems = textContent.items.map(item => item.str).join(' ');
+
+                        // Add page break marker for preview
+                        if (i > 1) fullPreviewHtml += '<hr class="my-4 border-gray-200">';
+                        fullPreviewHtml += `<p class="mb-2">${textItems}</p>`;
+
+                        extractedText.push(textItems);
+                    }
+
+                    textPreview.innerHTML = fullPreviewHtml;
+
+                    dropZone.classList.add('hidden');
+                    actionArea.classList.remove('hidden');
+
+                } catch (error) {
+                    console.error(error);
+                    UIManager.showToast('Error reading PDF: ' + error.message, 'error');
+                } finally {
+                    UIManager.hideLoading();
+                }
+            }
+
+            function updateUI() {
+                if (selectedFile) {
+                    dropZone.classList.add('hidden');
+                    actionArea.classList.remove('hidden');
+                } else {
+                    dropZone.classList.remove('hidden');
+                    actionArea.classList.add('hidden');
+                    textPreview.innerHTML = '<div class="flex flex-col items-center justify-center h-full text-gray-400"><i class="fa-solid fa-file-pdf text-4xl mb-4 opacity-50"></i><p>Extracted text will appear here</p></div>';
+                    selectedFile = null;
+                    pdfDoc = null;
+                    extractedText = [];
+                }
+            }
+
+            clearBtn.addEventListener('click', () => {
+                selectedFile = null;
+                updateUI();
+            });
+
+            convertBtn.addEventListener('click', () => {
+                if (!extractedText.length) return;
+
+                try {
+                    UIManager.showLoading('Generating Word Document...');
+
+                    // Create docx paragraphs from text
+                    // Split by newlines or just take page dumps
+                    const children = [];
+
+                    extractedText.forEach((pageText, index) => {
+                        // Add Page Break before pages (except first)
+                        if (index > 0) {
+                            children.push(new docx.Paragraph({
+                                children: [new docx.PageBreak()],
+                            }));
+                        }
+
+                        // Add Paragraph
+                        children.push(new docx.Paragraph({
+                            children: [
+                                new docx.TextRun(pageText),
+                            ],
+                        }));
+                    });
+
+                    const doc = new docx.Document({
+                        sections: [{
+                            properties: {},
+                            children: children,
+                        }],
+                    });
+
+                    docx.Packer.toBlob(doc).then(blob => {
+                        saveAs(blob, selectedFile.name.replace('.pdf', '.docx'));
+                        UIManager.hideLoading();
+                        UIManager.showToast('Word document created!', 'success');
+                    });
+
+                } catch (error) {
+                    console.error(error);
+                    UIManager.showToast('Conversion failed: ' + error.message, 'error');
+                    UIManager.hideLoading();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

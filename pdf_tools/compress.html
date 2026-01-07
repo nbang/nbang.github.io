@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compress PDF - Bang's Tools</title>
+    <meta name="description" content="Reduce file size while optimizing for maximal PDF quality." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- Dynamic background matching main site -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-red-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-orange-200/40 blur-[100px]"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="container mx-auto px-4 py-6 flex items-center justify-between">
+        <a href="index.html" class="flex items-center text-gray-600 hover:text-red-600 transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i>
+            <span class="font-medium">All PDF Tools</span>
+        </a>
+        <div class="text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+            Compress PDF
+        </div>
+        <div class="w-24"></div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl flex flex-col items-center justify-center text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-gray-900">
+            Compress PDF File
+        </h1>
+        <p class="text-xl text-gray-500 mb-12 max-w-2xl">
+            Reduce file size while optimizing for maximal PDF quality.
+        </p>
+
+        <!-- Upload Area -->
+        <div class="w-full max-w-2xl bg-white/80 backdrop-blur-xl rounded-3xl shadow-lg border-2 border-dashed border-red-300 hover:border-red-500 transition-all p-12 group cursor-pointer"
+            id="dropZone">
+            <div class="flex flex-col items-center justify-center">
+                <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-file-pdf text-4xl text-red-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Select PDF file</h3>
+                <p class="text-gray-500 mb-8">or drop PDF here</p>
+                <button
+                    class="bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center">
+                    <i class="fa-solid fa-plus mr-2"></i>
+                    Select PDF file
+                </button>
+            </div>
+            <input type="file" class="hidden" accept=".pdf" id="fileInput" />
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10"><div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+    <div class="mt-2">
+        Contact: <a href="mailto:bangndd@gmail.com" class="hover:text-gray-900 transition-colors font-medium">bangndd@gmail.com</a>
+    </div></footer>
+
+    <!-- Action Area (Hidden by default) -->
+    <div id="actionArea" class="hidden w-full max-w-2xl mt-8 animate-[fadeIn_0.5s_ease-out]">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-800">Selected File</h3>
+            <button id="clearBtn" class="text-red-500 hover:text-red-700 font-medium text-sm">Clear</button>
+        </div>
+        <div id="filePreview" class="mb-6 text-left"></div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 text-left">
+            <h4 class="font-bold text-gray-800 mb-4">Compression Level</h4>
+
+            <div class="space-y-3">
+                <label class="flex items-center p-3 border-2 border-red-500 bg-red-50 rounded-xl cursor-pointer transition-all">
+                    <input type="radio" name="compression" value="recommended" class="text-red-600 focus:ring-red-500 w-5 h-5 mr-3" checked />
+                    <div>
+                        <div class="font-bold text-gray-900">Recommended Optimization</div>
+                        <div class="text-xs text-gray-500">Lossless reduction. Removes unused objects and streamlines structure.</div>
+                    </div>
+                </label>
+            </div>
+            <p class="text-xs text-gray-400 mt-4 text-center">
+                * Note: Files that are already optimized may not see significant reduction.
+            </p>
+        </div>
+
+        <button id="processBtn"
+            class="bg-red-600 text-white w-full py-4 rounded-xl font-bold text-xl shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+            <span id="btnText">Compress PDF</span>
+            <i class="fa-solid fa-compress ml-3"></i>
+        </button>
+    </div>
+
+    <script src="utils/pdf-libs.js"></script>
+    <script src="utils/ui-manager.js"></script>
+    <script>
+        let selectedFile = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await PDFGlobals.loadStandardLib();
+
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const actionArea = document.getElementById('actionArea');
+            const filePreview = document.getElementById('filePreview');
+            const processBtn = document.getElementById('processBtn');
+            const clearBtn = document.getElementById('clearBtn');
+
+            // Initialize UI
+            UIManager.setupDropZone('dropZone', 'fileInput', handleFile);
+
+            function handleFile(files) {
+                if (files.length === 0) return;
+
+                const file = files[0];
+                if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                    UIManager.showToast('Please select a PDF file.', 'error');
+                    return;
+                }
+
+                selectedFile = file;
+                updateUI();
+            }
+
+            function updateUI() {
+                if (selectedFile) {
+                    dropZone.classList.add('hidden');
+                    actionArea.classList.remove('hidden');
+                    UIManager.renderFilePreview([selectedFile], filePreview);
+                } else {
+                    dropZone.classList.remove('hidden');
+                    actionArea.classList.add('hidden');
+                    selectedFile = null;
+                }
+            }
+
+            clearBtn.addEventListener('click', () => {
+                selectedFile = null;
+                updateUI();
+            });
+
+            processBtn.addEventListener('click', async () => {
+                if (!selectedFile) return;
+
+                try {
+                    UIManager.showLoading('Optimizing PDF...');
+
+                    const arrayBuffer = await selectedFile.arrayBuffer();
+                    const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+
+                    // Saving with pdf-lib automatically removes unused objects and reorganizes the file.
+                    // This is effectively "lossless" optimization for many PDFs generated by other tools (e.g. Word)
+                    const pdfBytes = await pdfDoc.save();
+
+                    download(pdfBytes, `compressed_${selectedFile.name}`, "application/pdf");
+
+                    UIManager.showToast('PDF optimized successfully!', 'success');
+
+                    setTimeout(() => {
+                        selectedFile = null;
+                        updateUI();
+                    }, 2000);
+
+                } catch (error) {
+                    console.error(error);
+                    UIManager.showToast('Optimization failed: ' + error.message, 'error');
+                } finally {
+                    UIManager.hideLoading();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

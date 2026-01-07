@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Free online PDF tools to merge, split, compress, convert, rotate, unlock and watermark PDFs." />
+    <title>PDF Tools - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- Dynamic background matching main site -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-red-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-orange-200/40 blur-[100px]"></div>
+    </div>
+
+    <main class="flex-grow container mx-auto px-4 py-12 max-w-6xl">
+        <header class="text-center mb-12 animate-[fadeIn_0.6s_ease-out] relative">
+            <a href="../index.html" class="absolute left-0 top-0 text-gray-400 hover:text-gray-600 transition-colors">
+                <i class="fa-solid fa-arrow-left text-xl"></i>
+            </a>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 pb-2 tracking-tight bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+                PDF Tools
+            </h1>
+            <p class="text-xl text-gray-500">Every tool you need to work with PDFs in one place.</p>
+        </header>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Optimize Tools -->
+            <a href="merge.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_0.7s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-red-50 rounded-full flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                    <i class="fa-solid fa-object-group text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">Merge PDF</h3>
+                <p class="text-sm text-gray-500">Combine PDFs in the order you want with the easiest PDF merger available.</p>
+            </a>
+
+            <a href="split.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_0.7s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-red-50 rounded-full flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                    <i class="fa-solid fa-scissors text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">Split PDF</h3>
+                <p class="text-sm text-gray-500">Separate one page or a whole set for easy conversion into independent PDF files.</p>
+            </a>
+
+            <a href="compress.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_0.7s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-red-50 rounded-full flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                    <i class="fa-solid fa-compress text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">Compress PDF</h3>
+                <p class="text-sm text-gray-500">Reduce file size while optimizing for maximal PDF quality.</p>
+            </a>
+
+            <!-- Convert To PDF -->
+            <a href="convert_to_pdf.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_0.8s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-red-50 rounded-full flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                    <i class="fa-solid fa-file-pdf text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">Convert to PDF</h3>
+                <p class="text-sm text-gray-500">Convert Word, Excel, PowerPoint, HTML, and Images to PDF instantly.</p>
+            </a>
+
+            <!-- Convert From PDF -->
+            <a href="pdf_to_jpg.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_0.9s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-yellow-50 rounded-full flex items-center justify-center group-hover:bg-yellow-100 transition-colors">
+                    <i class="fa-solid fa-image text-2xl text-yellow-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors">PDF to JPG</h3>
+                <p class="text-sm text-gray-500">Convert each PDF page into a JPG or extract all images contained in a PDF.</p>
+            </a>
+
+            <a href="pdf_to_word.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_0.9s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                    <i class="fa-solid fa-file-word text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">PDF to Word</h3>
+                <p class="text-sm text-gray-500">Convert your PDF to WORD documents with incredible accuracy.</p>
+            </a>
+
+
+
+            <!-- Adjust & Security -->
+            <a href="rotate.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.0s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-purple-50 rounded-full flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                    <i class="fa-solid fa-rotate-right text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">Rotate PDF</h3>
+                <p class="text-sm text-gray-500">Rotate your PDFs the way you need them. You can even rotate multiple PDFs at once!</p>
+            </a>
+
+            <a href="page_numbers.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.0s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-purple-50 rounded-full flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                    <i class="fa-solid fa-list-ol text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">Page Numbers</h3>
+                <p class="text-sm text-gray-500">Add page numbers into PDFs with ease. Choose your positions, dimensions, typography.</p>
+            </a>
+
+            <a href="watermark.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.0s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-purple-50 rounded-full flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                    <i class="fa-solid fa-stamp text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">Watermark PDF</h3>
+                <p class="text-sm text-gray-500">Stamp an image or text over your PDF in seconds. Choose the typography, transparency and position.</p>
+            </a>
+
+            <a href="edit.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.0s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-purple-50 rounded-full flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                    <i class="fa-solid fa-pen-to-square text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">Edit PDF</h3>
+                <p class="text-sm text-gray-500">Add text, images, shapes or freehand annotations to a PDF document. Edit the size, font, and color of the added
+                    content.</p>
+            </a>
+
+            <a href="unlock.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.1s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-gray-100 transition-colors">
+                    <i class="fa-solid fa-unlock text-2xl text-gray-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-600 transition-colors">Unlock PDF</h3>
+                <p class="text-sm text-gray-500">Remove PDF password security, giving you the freedom to use your PDFs as you want.</p>
+            </a>
+
+            <a href="protect.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.1s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-gray-100 transition-colors">
+                    <i class="fa-solid fa-lock text-2xl text-gray-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-600 transition-colors">Protect PDF</h3>
+                <p class="text-sm text-gray-500">Protect PDF files with a password. Encrypt PDF documents to prevent unauthorized access.</p>
+            </a>
+
+            <a href="sign.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.1s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-gray-100 transition-colors">
+                    <i class="fa-solid fa-file-signature text-2xl text-gray-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-600 transition-colors">Sign PDF</h3>
+                <p class="text-sm text-gray-500">Sign a document and request signatures. Draw your signature or sign PDF files.</p>
+            </a>
+
+            <!-- Advanced -->
+            <a href="organize.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.2s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-teal-50 rounded-full flex items-center justify-center group-hover:bg-teal-100 transition-colors">
+                    <i class="fa-solid fa-sort text-2xl text-teal-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Organize PDF</h3>
+                <p class="text-sm text-gray-500">Sort, add and delete PDF pages. Drag and drop the pages to reorder them.</p>
+            </a>
+
+            <a href="repair.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.2s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-teal-50 rounded-full flex items-center justify-center group-hover:bg-teal-100 transition-colors">
+                    <i class="fa-solid fa-screwdriver-wrench text-2xl text-teal-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Repair PDF</h3>
+                <p class="text-sm text-gray-500">Repair a damaged PDF and recover data from corrupt PDF. Fix PDF files with our Repair tool.</p>
+            </a>
+
+            <a href="scan.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.2s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-teal-50 rounded-full flex items-center justify-center group-hover:bg-teal-100 transition-colors">
+                    <i class="fa-solid fa-print text-2xl text-teal-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Scan to PDF</h3>
+                <p class="text-sm text-gray-500">Capture document scans from your mobile device and send them instantly to your browser.</p>
+            </a>
+
+            <a href="ocr.html"
+                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 p-6 text-center animate-[fadeIn_1.2s_ease-out]">
+                <div class="w-16 h-16 mx-auto mb-4 bg-teal-50 rounded-full flex items-center justify-center group-hover:bg-teal-100 transition-colors">
+                    <i class="fa-solid fa-eye text-2xl text-teal-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">OCR PDF</h3>
+                <p class="text-sm text-gray-500">Convert scanned PDF and images into editable Word, Excel, Keynote and more.</p>
+            </a>
+
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10"><div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+    <div class="mt-2">
+        Contact: <a href="mailto:bangndd@gmail.com" class="hover:text-gray-900 transition-colors font-medium">bangndd@gmail.com</a>
+    </div></footer>
+</body>
+
+</html>

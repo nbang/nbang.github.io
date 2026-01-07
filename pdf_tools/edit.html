@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit PDF - Bang's Tools</title>
+    <meta name="description"
+        content="Add text, images, shapes or freehand annotations to a PDF document. Edit the size, font, and color of the added content." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Outfit", sans-serif;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- Dynamic background matching main site -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-red-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-orange-200/40 blur-[100px]"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="container mx-auto px-4 py-6 flex items-center justify-between">
+        <a href="index.html" class="flex items-center text-gray-600 hover:text-red-600 transition-colors">
+            <i class="fa-solid fa-arrow-left mr-2"></i>
+            <span class="font-medium">All PDF Tools</span>
+        </a>
+        <div class="text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+            Edit PDF
+        </div>
+        <div class="w-24"></div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl flex flex-col items-center justify-center text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-gray-900">
+            Edit PDF
+        </h1>
+        <p class="text-xl text-gray-500 mb-12 max-w-2xl">
+            Add text, images, shapes or freehand annotations to a PDF document.
+        </p>
+
+        <!-- Upload Area -->
+        <div class="w-full max-w-2xl bg-white/80 backdrop-blur-xl rounded-3xl shadow-lg border-2 border-dashed border-red-300 hover:border-red-500 transition-all p-12 group cursor-pointer"
+            id="dropZone">
+            <div class="flex flex-col items-center justify-center">
+                <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-pen-to-square text-4xl text-purple-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Select PDF file</h3>
+                <p class="text-gray-500 mb-8">or drop PDF here</p>
+                <button
+                    class="bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center">
+                    <i class="fa-solid fa-plus mr-2"></i>
+                    Select PDF file
+                </button>
+            </div>
+            <input type="file" class="hidden" accept=".pdf" id="fileInput" />
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10"><div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+    <div class="mt-2">
+        Contact: <a href="mailto:bangndd@gmail.com" class="hover:text-gray-900 transition-colors font-medium">bangndd@gmail.com</a>
+    </div></footer>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const button = dropZone.querySelector('button');
+
+        button.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-red-500', 'bg-red-50/50');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-red-500', 'bg-red-50/50');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-red-500', 'bg-red-50/50');
+            alert('File upload functionality coming soon!');
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                alert(`Selected ${fileInput.files.length} files. functionality coming soon!`);
+            }
+        });
+    </script>
+</body>
+
+</html>
