@@ -8,3 +8,6 @@ lerna-debug.log*
 dist/
 .env
 .DS_Store
+
+# Test
+test/

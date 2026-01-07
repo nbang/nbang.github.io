@@ -4,6 +4,60 @@ const html = require("@html-eslint/eslint-plugin");
 const htmlParser = require("@html-eslint/parser");
 const tailwind = require("eslint-plugin-tailwindcss");
 
+const cssOneLineSelectors = {
+    meta: {
+        type: "layout",
+        fixable: "code",
+    },
+    create(context) {
+        return {
+            StyleTag(node) {
+                if (!node.value || typeof node.value.value !== "string") return;
+
+                const rawCss = node.value.value;
+                const blockRegex = /([^{]+)(\{)/g;
+                let match;
+
+                while ((match = blockRegex.exec(rawCss)) !== null) {
+                    const selectorPart = match[1];
+
+                    // Check for multi-line comma usage
+                    if (selectorPart.includes(",") && selectorPart.includes("\n")) {
+                        // Collapse newlines after commas
+                        const normalized = selectorPart.replace(/,\s*\n\s*/g, ", ");
+
+                        // Only report if change acts on the comma-newline pattern
+                        if (normalized !== selectorPart) {
+                            const contentStart = node.value.range[0];
+                            const startOffset = match.index;
+                            const endOffset = match.index + selectorPart.length;
+                            const fixRange = [contentStart + startOffset, contentStart + endOffset];
+
+                            context.report({
+                                node,
+                                loc: {
+                                    start: context.sourceCode.getLocFromIndex(fixRange[0]),
+                                    end: context.sourceCode.getLocFromIndex(fixRange[1]),
+                                },
+                                message: "CSS selectors should be on a single line.",
+                                fix(fixer) {
+                                    return fixer.replaceTextRange(fixRange, normalized);
+                                },
+                            });
+                        }
+                    }
+                }
+            },
+        };
+    },
+};
+
+const localPlugin = {
+    rules: {
+        "css-one-line-selectors": cssOneLineSelectors,
+    },
+};
+
 module.exports = [
     {
         files: ["**/*.js"],
@@ -43,7 +97,8 @@ module.exports = [
         },
         plugins: {
             "html": html,           // Key matches rule prefix 'html/'
-            "tailwindcss": tailwind // Key matches rule prefix 'tailwindcss/'
+            "tailwindcss": tailwind,// Key matches rule prefix 'tailwindcss/'
+            "local": localPlugin    // Custom local plugin
         },
         rules: {
             ...html.configs["recommended"].rules,
@@ -55,7 +110,8 @@ module.exports = [
             "html/attrs-newline": "off", // Disable attribute newline enforcement
             "html/element-newline": "off", // Disable element newline enforcement
             "html/no-script-style-type": "off",
-            "html/use-baseline": "off"
+            "html/use-baseline": "off",
+            "local/css-one-line-selectors": "error"
         }
     }
 ];

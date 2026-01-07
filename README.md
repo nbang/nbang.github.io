@@ -6,13 +6,18 @@ A collection of utilities and dashboards for data management, translation, AI ta
 
 ## Available Tools
 
+
 | Tool | Description | Link |
 |------|-------------|------|
+| **Image Tools** | A suite of image manipulation tools: Compress, Resize, convert, and more. | [Open Tools](https://github.bangndd.qzz.io/image_tools/index.html) |
+| **PDF Tools** | Merge, split, compress, convert, rotate, unlock and watermark PDFs. | [Open Tools](https://github.bangndd.qzz.io/pdf_tools/index.html) |
+| **AI In-Browser OCR** | Extract text from images locally using powerful Transformer models directly in your browser. | [Open Tool](https://github.bangndd.qzz.io/image_tools/ocr.html) |
+| **Cat-2-Map (GIS)** | Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000 coordinate support. | [Open Tool](https://github.bangndd.qzz.io/cat2map.html) |
+| **Free For Dev** | A curated list of software (SaaS, PaaS, IaaS) with free tiers for developers. | [Open Resources](https://github.bangndd.qzz.io/freefordev.html) |
+| **AI Prompts Library** | Browse, search, and customize a collection of useful AI prompts for various tasks. | [Open Library](https://github.bangndd.qzz.io/prompt.html) |
+| **Translation Workflow** | Manage your book translation pipeline, scrape chapters, translate content, and edit files. | [Open Dashboard](https://github.bangndd.qzz.io/translation.html) |
 | **HCM Merger Data** | View and filter detailed data regarding the merger of administrative units in Ho Chi Minh City. | [Open Dashboard](https://github.bangndd.qzz.io/hcm-admin.html) |
 | **Vietnam Admin Data** | Comprehensive dataset of administrative units across all provinces in Vietnam. | [Open Dashboard](https://github.bangndd.qzz.io/vietnam-admin.html) |
-| **Translation Workflow** | Manage your book translation pipeline, scrape chapters, translate content, and edit files. | [Open Dashboard](https://github.bangndd.qzz.io/translation.html) |
-| **AI In-Browser OCR** | Extract text from images locally using powerful Transformer models directly in your browser. | [Open Tool](https://github.bangndd.qzz.io/ocr.html) |
-| **AI Prompts Library** | Browse, search, and customize a collection of useful AI prompts for various tasks. | [Open Library](https://github.bangndd.qzz.io/prompt.html) |
 
 ## Project Structure
 
@@ -23,27 +28,24 @@ nbang.github.io/
 ├── index.html               # Main landing page listing all tools
 ├── CNAME                    # Custom domain configuration
 │
+├── image_tools/             # Image manipulation tools
+│   ├── index.html           # Image tools landing page
+│   ├── compress.html        # Compress images
+│   ├── resize.html          # Resize images
+│   ├── ocr.html             # OCR tool
+│   └── ...
+│
+├── pdf_tools/               # PDF manipulation tools
+│   ├── index.html           # PDF tools landing page
+│   ├── convert_to_pdf.html  # Unified PDF converter
+│   ├── compress.html        # Compress PDF
+│   ├── merge.html           # Merge PDFs
+│   └── ...
+│
 ├── hcm-admin.html           # HCM Merger Data Dashboard UI
-├── hcm-admin.js             # Logic for HCM Admin page
-├── hcm-data.js              # Data source for HCM Admin
-│
 ├── vietnam-admin.html       # Vietnam Admin Data Dashboard UI
-├── vietnam-admin.js         # Logic for Vietnam Admin page
-├── vietnam-data.js          # Large dataset for Vietnam Admin
-├── vietnam_admin_data.json  # Raw JSON data for Vietnam Admin
-│
 ├── translation.html         # Translation Workflow Tool UI
-├── translation.js           # Logic for Translation Workflow
-│
-├── ocr.html                 # AI In-Browser OCR Tool UI
-├── ocr.js                   # Logic using Transformers.js for OCR
-│
 ├── prompt.html              # AI Prompts Library UI
-├── prompts.js               # Logic for Prompts Library
-├── prompt-data.js           # Prompts data (JS format for CORS)
-├── prompts.json             # Source data for prompts
-├── dedupe_prompts.py        # Utility script to manage prompts
-│
 └── ...
 ```
 
@@ -63,3 +65,32 @@ This is a static site project hosted on GitHub Pages. No build process is requir
     python -m http.server 8000
     ```
     Then visit `http://localhost:8000` in your browser.
+
+## Development
+
+### Setup
+
+Install dependencies to enable linting:
+
+```bash
+npm install
+```
+
+### Linting & Formatting
+
+This project uses **ESLint** for code quality and consistent formatting (including HTML and Tailwind CSS).
+
+- **Check for issues:**
+  ```bash
+  npm run lint
+  ```
+
+- **Auto-fix issues:**
+  ```bash
+  npm run lint:fix
+  ```
+
+  _This will automatically format JS, HTML, and CSS (within HTML files), including:_
+  - _Standardizing indentation_
+  - _Ordering Tailwind classes_
+  - _Collapsing multi-line CSS selectors in `<style>` tags_
