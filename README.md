@@ -4,6 +4,10 @@ A collection of utilities and dashboards for data management, translation, AI ta
 
 **Live Site:** [https://github.bangndd.qzz.io](https://github.bangndd.qzz.io)
 
+> [!NOTE]
+> **For Developers:** Please refer to [DEVELOPER_HANDOVER.md](speckit/DEVELOPER_HANDOVER.md) for architecture details and handover instructions.
+
+
 ## Available Tools
 
 
