@@ -7,7 +7,9 @@ const PDF_LIBS = {
     pdfLib: 'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js',
     download: 'https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js',
     jszip: 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
-    fileSaver: 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js'
+    fileSaver: 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js',
+    pdfjsMain: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    pdfjsWorker: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
 };
 
 const PDFGlobals = {
@@ -41,12 +43,28 @@ const PDFGlobals = {
         }
     },
 
-    // Load libraries for ZIP functionality (Splitting/Batch)
     loadZipLib: async () => {
         try {
             await PDFGlobals.loadScript(PDF_LIBS.jszip);
         } catch (error) {
             console.error('Failed to load JSZip:', error);
+        }
+    },
+
+    // Load libraries for PDF Text Extraction (pdf.js)
+    loadPdfJsLib: async () => {
+        try {
+            await PDFGlobals.loadScript(PDF_LIBS.pdfjsMain);
+            // Configure worker
+            if (window.pdfjsLib) {
+                window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_LIBS.pdfjsWorker;
+                console.log('PDF.js loaded with worker.');
+            } else {
+                console.error('PDF.js main script loaded but window.pdfjsLib is undefined');
+            }
+        } catch (error) {
+            console.error('Failed to load PDF.js:', error);
+            alert('Failed to load PDF extraction libraries.');
         }
     },
 

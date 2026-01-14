@@ -97,6 +97,15 @@ These tools utilize `pdf-lib` for direct byte-level manipulation of PDF files.
 *   **Scan (`scan.html`)**:
     *   **Requirement**: Scan document via Camera.
     *   **Approach**: Access Camera via `navigator.mediaDevices.getUserMedia`. Capture frames to Canvas, then embed as images into a PDF pages.
+*   **Summarize (`summarize.html`)**:
+    *   **Requirement**: Client-side AI summarization of PDF content.
+    *   **Approach**:
+        1.  Extract text using `pdf.js`.
+        2.  Summarize using `@huggingface/transformers`.
+    *   **Models**:
+        *   **Standard (WASM)**: `Xenova/distilbart-cnn-6-6` (Encoder-Decoder, CPU friendly).
+        *   **Next-Gen (WebGPU)**: `onnx-community/Qwen2.5-0.5B-Instruct` and `Llama-3.2-1B-Instruct` (Quantized Chat Models).
+    *   **Optimization**: Implements **Chunked Caching** (IndexedDB) for large weights. Supports WebGPU for accelerated inference.
 
 ---
 

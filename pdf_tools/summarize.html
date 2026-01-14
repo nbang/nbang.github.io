@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="AI In-Browser PDF Summarizer. Summarize long PDF documents locally using privacy-first Transformer models." />
+    <title>AI In-Browser PDF Summarizer - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Outfit", sans-serif;
+        }
+        
+        .pulse {
+            animation: pulse-animation 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-animation {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen relative overflow-x-hidden">
+    <!-- Dynamic background -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-red-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-indigo-200/40 blur-[100px]"></div>
+    </div>
+
+    <main class="container mx-auto max-w-7xl p-6 bg-white/80 backdrop-blur-xl border border-white/50 rounded-3xl shadow-xl my-8 animate-[fadeIn_0.8s_ease-out]">
+        <div class="mb-6 flex justify-between items-center">
+            <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-red-600 transition-colors font-medium">
+                <i class="fa-solid fa-arrow-left mr-2"></i>
+                Back to PDF Tools
+            </a>
+            <div class="w-24"></div>
+        </div>
+
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-red-600 to-indigo-600 bg-clip-text text-transparent">
+                AI In-Browser PDF Summarizer</h1>
+            <p class="text-gray-500 text-base">Summarize documents locally using Transformer models. No server uploads.</p>
+        </header>
+
+        <section class="mb-6 flex flex-col md:flex-row justify-center gap-4 flex-wrap">
+            <div class="w-full md:w-auto relative group">
+                <label for="model-select" class="block text-xs font-medium text-gray-500 mb-1 ml-1">Select Model</label>
+                <div class="relative">
+                    <select id="model-select"
+                        class="w-full md:w-80 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 appearance-none focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/20 transition-all cursor-pointer hover:bg-white">
+                        <option value="Xenova/distilbart-cnn-6-6">DistilBART CNN 6-6 (Fast, CPU Friendly)</option>
+                        <option value="onnx-community/Qwen2.5-0.5B-Instruct">Qwen2.5 0.5B (WebGPU Recommended)</option>
+                        <option value="onnx-community/Llama-3.2-1B-Instruct">Llama 3.2 1B (High Quality, Heavy)</option>
+                        <option value="Xenova/LaMini-Flan-T5-248M">LaMini Flan-T5 248M (Balanced)</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-red-500">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="w-full md:w-auto relative group">
+                <label for="length-select" class="block text-xs font-medium text-gray-500 mb-1 ml-1">Summary Length</label>
+                <div class="relative">
+                    <select id="length-select"
+                        class="w-full md:w-48 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 appearance-none focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/20 transition-all cursor-pointer hover:bg-white">
+                        <option value="short">Short</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="long">Long</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-red-500">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8 relative" id="drop-zone">
+            <input type="file" id="file-input" accept="application/pdf" hidden />
+            <div
+                class="upload-area border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center cursor-pointer hover:border-red-500 hover:bg-red-50 transition-all flex flex-col items-center justify-center min-h-[200px] bg-gray-50 group">
+                <div class="upload-content flex flex-col items-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-red-50 rounded-full flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                        <i class="fa-solid fa-file-pdf text-3xl text-red-600"></i>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-1">
+                        Drag & Drop PDF or <span class="text-red-600 underline decoration-red-300 hover:decoration-red-600 font-medium">Click
+                            to Upload</span>
+                    </p>
+                    <span class="text-sm text-gray-400" id="file-name">Supports PDF files only</span>
+                </div>
+                <!-- File info displayed after upload -->
+                <div id="file-info" class="hidden flex-col items-center">
+                    <i class="fa-solid fa-file-pdf text-4xl text-red-500 mb-2"></i>
+                    <p id="uploaded-filename" class="font-medium text-gray-800 text-lg">filename.pdf</p>
+                    <p id="uploaded-filesize" class="text-sm text-gray-400">0 MB</p>
+                    <button id="remove-file-btn" class="mt-4 px-4 py-1.5 bg-gray-200 rounded-lg text-sm hover:bg-gray-300 transition-colors">
+                        Choose Different File
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-6">
+            <div class="hidden w-full h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2 shadow-inner" id="progress-container">
+                <div class="h-full bg-gradient-to-r from-red-400 to-indigo-500 transition-all duration-300 rounded-full" id="progress-bar" style="width: 0%">
+                </div>
+            </div>
+            <p id="status-text" class="text-center text-sm text-gray-500 min-h-[1.25rem]">Ready to summarize</p>
+        </section>
+
+        <section class="mb-6 flex justify-center hidden" id="action-section">
+            <button id="summarize-btn" class="px-8 py-3 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl shadow-lg hover:shadow-red-500/30 font-semibold text-lg transition-all transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generate Summary
+            </button>
+        </section>
+
+        <section class="mb-6">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-semibold text-gray-800">Summary</h2>
+                <div class="flex gap-2">
+                    <button id="copy-btn" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Copy to Clipboard">
+                        <i class="fa-regular fa-copy text-lg"></i>
+                    </button>
+                    <button id="download-btn" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Download Text">
+                        <i class="fa-solid fa-download text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <textarea id="result-text" readonly placeholder="Your summary will appear here..."
+                class="w-full h-80 bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-red-500 focus:bg-white text-base leading-relaxed resize-y"></textarea>
+        </section>
+        
+        <section class="flex flex-col items-center pt-4 border-t border-gray-100">
+            <button id="clear-cache-btn"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-200"
+                title="Delete all downloaded models from browser cache">
+                <i class="fa-solid fa-trash-can"></i>
+                Clear Model Cache
+            </button>
+        </section>
+
+    </main>
+
+    <!-- Load Utils -->
+    <script src="utils/pdf-libs.js"></script>
+    <script src="utils/ui-manager.js"></script>
+
+    <script>
+        // Global variables for AI
+        let pipeline, env;
+        let summarizer = null;
+        let currentModel = "Xenova/distilbart-cnn-6-6";
+        let isProcessing = false;
+        
+        // Chunked Caching Logic (Shared with OCR tool)
+        const DB_NAME = "TransformersChunkedCache";
+        const DB_VERSION = 1;
+        const STORE_NAME = "models";
+        const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        db.createObjectStore(STORE_NAME);
+                    }
+                };
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function storeInChunks(url, blob) {
+            const db = await openDB();
+            const totalSize = blob.size;
+            const totalChunks = Math.ceil(totalSize / CHUNK_SIZE);
+
+            const meta = { url, totalSize, totalChunks, mimeType: blob.type, timestamp: Date.now() };
+
+            await new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, "readwrite");
+                tx.objectStore(STORE_NAME).put(meta, url);
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            });
+
+            for (let i = 0; i < totalChunks; i++) {
+                const start = i * CHUNK_SIZE;
+                const end = Math.min(start + CHUNK_SIZE, totalSize);
+                const chunk = blob.slice(start, end);
+                await new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, "readwrite");
+                    tx.objectStore(STORE_NAME).put(chunk, `${url}_chunk_${i}`);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                });
+            }
+            console.log(`Stored ${url} in ${totalChunks} chunks`);
+        }
+
+        async function retrieveFromChunks(url) {
+            const db = await openDB();
+            const meta = await new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, "readonly");
+                const req = tx.objectStore(STORE_NAME).get(url);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+
+            if (!meta) return null;
+
+            const chunks = [];
+            for (let i = 0; i < meta.totalChunks; i++) {
+                const chunk = await new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, "readonly");
+                    const req = tx.objectStore(STORE_NAME).get(`${url}_chunk_${i}`);
+                    req.onsuccess = () => resolve(req.result);
+                    req.onerror = () => reject(req.error);
+                });
+                if (!chunk) return null;
+                chunks.push(chunk);
+            }
+            return new Blob(chunks, { type: meta.mimeType });
+        }
+        
+        // Override fetch for caching
+        const originalFetch = window.fetch;
+        window.fetch = async (input, init) => {
+             const url = typeof input === "string" ? input : input.url;
+             if (url.includes("cdn.jsdelivr.net") || (!url.includes("huggingface") && !url.includes(".onnx") && !url.includes(".bin") && !url.includes("model.safetensors"))) {
+                return originalFetch(input, init);
+             }
+             try {
+                const cachedBlob = await retrieveFromChunks(url);
+                if (cachedBlob) {
+                     console.log(`[Cache Hit] Serving ${url} from IDB`);
+                     return new Response(cachedBlob);
+                }
+             } catch (e) {
+                console.warn("Cache retrieval failed, fetching network:", e);
+             }
+             const response = await originalFetch(input, init);
+             if (response.ok) {
+                 const clone = response.clone();
+                 clone.blob().then(blob => storeInChunks(url, blob).catch(err => console.error("Cache write failed:", err)));
+             }
+             return response;
+        };
+        // --- End Chunked Caching Logic ---
+
+        // DOM Elements
+        const modelSelect = document.getElementById("model-select");
+        const lengthSelect = document.getElementById("length-select");
+        const fileInput = document.getElementById("file-input");
+        const dropZone = document.getElementById("drop-zone");
+        const uploadContent = document.querySelector(".upload-content");
+        const fileInfo = document.getElementById("file-info");
+        const uploadedFilename = document.getElementById("uploaded-filename");
+        const uploadedFilesize = document.getElementById("uploaded-filesize");
+        const removeFileBtn = document.getElementById("remove-file-btn");
+        
+        const actionSection = document.getElementById("action-section");
+        const summarizeBtn = document.getElementById("summarize-btn");
+        
+        const progressContainer = document.getElementById("progress-container");
+        const progressBar = document.getElementById("progress-bar");
+        const statusText = document.getElementById("status-text");
+        const resultText = document.getElementById("result-text");
+        const copyBtn = document.getElementById("copy-btn");
+        const downloadBtn = document.getElementById("download-btn");
+        const clearCacheBtn = document.getElementById("clear-cache-btn");
+
+        let loadedPdfText = "";
+
+        async function init() {
+            try {
+                // Initialize PDF libs
+                await window.PDFGlobals.loadPdfJsLib();
+                
+                // Initialize Transformers
+                const transformers = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers");
+                pipeline = transformers.pipeline;
+                env = transformers.env;
+                env.allowLocalModels = false;
+                env.useBrowserCache = false;
+
+                setupEventListeners();
+                console.log("Summarizer Initialized");
+            } catch (error) {
+                console.error("Initialization error:", error);
+                statusText.textContent = "Error initializing libraries.";
+            }
+        }
+
+        function setupEventListeners() {
+            // UI Manager Dropzone
+            window.UIManager.setupDropZone('drop-zone', 'file-input', handleFileSelect);
+            
+            removeFileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.value = "";
+                loadedPdfText = "";
+                resetUI();
+            });
+
+            modelSelect.addEventListener('change', (e) => {
+                currentModel = e.target.value;
+                summarizer = null; // Reset pipeline to force reload
+                updateStatus(`Model switched to ${e.target.options[e.target.selectedIndex].text.split('(')[0]}`);
+            });
+
+            summarizeBtn.addEventListener('click', runSummarization);
+
+            copyBtn.addEventListener('click', () => {
+                if (!resultText.value) return;
+                navigator.clipboard.writeText(resultText.value);
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fa-solid fa-check text-green-500 text-lg"></i>';
+                setTimeout(() => copyBtn.innerHTML = originalHTML, 2000);
+            });
+            
+            downloadBtn.addEventListener('click', () => {
+                if (!resultText.value) return;
+                const blob = new Blob([resultText.value], {type: "text/plain;charset=utf-8"});
+                window.download(blob, "summary.txt", "text/plain");
+            });
+
+            clearCacheBtn.addEventListener('click', async () => {
+                if (confirm("Clear AI model cache? You will need to download models again.")) {
+                     try {
+                        indexedDB.deleteDatabase(DB_NAME);
+                        const keys = await caches.keys();
+                        for (const key of keys) {
+                            if (key.includes("transformers")) await caches.delete(key);
+                        }
+                        alert("Cache cleared.");
+                        location.reload();
+                     } catch(e) { alert("Error clearing cache"); }
+                }
+            });
+        }
+
+        async function handleFileSelect(files) {
+            if (!files.length) return;
+            const file = files[0];
+            if (file.type !== 'application/pdf') {
+                alert("Please upload a PDF file.");
+                return;
+            }
+
+            // Update UI
+            uploadContent.classList.add('hidden');
+            fileInfo.classList.remove('hidden');
+            fileInfo.classList.add('flex');
+            uploadedFilename.textContent = file.name;
+            uploadedFilesize.textContent = window.PDFGlobals.formatBytes(file.size);
+            
+            actionSection.classList.remove('hidden');
+            resultText.value = "";
+            
+            // Extract Text
+            await extractTextFromPDF(file);
+        }
+
+        function resetUI() {
+            uploadContent.classList.remove('hidden');
+            fileInfo.classList.add('hidden');
+            fileInfo.classList.remove('flex');
+            actionSection.classList.add('hidden');
+            resultText.value = "";
+            progressContainer.classList.add('hidden');
+            progressBar.style.width = '0%';
+            statusText.textContent = "Ready to summarize";
+        }
+
+        async function extractTextFromPDF(file) {
+            updateStatus("Extracting text from PDF...", 10);
+            progressContainer.classList.remove('hidden');
+            
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const loadingTask = pdfjsLib.getDocument({data: arrayBuffer});
+                const pdf = await loadingTask.promise;
+                
+                let fullText = "";
+                const numPages = pdf.numPages;
+
+                for (let i = 1; i <= numPages; i++) {
+                    updateStatus(`Extracting page ${i} of ${numPages}...`, 10 + Math.round((i/numPages) * 20));
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    fullText += pageText + " ";
+                }
+
+                loadedPdfText = fullText.replace(/\s+/g, ' ').trim();
+                console.log(`Extracted ${loadedPdfText.length} chars`);
+                updateStatus(`Ready to summarize (${pdf.numPages} pages, ~${Math.round(loadedPdfText.length/4)} tokens)`, 30);
+                
+                if (loadedPdfText.length === 0) {
+                     alert("No text found in PDF. It might be a scanned image.");
+                     statusText.textContent = "Error: Scanned PDF detected (no text). Use OCR tool instead.";
+                     actionSection.classList.add('hidden');
+                }
+                
+            } catch (error) {
+                console.error(error);
+                statusText.textContent = "Error reading PDF: " + error.message;
+            }
+        }
+
+        async function runSummarization() {
+            if (!loadedPdfText || isProcessing) return;
+            isProcessing = true;
+            summarizeBtn.disabled = true;
+            resultText.value = "";
+            
+            const lengthSetting = lengthSelect.value;
+            let maxNewTokens = 200;
+            let minNewTokens = 50;
+            if (lengthSetting === 'short') { maxNewTokens = 100; minNewTokens = 20; }
+            if (lengthSetting === 'long') { maxNewTokens = 500; minNewTokens = 150; }
+
+            const isChatModel = currentModel.includes("Qwen") || currentModel.includes("Llama");
+            const pipelineTask = isChatModel ? 'text-generation' : 'summarization';
+
+            try {
+                // Load Model
+                if (!summarizer || summarizer.modelName !== currentModel) {
+                     // Check webgpu support for these models
+                     // Note: We are not explicitly forcing device=webgpu here to keep code simple, 
+                     // but Transformers.js v3 should handle it if params are passed or auto-detection works.
+                     // For now, we rely on default behavior or add explicit device check if needed.
+                     
+                    updateStatus(`Loading model ${currentModel.split('/')[1]}...`, 35);
+                    progressBar.style.width = "35%";
+                    progressBar.classList.add("pulse");
+                    
+                    summarizer = await pipeline(pipelineTask, currentModel, {
+                        progress_callback: (data) => {
+                             if (data.status === 'progress') {
+                                 const p = 35 + (data.progress * 55); 
+                                 progressBar.style.width = `${p}%`;
+                             }
+                        }
+                    });
+                    summarizer.modelName = currentModel;
+                }
+                
+                progressBar.classList.remove("pulse");
+                updateStatus("Generating summary...", 90);
+                progressBar.style.width = "90%";
+                progressBar.classList.add("pulse");
+                
+                let textToProcess = loadedPdfText;
+                let truncated = false;
+                // Chat models can often handle more context, but let's be safe
+                const MAX_CHARS = isChatModel ? 12000 : 4000; 
+                
+                if (textToProcess.length > MAX_CHARS) {
+                    textToProcess = textToProcess.substring(0, MAX_CHARS);
+                    truncated = true;
+                }
+
+                let output;
+                if (isChatModel) {
+                    const messages = [
+                        { role: "system", content: "You are a helpful assistant that summarizes text concisely." },
+                        { role: "user", content: `Summarize the following text in a ${lengthSetting} paragraph:\n\n${textToProcess}` }
+                    ];
+                    // Apply chat template manually or let pipeline handle it if supported (v3 handles list of messages)
+                    output = await summarizer(messages, {
+                        max_new_tokens: maxNewTokens,
+                        do_sample: false,
+                    });
+                } else {
+                    output = await summarizer(textToProcess, {
+                        max_new_tokens: maxNewTokens,
+                        min_new_tokens: minNewTokens,
+                    });
+                }
+                
+                let summary;
+                if (isChatModel) {
+                     // Output structure for chat might be different -> content of last message
+                     // Transformers.js pipeline return for text-generation with messages matches huggingface python
+                     summary = output[0].generated_text.at(-1).content;
+                } else {
+                     summary = output[0].summary_text;
+                }
+
+                if (truncated) {
+                    summary += `\n\n(Note: The document was too long, so this summary is based on the first ~${Math.round(MAX_CHARS/4)} words.)`;
+                }
+
+                resultText.value = summary;
+                updateStatus("Done!", 100);
+
+            } catch (error) {
+                console.error(error);
+                statusText.textContent = "Error: " + error.message;
+                resultText.value = "An error occurred during summarization. Please check console.";
+            } finally {
+                isProcessing = false;
+                summarizeBtn.disabled = false;
+                progressBar.classList.remove("pulse");
+            }
+        }
+
+        function updateStatus(text, percent) {
+            statusText.textContent = text;
+            if (percent !== undefined) progressBar.style.width = `${percent}%`;
+        }
+
+        init();
+    </script>
+    
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10">
+        <div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+    </footer>
+</body>
+</html>
