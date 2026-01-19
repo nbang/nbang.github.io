@@ -143,7 +143,21 @@ These tools utilize `pdf-lib` for direct byte-level manipulation of PDF files.
 
 ---
 
-### 5. Data Dashboards
+### 5. Lunar Calendar Tool (`calendar-converter.html`)
+**Goal**: Convert between Gregorian (Solar) and Vietnamese Lunar calendars.
+
+*   **Requirement**: Accurate conversion using the standard Vietnamese algorithm (Ho Ngoc Duc).
+*   **Key Features**:
+    *   **Dual Converter**: Solar <-> Lunar.
+    *   **Calendar Widget**: Month view with lunar dates.
+    *   **Leap Month Support**: Handles Vietnamese leap months correctly.
+*   **Technical Approach**:
+    *   **Algorithm**: `lunar-algo.js` (Adapted from Ho Ngoc Duc, 2006).
+    *   **Implementation**: Pure JS calculation exposed via `SolarLunarConverter` global object. No external dependencies.
+
+---
+
+### 6. Data Dashboards
 **Goal**: Visualize large static datasets without a backend database.
 
 **Pattern**: "Side-car Data File". Data is stored in large JS files that assign a global variable (e.g., `window.data`). The HTML file loads this script and renders the UI.
@@ -171,7 +185,7 @@ These tools utilize `pdf-lib` for direct byte-level manipulation of PDF files.
 
 ---
 
-### 6. Site Navigation
+### 7. Site Navigation
 
 #### **Main Index (`index.html`)**
 *   **Goal**: Central landing page listing **ALL** available tools.
