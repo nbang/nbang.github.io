@@ -14,7 +14,7 @@
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AI In-Browser OCR - Extract text from images locally using powerful models." />
+    <meta name="description" content="AI In-Browser OCR - Extract text from images locally using powerful models like Florence-2 and SmolVLM with WebGPU." />
     <title>Image OCR - Bang's Tools</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -61,8 +61,7 @@
                 Image OCR
             </h1>
             <p class="text-lg text-gray-500 max-w-2xl mx-auto">
-                Secure, private, and powerful text extraction running entirely on your device.
-                No data is ever sent to a server.
+                Secure, private, and powerful text extraction running entirely on your device using WebGPU.
             </p>
         </header>
 
@@ -84,8 +83,8 @@
                     <label for="model-select" class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2 ml-1">AI Model</label>
                     <div class="relative">
                         <select id="model-select" class="w-full pl-5 pr-10 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-800 font-medium appearance-none focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all cursor-pointer hover:bg-white hover:border-gray-300">
-                            <option value="onnx-community/Florence-2-base-ft">Florence-2 (Microsoft)</option>
-                            <option value="Xenova/donut-base-finetuned-cord-v2">Donut (Document/Invoice)</option>
+                            <option value="florence2">Florence-2 (Microsoft)</option>
+                            <option value="smolvlm">SmolVLM (HuggingFace)</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
                             <i class="fa-solid fa-chevron-down text-sm"></i>
@@ -94,28 +93,6 @@
                     <p class="text-xs text-gray-400 mt-1.5 ml-1" id="model-desc">Standard powerful OCR model.</p>
                 </div>
 
-            </section>
-
-            <!-- Drop Zone -->
-            <section class="mb-8 relative group" id="drop-zone">
-                <input type="file" id="file-input" accept="image/*" hidden />
-                <div class="relative border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center cursor-pointer hover:border-sky-400 hover:bg-sky-50/30 transition-all flex flex-col items-center justify-center min-h-[240px] bg-gray-50/30 overflow-hidden">
-                    
-                    <div class="upload-content flex flex-col items-center z-10 transition-opacity duration-300">
-                        <div class="w-20 h-20 mb-6 bg-white rounded-2xl shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 border border-gray-100">
-                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-sky-500/80"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Upload Image</h3>
-                        <p class="text-gray-400 mb-6">Drag & drop or click to browse</p>
-                        <div class="flex gap-2">
-                            <span class="px-2 py-1 bg-gray-100 rounded text-xs text-gray-500 font-mono">PNG</span>
-                            <span class="px-2 py-1 bg-gray-100 rounded text-xs text-gray-500 font-mono">JPG</span>
-                            <span class="px-2 py-1 bg-gray-100 rounded text-xs text-gray-500 font-mono">WEBP</span>
-                        </div>
-                    </div>
-
-                    <img id="image-preview" class="hidden absolute inset-0 w-full h-full object-contain p-4 z-20 bg-gray-50/50 backdrop-blur-sm transition-all duration-500" alt="Preview" />
-                </div>
             </section>
 
             <!-- Status Bar -->
@@ -129,21 +106,52 @@
                 </div>
             </section>
 
-            <!-- Output Section -->
-            <section>
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                        <i class="fa-solid fa-align-left text-indigo-500"></i> Extracted Result
-                    </h2>
-                    <div class="flex gap-2">
-                        <button id="copy-btn" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Copy Text">
-                            <i class="fa-regular fa-copy"></i>
-                        </button>
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Drop Zone / Preview Card -->
+                <section class="relative group h-full flex flex-col" id="drop-zone">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fa-solid fa-image text-sky-500"></i> Input Image
+                        </h2>
                     </div>
-                </div>
-                <textarea id="result-text" readonly placeholder="Deep learning result will appear here..."
-                    class="w-full h-80 bg-gray-50 border border-gray-200 rounded-2xl p-6 text-gray-800 focus:outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all text-base leading-relaxed font-mono resize-y shadow-inner"></textarea>
-            </section>
+                    
+                    <input type="file" id="file-input" accept="image/*" disabled hidden />
+                    <div class="relative border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center cursor-pointer hover:border-sky-400 hover:bg-sky-50/30 transition-all flex flex-col items-center justify-center flex-grow min-h-[320px] bg-gray-50/30 overflow-hidden">
+                        
+                        <div class="upload-content flex flex-col items-center z-10 transition-opacity duration-300">
+                            <div class="w-16 h-16 mb-4 bg-white rounded-2xl shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 border border-gray-100">
+                                <i class="fa-solid fa-cloud-arrow-up text-3xl text-sky-500/80"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-700 mb-1">Upload Image</h3>
+                            <p class="text-sm text-gray-400 mb-4">Drag & drop or click</p>
+                            <div class="flex gap-2">
+                                <span class="px-2 py-1 bg-gray-100 rounded text-[10px] text-gray-500 font-mono">PNG</span>
+                                <span class="px-2 py-1 bg-gray-100 rounded text-[10px] text-gray-500 font-mono">JPG</span>
+                                <span class="px-2 py-1 bg-gray-100 rounded text-[10px] text-gray-500 font-mono">WEBP</span>
+                            </div>
+                        </div>
+
+                        <img id="image-preview" class="hidden absolute inset-0 w-full h-full object-contain p-2 z-20 bg-gray-50/50 backdrop-blur-sm transition-all duration-500" alt="Preview" />
+                    </div>
+                </section>
+
+                <!-- Output Section / Result Card -->
+                <section class="h-full flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                            <i class="fa-solid fa-align-left text-indigo-500"></i> Extracted Result
+                        </h2>
+                        <div class="flex gap-2">
+                            <button id="copy-btn" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Copy Text">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="result-text" readonly placeholder="Result will appear here..."
+                        class="w-full flex-grow min-h-[320px] bg-gray-50 border border-gray-200 rounded-2xl p-6 text-gray-800 focus:outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all text-base leading-relaxed font-mono resize-none shadow-inner"></textarea>
+                </section>
+            </div>
             
             <section class="flex flex-col items-center pt-8 mt-8 border-t border-gray-100/50">
                 <button id="clear-cache-btn"
@@ -162,22 +170,35 @@
 
     <!-- Modules -->
     <script type="module">
-        import {
-            pipeline,
-            env,
-            Florence2ForConditionalGeneration,
-            AutoModel,
-            AutoProcessor,
-            AutoTokenizer,
-            RawImage
-        } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
+        import { AutoModel, AutoProcessor, AutoTokenizer, RawImage, env, AutoModelForVision2Seq } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
 
         // Configuration
         env.allowLocalModels = false;
         env.useBrowserCache = true;
-        // FORCE SAFE MODE
-        // env.backends.onnx.wasm.proxy = true; 
         
+        // Suppress expected ONNX Runtime warnings
+        const originalConsoleWarn = console.warn;
+        const originalConsoleError = console.error;
+
+        console.warn = function (...args) {
+            const message = args.join(' ');
+            if (message.includes('VerifyEachNodeIsAssignedToAnEp') ||
+                message.includes('session_state.cc')) {
+                return;
+            }
+            originalConsoleWarn.apply(console, args);
+        };
+
+        console.error = function (...args) {
+            const message = args.join(' ');
+            if (message.includes('VerifyEachNodeIsAssignedToAnEp') ||
+                message.includes('session_state.cc') ||
+                message.includes('[W:onnxruntime')) {
+                return;
+            }
+            originalConsoleError.apply(console, args);
+        };
+
         // Element Refs
         const els = {
             modelSelect: document.getElementById('model-select'),
@@ -190,69 +211,271 @@
             result: document.getElementById('result-text'),
             status: document.getElementById('status-text'),
             loadingOverlay: document.getElementById('loading-overlay'),
-            progressOverlay: document.getElementById('progress-bar-overlay')
+            progressOverlay: document.getElementById('progress-bar-overlay'),
+            loadingTitle: document.getElementById('loading-title'),
+            loadingMessage: document.getElementById('loading-message')
         };
-        
-        // Detect device capability
-        async function detectDevice() {
-            // Check for WebGPU support
-            if ('gpu' in navigator) {
-                try {
-                    const adapter = await navigator.gpu.requestAdapter();
-                    if (adapter) {
-                        console.log('WebGPU is supported and available');
-                        return 'webgpu';
-                    }
-                } catch (e) {
-                    console.warn('WebGPU check failed:', e);
-                }
-            }
-            console.log('WebGPU not available, falling back to WASM');
-            return 'wasm';
-        }
 
-        let state = {
-            model: null,
-            processor: null,
-            tokenizer: null,
-            currentModelId: els.modelSelect.value,
-            isProcessing: false,
-            device: null // Will be set on first load
+        // Models
+        const MODELS = {
+            florence2: 'onnx-community/Florence-2-base-ft',
+            smolvlm: 'HuggingFaceTB/SmolVLM-256M-Instruct',
         };
 
         const MODEL_DESCS = {
-            "onnx-community/Florence-2-base-ft": "Standard powerful OCR model. Good for general text.",
-            "Xenova/donut-base-finetuned-cord-v2": "Specialized for invoices, receipts, and forms."
+            florence2: "Standard powerful OCR model. Good for general text.",
+            smolvlm: "Small Vision Language Model. Excellent for complex reasoning and structure."
         };
 
-        // UI Handlers
-        els.modelSelect.addEventListener('change', (e) => {
+        let state = {
+            currentModelId: 'florence2', // Default matches select
+            model: null,
+            processor: null,
+            tokenizer: null,
+            currentDevice: null,
+            isProcessing: false
+        };
+
+        // UI Helpers
+        function setStatus(message, isReady = false) {
+            els.status.innerHTML = message;
+            els.status.classList.remove('hidden');
+            if (isReady) {
+                 // can style if needed
+            }
+        }
+
+        function showLoading(show, title="Loading...", message="") {
+            if (show) {
+                els.loadingOverlay.classList.remove('hidden');
+                els.loadingTitle.textContent = title;
+                els.loadingMessage.textContent = message;
+            } else {
+                els.loadingOverlay.classList.add('hidden');
+            }
+        }
+        
+        function updateProgress(pct) {
+            els.progressOverlay.style.width = pct + "%";
+        }
+
+        // Init Model
+        async function initModel(device = 'webgpu') {
+             try {
+                if (state.model) {
+                     // In a real app we might dispose, but JS GC handles it somewhat
+                }
+                
+                state.model = null;
+                state.processor = null;
+                state.tokenizer = null;
+                els.fileInput.disabled = true;
+
+                showLoading(true, `Loading ${state.currentModelId === 'smolvlm' ? 'SmolVLM' : 'Florence-2'}`, "Downloading models... (this happens once)");
+                updateProgress(0);
+
+                // Config
+                const dtypeConfig = {
+                    embed_tokens: 'fp32',
+                    vision_encoder: 'fp32',
+                    encoder_model: 'q4',
+                    decoder_model_merged: 'q4',
+                };
+                
+                const options = {
+                    device: device,
+                    dtype: dtypeConfig,
+                };
+                
+                const selectedModelId = MODELS[state.currentModelId];
+                console.log(`Initializing model ${selectedModelId} with options:`, options);
+
+                // Load Processor & Tokenizer
+                if (!state.processor) {
+                    showLoading(true, "Loading Processor", "Preparing inputs...");
+                    state.processor = await AutoProcessor.from_pretrained(selectedModelId);
+                }
+                if (!state.tokenizer) {
+                    showLoading(true, "Loading Tokenizer", "Preparing text handler...");
+                    state.tokenizer = await AutoTokenizer.from_pretrained(selectedModelId);
+                }
+
+                // Load Model
+                 const progressCallback = (data) => {
+                    if (data.status === 'progress') {
+                        const percent = data.progress ? data.progress.toFixed(1) : 0;
+                        updateProgress(percent);
+                        if (data.file) {
+                             els.loadingMessage.textContent = `Downloading ${data.file} (${percent}%)`;
+                        }
+                    } else if (data.status === 'initiate') {
+                        updateProgress(0);
+                        els.loadingMessage.textContent = `Initiating ${data.file}...`;
+                    }
+                };
+                
+                showLoading(true, "Loading Model Weights", "This is the heavy part...");
+
+                if (state.currentModelId === 'smolvlm') {
+                    state.model = await AutoModelForVision2Seq.from_pretrained(selectedModelId, {
+                        ...options,
+                        progress_callback: progressCallback
+                    });
+                } else {
+                    // Florence-2
+                    state.model = await AutoModel.from_pretrained(selectedModelId, {
+                        ...options,
+                        progress_callback: progressCallback
+                    });
+                }
+                
+                state.currentDevice = device;
+                showLoading(false);
+                setStatus(`<i class="fa-solid fa-check text-green-500"></i> Ready (${device.toUpperCase()})`, true);
+                els.fileInput.disabled = false;
+                
+                return true;
+
+            } catch (error) {
+                const errorMessage = error.message || String(error);
+                console.error("Init Error:", error);
+
+                if (device === 'webgpu' && (errorMessage.includes('No available adapters') || errorMessage.includes('WebGPU'))) {
+                    console.warn('WebGPU not available, switching to WASM...');
+                    showLoading(true, "WebGPU Failed", "Switching to CPU/WASM fallback...");
+                    return await initModel('wasm');
+                }
+
+                showLoading(false);
+                setStatus(`<i class="fa-solid fa-triangle-exclamation text-red-500"></i> Error: ${errorMessage}`);
+                els.result.value = `Error initializing model: ${errorMessage}`;
+                return false;
+            }
+        }
+
+        // OCR Logic
+        async function performOCR(imageUrl) {
+            if (!state.model || !state.processor || !state.tokenizer) {
+                alert("Model not ready!");
+                return;
+            }
+
+            state.isProcessing = true;
+            showLoading(true, "Processing Image", "Extracting text...");
+            els.result.value = "";
+            updateProgress(0); // Indeterminate or just show spinner
+
+            try {
+                const image = await RawImage.fromURL(imageUrl);
+                let generatedText = '';
+
+                if (state.currentModelId === 'smolvlm') {
+                    // SmolVLM Logic
+                    const messages = [
+                        {
+                            role: "user",
+                            content: [
+                                { type: "image" },
+                                { type: "text", text: "Extract all text from this image." }
+                            ]
+                        }
+                    ];
+
+                    let text_inputs;
+                    if (state.processor.apply_chat_template) {
+                        text_inputs = state.processor.apply_chat_template(messages, { render_bos_token: false });
+                    } else if (state.tokenizer.apply_chat_template) {
+                        text_inputs = state.tokenizer.apply_chat_template(messages, { render_bos_token: false });
+                    } else {
+                        throw new Error('No apply_chat_template found');
+                    }
+                    
+                    const inputs = await state.processor(text_inputs, [image]);
+                    
+                    const outputs = await state.model.generate({
+                        ...inputs,
+                        max_new_tokens: 1024,
+                        do_sample: false,
+                    });
+
+                    const generatedFullText = state.tokenizer.batch_decode(outputs, { skip_special_tokens: true }).join('');
+                    const promptText = state.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
+                    generatedText = generatedFullText.replace(promptText, '').replace(/^A:\s*/, '').trim();
+
+                } else {
+                    // Florence-2 Logic
+                    const prompt = '<OCR>';
+                    const inputs = await state.processor(image, prompt);
+
+                    const outputs = await state.model.generate({
+                        ...inputs,
+                        max_new_tokens: 1024,
+                        do_sample: false,
+                    });
+
+                    generatedText = state.tokenizer.batch_decode(outputs, { skip_special_tokens: false })[0];
+                    const promptStr = '<OCR>';
+                    generatedText = generatedText.replaceAll('<s>', '').replaceAll('</s>', '').replaceAll(promptStr, '').trim();
+                }
+
+                els.result.value = generatedText;
+                showLoading(false);
+                setStatus(`<i class="fa-solid fa-check text-green-500"></i> Completed (${state.currentDevice.toUpperCase()})`, true);
+
+            } catch (error) {
+                console.error('OCR Error:', error);
+                showLoading(false);
+                setStatus(`<i class="fa-solid fa-triangle-exclamation text-red-500"></i> Processing Error`);
+                els.result.value = `Error: ${error.message}`;
+            } finally {
+                state.isProcessing = false;
+            }
+        }
+
+        // Event Listeners
+        els.modelSelect.addEventListener('change', async (e) => {
             state.currentModelId = e.target.value;
             els.modelDesc.textContent = MODEL_DESCS[state.currentModelId] || "";
-            // Clear cached model when switching to avoid conflicts
-            state.model = null;
-            state.processor = null;
-            state.tokenizer = null;
-            // Clear UI
+            
+            // Clean UI
             els.result.value = "";
             els.preview.classList.add('hidden');
             els.preview.src = "";
             document.querySelector('.upload-content').classList.remove('opacity-0');
-            els.status.classList.add('hidden');
-            els.progressOverlay.style.width = "0%";
+            setStatus("Switching models...", false);
+            
+            await initModel('webgpu');
         });
 
-        // Drag & Drop
-        els.dropZone.addEventListener('click', () => els.fileInput.click());
+        // Drag & Drop / File Input
+        els.dropZone.addEventListener('click', () => {
+            if(!els.fileInput.disabled) els.fileInput.click();
+        });
+        
         els.dropZone.addEventListener('dragover', (e) => { e.preventDefault(); els.dropZone.classList.add('border-sky-400', 'bg-sky-50'); });
         els.dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); els.dropZone.classList.remove('border-sky-400', 'bg-sky-50'); });
+        
         els.dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             els.dropZone.classList.remove('border-sky-400', 'bg-sky-50');
-            handleFile(e.dataTransfer.files[0]);
+            if(!els.fileInput.disabled) handleFile(e.dataTransfer.files[0]);
         });
-        els.fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
         
+        els.fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                els.preview.src = e.target.result;
+                els.preview.classList.remove('hidden');
+                document.querySelector('.upload-content').classList.add('opacity-0');
+                performOCR(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
         els.copyBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(els.result.value);
             els.copyBtn.innerHTML = '<i class="fa-solid fa-check text-green-500"></i>';
@@ -272,199 +495,13 @@
             }
         });
 
-        function handleFile(file) {
-            if (!file || !file.type.startsWith('image/')) return;
-            
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                els.preview.src = e.target.result;
-                els.preview.classList.remove('hidden');
-                document.querySelector('.upload-content').classList.add('opacity-0');
-                runOCR(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Logic
-        async function runOCR(imageUrl) {
-            if (state.isProcessing) return;
-            state.isProcessing = true;
-            els.result.value = "";
-            showLoading(true, "Processing...");
-            
-            try {
-                // Dispatch based on model
-                let text = "";
-                if (state.currentModelId.includes('donut')) {
-                    text = await runDonut(imageUrl);
-                } else {
-                    text = await runFlorence(imageUrl);
-                }
-                
-                els.result.value = text;
-            } catch (e) {
-                console.error(e);
-                els.result.value = "Error: " + e.message;
-            } finally {
-                state.isProcessing = false;
-                showLoading(false);
-            }
-        }
-        // Expose for external calls/debugging
-        window.runOCR = runOCR;
-
-        async function runFlorence(imageUrl) {
-            updateStatus("Loading Florence-2 Model...");
-            const modelId = state.currentModelId;
-            
-            try {
-                if (!state.model || !state.model.generate) {
-                     // Detect device if not already done
-                     if (!state.device) {
-                         state.device = await detectDevice();
-                         console.log(`Using device: ${state.device}`);
-                     }
-                     
-                     state.model = await Florence2ForConditionalGeneration.from_pretrained(modelId, {
-                         dtype: "fp32", // Use fp32 for better compatibility
-                         device: state.device,
-                         progress_callback: progressCallback
-                     });
-                     state.processor = await AutoProcessor.from_pretrained(modelId);
-                     state.tokenizer = await AutoTokenizer.from_pretrained(modelId);
-                }
-                
-                updateStatus("Generating text...");
-                const image = await RawImage.fromURL(imageUrl);
-                
-                // Florence-2 prompt
-                const inputs = await state.processor(image, "<OCR>");
-                
-                const outputs = await state.model.generate({
-                    ...inputs,
-                    max_new_tokens: 1024,
-                    do_sample: false,
-                });
-
-                const generatedText = state.tokenizer.batch_decode(outputs, { skip_special_tokens: false })[0];
-                
-                return generatedText
-                    .replace(/<\/?s>/g, "")
-                    .replace(/<[a-zA-Z0-9_]+>/g, "")
-                    .trim();
-            } catch (e) {
-                console.error(e);
-                return "Error: " + e.message;
-            }
-        }
-        
-        async function runDonut(imageUrl) {
-            updateStatus("Loading Donut Model...");
-            const modelId = state.currentModelId;
-            
-            try {
-                // Import VisionEncoderDecoderModel
-                const { VisionEncoderDecoderModel } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1");
-                
-                if (!state.model || !state.model.generate) {
-                    // Detect device if not already done
-                    if (!state.device) {
-                        state.device = await detectDevice();
-                        console.log(`Using device: ${state.device}`);
-                    }
-                    
-                    state.model = await VisionEncoderDecoderModel.from_pretrained(modelId, {
-                        dtype: "fp32", // Use fp32 for all components (q4 not available for this model)
-                        device: state.device,
-                        progress_callback: progressCallback
-                    });
-                    state.processor = await AutoProcessor.from_pretrained(modelId);
-                    state.tokenizer = await AutoTokenizer.from_pretrained(modelId);
-                }
-
-                updateStatus("Processing Image...");
-                const image = await RawImage.fromURL(imageUrl);
-                
-                // Process image
-                const pixel_values = await state.processor(image);
-                
-                // Create task prompt - Donut needs specific task tokens
-                const task_prompt = "<s_cord-v2>";  // Document parsing task
-                const decoder_input_ids = state.tokenizer(task_prompt, {
-                    add_special_tokens: false,
-                }).input_ids;
-
-                updateStatus("Generating Text...");
-                const outputs = await state.model.generate({
-                    ...pixel_values,
-                    decoder_input_ids,
-                    max_new_tokens: 768,
-                    pad_token_id: state.tokenizer.pad_token_id,
-                    eos_token_id: state.tokenizer.eos_token_id,
-                    use_cache: false,
-                    bad_words_ids: [[state.tokenizer.unk_token_id]],
-                    return_dict_in_generate: true,
-                });
-
-                // Decode the output
-                const decoded = state.tokenizer.batch_decode(outputs.sequences || outputs, {
-                    skip_special_tokens: true
-                })[0];
-
-                console.log("Donut Decoded Output:", decoded);
-                
-                // Clean the output
-                let cleaned = cleanDonutOutput(decoded);
-                return cleaned;
-
-            } catch (e) {
-                console.error("Donut Error:", e);
-                return `Error: ${e.message}\n\nStack: ${e.stack}`;
-            }
-        }
-
-        function cleanDonutOutput(text) {
-            // Remove common start/end tokens
-            text = text.replace(/<s_cord-v2>/g, "").replace(/<s>/g, "").replace(/<\/s>/g, "");
-            
-            // Simple parsing for CORD-like structure
-            text = text.replace(/<s_([^>]+)>/g, (match, key) => `\n${key.toUpperCase()}: `);
-            text = text.replace(/<\/s_[^>]+>/g, "");
-            text = text.replace(/\n\s*\n/g, "\n").trim();
-            
-            return text;
-        }
-
-        function updateStatus(msg) {
-            if(els.status) {
-                els.status.textContent = msg;
-                if (state.isProcessing) {
-                    els.status.classList.remove('hidden');
-                } else {
-                    els.status.classList.add('hidden');
-                }
-            }
-            if(document.getElementById('loading-message')) {
-                document.getElementById('loading-message').textContent = msg;
-            }
-        }
-
-        function showLoading(show, title="Loading...") {
-            if (show) {
-                els.loadingOverlay.classList.remove('hidden');
-                document.getElementById('loading-title').textContent = title;
-            } else {
-                els.loadingOverlay.classList.add('hidden');
-            }
-        }
-        
-        function progressCallback(data) {
-             if (data.status === 'progress') {
-                const pct = Math.round(data.progress * 100);
-                els.progressOverlay.style.width = pct + "%";
-                if(pct === 100 && data.file) updateStatus(`Loaded ${data.file}`);
-             }
-        }
+        // Initialize on load
+        window.addEventListener('load', () => {
+             // Set initial model from select
+             state.currentModelId = els.modelSelect.value;
+             els.modelDesc.textContent = MODEL_DESCS[state.currentModelId] || "";
+             initModel('webgpu');
+        });
 
     </script>
 </body>
