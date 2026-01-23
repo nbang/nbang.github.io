@@ -18,6 +18,7 @@ A collection of utilities and dashboards for data management, translation, AI ta
 | **AI In-Browser OCR** | Extract text from images locally using powerful Transformer models directly in your browser. | [Open Tool](https://github.bangndd.qzz.io/image_tools/ocr.html) |
 | **Cat-2-Map (GIS)** | Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000 coordinate support. | [Open Tool](https://github.bangndd.qzz.io/cat2map.html) |
 | **Free For Dev** | A curated list of software (SaaS, PaaS, IaaS) with free tiers for developers. | [Open Resources](https://github.bangndd.qzz.io/freefordev.html) |
+| **Markdown Viewer** | Render Markdown files with Mermaid diagrams support and export to PNG. | [Open Tool](https://github.bangndd.qzz.io/md_viewer.html) |
 | **AI Prompts Library** | Browse, search, and customize a collection of useful AI prompts for various tasks. | [Open Library](https://github.bangndd.qzz.io/prompt.html) |
 | **Translation Workflow** | Manage your book translation pipeline, scrape chapters, translate content, and edit files. | [Open Dashboard](https://github.bangndd.qzz.io/translation.html) |
 | **HCM Merger Data** | View and filter detailed data regarding the merger of administrative units in Ho Chi Minh City. | [Open Dashboard](https://github.bangndd.qzz.io/hcm-admin.html) |
@@ -50,6 +51,7 @@ nbang.github.io/
 ├── vietnam-admin.html       # Vietnam Admin Data Dashboard UI
 ├── translation.html         # Translation Workflow Tool UI
 ├── prompt.html              # AI Prompts Library UI
+├── md_viewer.html           # Markdown Viewer Tool UI
 └── ...
 ```
 

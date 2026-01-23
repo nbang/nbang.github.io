@@ -21,12 +21,15 @@ This project (`nbang.github.io`) is a comprehensive suite of web-based tools and
 **Goal**: Provide privacy-first, client-side image manipulation.
 
 #### **AI In-Browser OCR (`ocr.html`)**
-*   **Requirement**: Extract text from images without server upload. Support multiple models.
+*   **Requirement**: Extract text from images without server upload using state-of-the-art models.
 *   **Technical Approach**:
-    *   **Library**: `@huggingface/transformers` (Transformers.js).
-    *   **Execution**: Uses **WebGPU** (if available) or **WASM** for inference.
-    *   **Models**: Supports Florence-2, Qwen2-VL, and SmolVLM.
-    *   **Caching Strategy**: Implements a custom **IndexedDB Chunked Cache** (`TransformersChunkedCache`) to store large model weights locally, preventing repeated downloads.
+    *   **Library**: `@huggingface/transformers` (Transformers.js v3+).
+    *   **Execution**: Prioritizes **WebGPU** for high performance, falls back to **WASM** (CPU).
+    *   **Models**:
+        *   **Florence-2-base-ft** (Microsoft): Fast, accurate general OCR.
+        *   **SmolVLM-256M-Instruct** (HuggingFace): Lightweight Vision-Language Model for complex text/reasoning.
+    *   **Layout**: Responsive 2-column "Side-by-Side" design (Input Image vs Extracted Result).
+    *   **Caching Strategy**: Standard browser Cache API + Transformers.js internal caching.
 
 #### **Compress Image (`compress.html`)**
 *   **Requirement**: Reduce file size of JPG/PNG/WebP.
@@ -56,6 +59,19 @@ This project (`nbang.github.io`) is a comprehensive suite of web-based tools and
     *   **Approach**: Renders the DOM node containing the HTML to a canvas, then exports as JPG.
 *   **Rotate (`rotate.html`)**:
     *   **Approach**: Canvas rotation context transformations (`ctx.rotate`).
+
+---
+
+### 2. Markdown Viewer (`md_viewer.html`)
+**Goal**: View and render Markdown files locally with diagram support.
+
+*   **Requirement**: Render Markdown text, Mermaid diagrams, and export to image.
+*   **Technical Approach**:
+    *   **Markdown**: `marked` library for parsing.
+    *   **Diagrams**: `mermaid.js`. Code blocks marked with `mermaid` are replaced with rendered SVGs.
+    *   **Export**: `html2canvas` captures the preview element as a PNG image.
+    *   **URL Loading**: `fetch` API to load raw Markdown content from external URLs (CORS dependent).
+    *   **Styling**: GitHub-like typography using customized Tailwind CSS classes (`.prose`).
 
 ---
 
