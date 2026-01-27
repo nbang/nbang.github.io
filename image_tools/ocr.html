@@ -20,6 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         body { font-family: "Inter", sans-serif; }
@@ -83,6 +84,7 @@
                     <label for="model-select" class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2 ml-1">AI Model</label>
                     <div class="relative">
                         <select id="model-select" class="w-full pl-5 pr-10 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-800 font-medium appearance-none focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all cursor-pointer hover:bg-white hover:border-gray-300">
+                            <option value="tesseract" selected>Tesseract.js (Standard)</option>
                             <option value="florence2">Florence-2 (Microsoft)</option>
                             <option value="smolvlm">SmolVLM (HuggingFace)</option>
                             <option value="granite">Granite Docling (IBM)</option>
