@@ -129,14 +129,16 @@ async function initModel(device = 'webgpu') {
         const selectedModelId = MODELS[state.currentModelId];
         console.log(`Initializing model ${selectedModelId} with options:`, options);
 
-        // Load Processor & Tokenizer
-        if (!state.processor) {
-            showLoading(true, "Loading Processor", "Preparing inputs...");
-            state.processor = await AutoProcessor.from_pretrained(selectedModelId);
-        }
-        if (!state.tokenizer) {
-            showLoading(true, "Loading Tokenizer", "Preparing text handler...");
-            state.tokenizer = await AutoTokenizer.from_pretrained(selectedModelId);
+        // Load Processor & Tokenizer (Skip for Tesseract)
+        if (state.currentModelId !== 'tesseract') {
+            if (!state.processor) {
+                showLoading(true, "Loading Processor", "Preparing inputs...");
+                state.processor = await AutoProcessor.from_pretrained(selectedModelId);
+            }
+            if (!state.tokenizer) {
+                showLoading(true, "Loading Tokenizer", "Preparing text handler...");
+                state.tokenizer = await AutoTokenizer.from_pretrained(selectedModelId);
+            }
         }
 
         // Load Model

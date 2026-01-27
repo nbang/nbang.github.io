@@ -283,6 +283,12 @@ userFilter.addEventListener('change', () => {
 closeModalBtn.addEventListener('click', closeEditor);
 modalBackdrop.addEventListener('click', closeEditor);
 
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeEditor();
+    }
+});
+
 copyPromptBtn.addEventListener('click', () => {
     promptPreview.select();
     navigator.clipboard.writeText(promptPreview.value).then(() => {
