@@ -47,24 +47,27 @@ const els = {
 
 // Models
 const MODELS = {
+    tesseract: 'tesseract',
     florence2: 'onnx-community/Florence-2-base-ft',
     smolvlm: 'HuggingFaceTB/SmolVLM-256M-Instruct',
     granite: 'ibm-granite/granite-docling-258M-WebGPU',
 };
 
 const MODEL_DESCS = {
+    tesseract: "Tesseract.js. Classic and reliable OCR running in WASM.",
     florence2: "Standard powerful OCR model. Good for general text.",
     smolvlm: "Small Vision Language Model. Excellent for complex reasoning and structure.",
     granite: "IBM Granite Docling (258M). Optimized for document understanding."
 };
 
 let state = {
-    currentModelId: 'florence2', // Default matches select
+    currentModelId: 'tesseract', // Default matches select
     model: null,
     processor: null,
     tokenizer: null,
     currentDevice: null,
-    isProcessing: false
+    isProcessing: false,
+    tesseractWorker: null
 };
 
 // UI Helpers
@@ -152,6 +155,28 @@ async function initModel(device = 'webgpu') {
 
         showLoading(true, "Loading Model Weights", "This is the heavy part...");
 
+        if (state.currentModelId === 'tesseract') {
+            if (!window.Tesseract) {
+                throw new Error("Tesseract.js not loaded");
+            }
+            if (!state.tesseractWorker) {
+                showLoading(true, "initializing Tesseract", "Loading WASM worker...");
+                state.tesseractWorker = await Tesseract.createWorker('eng', 1, {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            updateProgress((m.progress * 100).toFixed(1));
+                            els.loadingMessage.textContent = `Recognizing... ${Math.round(m.progress * 100)}%`;
+                        }
+                    }
+                });
+            }
+            state.currentDevice = 'wasm';
+            showLoading(false);
+            setStatus(`<i class="fa-solid fa-check text-green-500"></i> Ready (WASM)`, true);
+            els.fileInput.disabled = false;
+            return true;
+        }
+
         if (state.currentModelId === 'smolvlm' || state.currentModelId === 'granite') {
             state.model = await AutoModelForVision2Seq.from_pretrained(selectedModelId, {
                 ...options,
@@ -191,7 +216,12 @@ async function initModel(device = 'webgpu') {
 
 // OCR Logic
 async function performOCR(imageUrl) {
-    if (!state.model || !state.processor || !state.tokenizer) {
+    if (state.currentModelId === 'tesseract') {
+        if (!state.tesseractWorker) {
+            alert("Tesseract not ready!");
+            return;
+        }
+    } else if (!state.model || !state.processor || !state.tokenizer) {
         alert("Model not ready!");
         return;
     }
@@ -205,7 +235,11 @@ async function performOCR(imageUrl) {
         const image = await RawImage.fromURL(imageUrl);
         let generatedText = '';
 
-        if (state.currentModelId === 'smolvlm' || state.currentModelId === 'granite') {
+        if (state.currentModelId === 'tesseract') {
+            if (!state.tesseractWorker) throw new Error("Worker not ready");
+            const result = await state.tesseractWorker.recognize(imageUrl);
+            generatedText = result.data.text;
+        } else if (state.currentModelId === 'smolvlm' || state.currentModelId === 'granite') {
             // Vision Language Model Logic (SmolVLM & Granite)
             let messages = [];
 

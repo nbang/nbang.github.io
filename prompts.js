@@ -20,19 +20,26 @@ let currentPrompt = null;
 
 // Fetch Data
 // Use Global Data
-function loadPrompts() {
-    if (typeof promptData !== 'undefined') {
-        promptsData = promptData;
+// Fetch Data
+async function loadPrompts() {
+    try {
+        const response = await fetch('prompt-data.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        promptsData = await response.json();
         populateCategories();
         populateUsers();
         renderPrompts(promptsData);
-    } else {
-        console.error('promptData not found. Check prompt-data.js loading.');
-        promptsGrid.innerHTML = '<p class="col-span-full text-center text-red-500">Failed to load prompts data.</p>';
+    } catch (error) {
+        console.error('Failed to load prompts:', error);
+        const grid = document.getElementById('prompts-grid');
+        if (grid) {
+            grid.innerHTML = '<p class="col-span-full text-center text-red-500">Failed to load prompts data. Please try again later.</p>';
+        }
     }
 }
 
-// Populate Categories
 // Populate Categories
 function populateCategories() {
     const selectedUser = userFilter.value;
