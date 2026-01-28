@@ -31,6 +31,8 @@ console.error = function (...args) {
 // Element Refs
 const els = {
     modelSelect: document.getElementById('model-select'),
+    languageSelect: document.getElementById('language-select'),
+    languageContainer: document.getElementById('language-container'),
     copyBtn: document.getElementById('copy-btn'),
     modelDesc: document.getElementById('model-desc'),
     clearCacheBtn: document.getElementById('clear-cache-btn'),
@@ -60,6 +62,21 @@ const MODEL_DESCS = {
     granite: "IBM Granite Docling (258M). Optimized for document understanding."
 };
 
+// Tesseract Languages
+const TESS_LANGS = [
+    { code: 'eng', name: 'English' },
+    { code: 'vie', name: 'Vietnamese' },
+    { code: 'chi_sim', name: 'Chinese (Simplified)' },
+    { code: 'jpn', name: 'Japanese' },
+    { code: 'kor', name: 'Korean' },
+    { code: 'fra', name: 'French' },
+    { code: 'deu', name: 'German' },
+    { code: 'spa', name: 'Spanish' },
+    { code: 'rus', name: 'Russian' },
+    { code: 'hin', name: 'Hindi' },
+    { code: 'ara', name: 'Arabic' }
+];
+
 let state = {
     currentModelId: 'tesseract', // Default matches select
     model: null,
@@ -67,7 +84,8 @@ let state = {
     tokenizer: null,
     currentDevice: null,
     isProcessing: false,
-    tesseractWorker: null
+    tesseractWorker: null,
+    currentLang: 'eng'
 };
 
 // UI Helpers
@@ -93,6 +111,18 @@ function updateProgress(pct) {
     els.progressOverlay.style.width = pct + "%";
 }
 
+// Populate Languages
+function initLanguageSelect() {
+    els.languageSelect.innerHTML = '';
+    TESS_LANGS.forEach(lang => {
+        const option = document.createElement('option');
+        option.value = lang.code;
+        option.textContent = lang.name;
+        if (lang.code === 'eng') option.selected = true;
+        els.languageSelect.appendChild(option);
+    });
+}
+
 // Init Model
 async function initModel(device = 'webgpu') {
     try {
@@ -100,18 +130,35 @@ async function initModel(device = 'webgpu') {
             // In a real app we might dispose, but JS GC handles it somewhat
         }
 
+        // Clean up previous tesseract worker if exists and language changed
+        if (state.tesseractWorker && state.currentModelId === 'tesseract') {
+            // For simplicity, we'll terminate and re-create if it exists to ensure language switch
+            await state.tesseractWorker.terminate();
+            state.tesseractWorker = null;
+        }
+
         state.model = null;
         state.processor = null;
         state.tokenizer = null;
         els.fileInput.disabled = true;
+
+        // Toggle Language Dropdown
+        if (state.currentModelId === 'tesseract') {
+            els.languageContainer.classList.remove('hidden');
+        } else {
+            els.languageContainer.classList.add('hidden');
+        }
 
         const modelNameMap = {
             smolvlm: 'SmolVLM',
             florence2: 'Florence-2',
             granite: 'Granite Docling'
         };
-        showLoading(true, `Loading ${modelNameMap[state.currentModelId]}`, "Downloading models... (this happens once)");
-        updateProgress(0);
+
+        if (state.currentModelId !== 'tesseract') {
+            showLoading(true, `Loading ${modelNameMap[state.currentModelId]}`, "Downloading models... (this happens once)");
+            updateProgress(0);
+        }
 
         // Config
         const dtypeConfig = {
@@ -155,29 +202,33 @@ async function initModel(device = 'webgpu') {
             }
         };
 
-        showLoading(true, "Loading Model Weights", "This is the heavy part...");
 
         if (state.currentModelId === 'tesseract') {
             if (!window.Tesseract) {
                 throw new Error("Tesseract.js not loaded");
             }
-            if (!state.tesseractWorker) {
-                showLoading(true, "initializing Tesseract", "Loading WASM worker...");
-                state.tesseractWorker = await Tesseract.createWorker('eng', 1, {
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            updateProgress((m.progress * 100).toFixed(1));
-                            els.loadingMessage.textContent = `Recognizing... ${Math.round(m.progress * 100)}%`;
-                        }
+
+            const lang = els.languageSelect.value || 'eng';
+            showLoading(true, `Initializing Tesseract (${lang})`, "Loading WASM worker...");
+            updateProgress(0);
+
+            state.tesseractWorker = await Tesseract.createWorker(lang, 1, {
+                logger: m => {
+                    if (m.status === 'recognizing text') {
+                        updateProgress((m.progress * 100).toFixed(1));
+                        els.loadingMessage.textContent = `Recognizing... ${Math.round(m.progress * 100)}%`;
                     }
-                });
-            }
+                }
+            });
+
             state.currentDevice = 'wasm';
             showLoading(false);
             setStatus(`<i class="fa-solid fa-check text-green-500"></i> Ready (WASM)`, true);
             els.fileInput.disabled = false;
             return true;
         }
+
+        showLoading(true, "Loading Model Weights", "This is the heavy part...");
 
         if (state.currentModelId === 'smolvlm' || state.currentModelId === 'granite') {
             state.model = await AutoModelForVision2Seq.from_pretrained(selectedModelId, {
@@ -343,6 +394,14 @@ els.modelSelect.addEventListener('change', async (e) => {
     await initModel('webgpu');
 });
 
+els.languageSelect.addEventListener('change', async () => {
+    // Reload model (Tesseract only) with new language
+    if (state.currentModelId === 'tesseract') {
+        setStatus(`Switching language to ${els.languageSelect.options[els.languageSelect.selectedIndex].text}...`, false);
+        await initModel();
+    }
+});
+
 // Drag & Drop / File Input
 els.dropZone.addEventListener('click', () => {
     if (!els.fileInput.disabled) els.fileInput.click();
@@ -396,5 +455,6 @@ window.addEventListener('load', () => {
     // Set initial model from select
     state.currentModelId = els.modelSelect.value;
     els.modelDesc.textContent = MODEL_DESCS[state.currentModelId] || "";
+    initLanguageSelect();
     initModel('webgpu');
 });

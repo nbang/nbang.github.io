@@ -37,23 +37,20 @@ This project (`nbang.github.io`) is a comprehensive suite of web-based tools and
 #### **Compress Image (`compress.html`)**
 
 - **Requirement**: Reduce file size of JPG/PNG/WebP.
+- **Requirement**: Reduce file size of JPG/PNG/WebP.
 - **Library**: `browser-image-compression`.
 - **Approach**: Uses a web worker to process images off the main thread. Adjusts quality and max dimensions based on user input.
 
-#### **Crop Image (`crop.html`)**
+#### **Photo Editor (`editor.html`)**
 
-- **Requirement**: Visual cropping with aspect ratio presets.
-- **Library**: `cropperjs`.
-- **Approach**: Wraps the image in a canvas-based editor. Exports result via `canvas.toBlob()`.
-
-#### **Resize Image (`resize.html`)**
-
-- **Requirement**: Resize dimensions by percentage or pixels.
-- **Approach**: Pure HTML5 Canvas API.
-    1. Image loaded into DOM.
-    2. `canvas.width` / `canvas.height` set to target dimensions.
-    3. `ctx.drawImage(img, ...)` to scale.
-    4. Export using `canvas.toDataURL`.
+- **Requirement**: Unified interface for cropping, rotating, resizing, filtering, and annotating images.
+- **Libraries**:
+  - `fabric.js` (Canvas manipulation, filters, drawing, rotation, resizing).
+  - `cropperjs` (Advanced cropping).
+- **Approach**:
+  - **Main Canvas**: Uses Fabric.js for core rendering, filters, drawing, and resizing (scaling background image).
+  - **Cropping**: Temporarily switches to a `cropperjs` view (img element) for cropping actions, then applies result back to Fabric canvas.
+  - **Rotation**: Rotates the Fabric canvas/image.
 
 #### **Converters & Other Utilities**
 
@@ -64,8 +61,6 @@ This project (`nbang.github.io`) is a comprehensive suite of web-based tools and
 - **Requirement**: Convert pasted HTML code to an image.
 - **Library**: `html2canvas`.
 - **Approach**: Renders the DOM node containing the HTML to a canvas, then exports as JPG.
-- **Rotate (`rotate.html`)**:
-- **Approach**: Canvas rotation context transformations (`ctx.rotate`).
 
 ---
 

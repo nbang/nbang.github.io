@@ -21,6 +21,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <!-- Cropper.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <style>
         body {
             font-family: "Inter", sans-serif;
@@ -75,6 +78,18 @@
                         class="tool-btn active p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all" title="Filters">
                         <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
                     </button>
+                    <button onclick="setMode('crop')" class="tool-btn p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all"
+                        title="Crop">
+                        <i class="fa-solid fa-crop-simple text-xl"></i>
+                    </button>
+                    <button onclick="setMode('rotate')" class="tool-btn p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all"
+                        title="Rotate">
+                        <i class="fa-solid fa-rotate-right text-xl"></i>
+                    </button>
+                    <button onclick="setMode('resize')" class="tool-btn p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all"
+                        title="Resize">
+                        <i class="fa-solid fa-expand text-xl"></i>
+                    </button>
                     <button onclick="setMode('draw')" class="tool-btn p-3 rounded-xl hover:bg-purple-50 text-gray-500 hover:text-purple-600 transition-all"
                         title="Draw">
                         <i class="fa-solid fa-paintbrush text-xl"></i>
@@ -93,6 +108,9 @@
                 <!-- Canvas -->
                 <div class="flex-1 bg-gray-50/50 flex flex-col items-center justify-center p-4 overflow-hidden relative" id="canvasContainer">
                     <canvas id="canvas"></canvas>
+                    <div id="cropperContainer" class="hidden w-full h-full absolute inset-0 bg-gray-900 z-20 flex items-center justify-center p-4">
+                        <img id="cropperImage" class="max-w-full max-h-full" src="" alt="Cropper Preview">
+                    </div>
                 </div>
 
                 <!-- Properties Panel -->
@@ -119,199 +137,7 @@
         </div>
     </main>
 
-    <script>
-        const fileInput = document.getElementById("fileInput");
-        const uploadView = document.getElementById("uploadView");
-        const workspaceView = document.getElementById("workspaceView");
-        const panelContent = document.getElementById("panelContent");
-        const btnSave = document.getElementById("btnSave");
-        const downloadLink = document.getElementById("downloadLink");
-        const btnReset = document.getElementById("btnReset");
-
-        let canvas;
-        let originalFile = null;
-        let currentMode = "filter";
-
-        // Filters HTML
-        const filtersHTML = `
-            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i> Filters</h3>
-            <div class="space-y-3">
-                <button onclick="applyFilter('grayscale')" class="w-full py-2 px-4 rounded-lg border border-gray-200 bg-white hover:border-purple-500 text-left text-sm font-medium transition-all">Grayscale</button>
-                <button onclick="applyFilter('sepia')" class="w-full py-2 px-4 rounded-lg border border-gray-200 bg-white hover:border-purple-500 text-left text-sm font-medium transition-all">Sepia</button>
-                <button onclick="applyFilter('invert')" class="w-full py-2 px-4 rounded-lg border border-gray-200 bg-white hover:border-purple-500 text-left text-sm font-medium transition-all">Invert</button>
-                <button onclick="applyFilter('none')" class="w-full py-2 px-4 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 text-left text-sm font-medium transition-all">Remove Filters</button>
-            </div>
-        `;
-
-        const drawHTML = `
-            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-paintbrush text-purple-600"></i> Drawing</h3>
-            <div class="space-y-4">
-                 <div>
-                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Brush Color</label>
-                    <input type="color" id="brushColor" value="#9333ea" class="w-full h-10 rounded cursor-pointer" onchange="updateBrush()">
-                </div>
-                 <div>
-                    <label class="block text-xs font-semibold text-gray-500 uppercase mb-1">Brush Size</label>
-                    <input type="range" id="brushSize" min="1" max="50" value="5" class="w-full accent-purple-600" oninput="updateBrush()">
-                </div>
-                <div class="flex items-center gap-2 mt-4">
-                     <input type="checkbox" id="drawingModeToggle" class="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 border-gray-300" onchange="toggleDrawing(this.checked)">
-                     <label for="drawingModeToggle" class="font-medium text-gray-700">Enable Drawing</label>
-                </div>
-            </div>
-        `;
-
-        const textHTML = `
-            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-font text-purple-600"></i> Add Text</h3>
-             <div class="space-y-4">
-                <input type="text" id="newTextVal" placeholder="Text Content" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:border-purple-500 outline-none">
-                <button onclick="addNewText()" class="w-full py-2 bg-purple-100 text-purple-600 rounded-lg text-sm font-medium hover:bg-purple-200">Add to Canvas</button>
-            </div>
-        `;
-
-        // Init
-        fileInput.addEventListener("change", initCanvas);
-        btnReset.addEventListener("click", () => location.reload());
-        btnSave.addEventListener("click", saveImage);
-
-        // Drag Drop (Main)
-        const dropZone = document.querySelector('label[for="fileInput"]');
-        dropZone.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            dropZone.classList.add("border-purple-500", "bg-purple-50/50");
-        });
-        dropZone.addEventListener("dragleave", (e) => {
-            e.preventDefault();
-            dropZone.classList.remove("border-purple-500", "bg-purple-50/50");
-        });
-        dropZone.addEventListener("drop", (e) => {
-            e.preventDefault();
-            dropZone.classList.remove("border-purple-500", "bg-purple-50/50");
-            if (e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                initCanvas({ target: fileInput });
-            }
-        });
-
-        function initCanvas(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            originalFile = file;
-
-            const reader = new FileReader();
-            reader.onload = (f) => {
-                fabric.Image.fromURL(f.target.result, (img) => {
-                    uploadView.classList.add("hidden");
-                    workspaceView.classList.remove("hidden");
-
-                    const container = document.getElementById("canvasContainer");
-                    const maxWidth = container.clientWidth - 40;
-                    const maxHeight = window.innerHeight * 0.7;
-
-                    let scale = 1;
-                    if (img.width > maxWidth || img.height > maxHeight) {
-                        scale = Math.min(maxWidth / img.width, maxHeight / img.height);
-                    }
-
-                    // Create canvas
-                    canvas = new fabric.Canvas("canvas");
-                    canvas.setWidth(img.width * scale);
-                    canvas.setHeight(img.height * scale);
-
-                    img.scale(scale);
-                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-
-                    setMode("filter"); // Default mode
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function setMode(mode) {
-            currentMode = mode;
-            // UI Update
-            document.querySelectorAll(".tool-btn").forEach((b) => {
-                b.classList.remove("text-purple-600", "bg-purple-50", "ring-2", "ring-purple-100");
-                b.classList.add("text-gray-500");
-            });
-            // Highlight active (simple check based on onclick)
-            const activeBtn = Array.from(document.querySelectorAll(".tool-btn")).find((b) => b.onclick.toString().includes(mode));
-            if (activeBtn) activeBtn.classList.add("text-purple-600", "bg-purple-50", "ring-2", "ring-purple-100");
-
-            // Disable drawing mode on mode switch
-            if (canvas) canvas.isDrawingMode = false;
-
-            // Content Update
-            if (mode === "filter") panelContent.innerHTML = filtersHTML;
-            if (mode === "draw") panelContent.innerHTML = drawHTML;
-            if (mode === "text") panelContent.innerHTML = textHTML;
-        }
-
-        // --- Logic ---
-        function applyFilter(type) {
-            const img = canvas.backgroundImage;
-            img.filters = []; // clear
-
-            if (type === "grayscale") img.filters.push(new fabric.Image.filters.Grayscale());
-            if (type === "sepia") img.filters.push(new fabric.Image.filters.Sepia());
-            if (type === "invert") img.filters.push(new fabric.Image.filters.Invert());
-
-            img.applyFilters();
-            canvas.renderAll();
-        }
-
-        function toggleDrawing(enable) {
-            canvas.isDrawingMode = enable;
-            if (enable) updateBrush();
-        }
-
-        function updateBrush() {
-            canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-            canvas.freeDrawingBrush.color = document.getElementById("brushColor").value;
-            canvas.freeDrawingBrush.width = parseInt(document.getElementById("brushSize").value);
-        }
-
-        function addNewText() {
-            const val = document.getElementById("newTextVal").value || "Text";
-            const text = new fabric.IText(val, {
-                left: canvas.width / 2,
-                top: canvas.height / 2,
-                originX: "center",
-                originY: "center",
-                fontSize: 30,
-                fill: "#000000",
-            });
-            canvas.add(text);
-            canvas.setActiveObject(text);
-        }
-
-        function deleteActive() {
-            const active = canvas.getActiveObject();
-            if (active) canvas.remove(active);
-        }
-
-        function saveImage() {
-            btnSave.disabled = true;
-            btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
-
-            const bg = canvas.backgroundImage;
-            const multiplier = 1 / bg.scaleX;
-
-            const dataURL = canvas.toDataURL({
-                format: "jpeg",
-                quality: 0.9,
-                multiplier: multiplier,
-            });
-
-            downloadLink.href = dataURL;
-            downloadLink.download = `edited_${originalFile.name}`;
-
-            btnSave.classList.add("hidden");
-            downloadLink.classList.remove("hidden");
-            btnSave.disabled = false;
-            btnSave.innerHTML = 'Save Image <i class="fa-solid fa-floppy-disk"></i>';
-        }
-    </script>
+    <script src="editor.js"></script>
     <footer class="text-center py-8 text-gray-500 text-sm relative z-10">
         <div>&copy; 2026 Bang's Tools. All rights reserved.</div>
         <div class="mt-2">

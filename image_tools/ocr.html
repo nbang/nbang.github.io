@@ -62,7 +62,7 @@
                 Image OCR
             </h1>
             <p class="text-lg text-gray-500 max-w-2xl mx-auto">
-                Secure, private, and powerful text extraction running entirely on your device using WebGPU.
+                Secure, private, and powerful text extraction running entirely on your device.
             </p>
         </header>
 
@@ -96,18 +96,34 @@
                     <p class="text-xs text-gray-400 mt-1.5 ml-1" id="model-desc">Standard powerful OCR model.</p>
                 </div>
 
+                <!-- Language / Status -->
+                <div class="flex flex-col justify-end pb-1">
+                     <!-- Language Select (Hidden by default, shown for Tesseract) -->
+                     <div id="language-container" class="mb-3 hidden">
+                        <label for="language-select" class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2 ml-1">Language</label>
+                        <div class="relative">
+                            <select id="language-select" class="w-full pl-5 pr-10 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-800 font-medium appearance-none focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all cursor-pointer hover:bg-white hover:border-gray-300">
+                                <!-- Populated by JS -->
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between h-12 px-1">
+                        <span id="status-text" class="text-sm font-medium text-sky-600 hidden flex items-center gap-2">
+                             Ready
+                        </span>
+                        <span id="timer" class="text-xs text-gray-400 font-mono hidden">0.0s</span>
+                    </div>
+                </div>
             </section>
 
-            <!-- Status Bar -->
-            <section class="mb-6">
-                <div class="flex justify-between items-end mb-2">
-                    <span id="status-text" class="text-sm font-medium text-sky-600 hidden">Ready</span>
-                    <span id="timer" class="text-xs text-gray-400 font-mono hidden">0.0s</span>
-                </div>
-                <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div id="progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 w-0 transition-all duration-300"></div>
-                </div>
-            </section>
+            <!-- Progress Bar Line -->
+            <div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden mb-6">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 w-0 transition-all duration-300"></div>
+            </div>
 
             <!-- Main Content Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
