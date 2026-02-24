@@ -31,8 +31,7 @@
         }
 
         .table-container {
-            /* max-height removed for flex layout */
-            overflow-y: auto;
+            overflow-x: auto;
         }
 
         /* Tùy chỉnh thanh cuộn */
@@ -74,16 +73,16 @@
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 h-screen overflow-hidden flex flex-col relative">
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative">
     <!-- Dynamic background -->
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
         <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-sky-200/40 blur-[100px]"></div>
         <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-indigo-200/40 blur-[100px]"></div>
     </div>
 
-    <main class="container mx-auto max-w-7xl p-6 h-full flex flex-col overflow-hidden">
+    <main class="container mx-auto max-w-7xl p-6 flex-1 flex flex-col">
         <div
-            class="bg-white/80 backdrop-blur-xl shadow-xl rounded-3xl p-8 border border-white/50 animate-[fadeIn_0.5s_ease-out] h-full flex flex-col overflow-hidden">
+            class="bg-white/80 backdrop-blur-xl shadow-xl rounded-3xl p-8 border border-white/50 animate-[fadeIn_0.5s_ease-out] flex-1 flex flex-col">
             <div class="mb-6 flex items-center justify-between">
                 <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-blue-600 transition-colors font-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,7 +147,7 @@
             </div>
 
             <!-- Bảng hiển thị dữ liệu -->
-            <div class="table-container rounded-xl border border-gray-200 shadow-sm bg-white flex-1 min-h-0">
+            <div class="table-container rounded-xl border border-gray-200 shadow-sm bg-white">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50/80 backdrop-blur-sm">
                         <tr>
