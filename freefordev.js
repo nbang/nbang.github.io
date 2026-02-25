@@ -55,11 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Header
                 const header = document.createElement('div');
-                header.className = 'flex items-center gap-4 mb-6 sticky top-20 z-30 py-4 bg-slate-950/90 backdrop-blur-md -mx-4 px-4 md:mx-0 md:px-0 border-b border-white/5';
+                header.className = 'flex items-center gap-4 mb-6 sticky top-24 z-40 py-4 bg-gray-50/90 backdrop-blur-md -mx-4 px-4 md:mx-0 md:px-0 border-b border-gray-200';
                 header.innerHTML = `
-                    <h2 class="font-heading text-2xl font-bold text-slate-100 flex items-center gap-3">
+                    <h2 class="font-heading text-2xl font-bold text-gray-900 flex items-center gap-3">
                         ${category.name}
-                        <span class="text-xs font-mono font-normal text-slate-500 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md">${itemsToShow.length}</span>
+                        <span class="text-xs font-mono font-normal text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-md shadow-sm">${itemsToShow.length}</span>
                     </h2>
                 `;
                 section.appendChild(header);
@@ -72,20 +72,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const card = document.createElement('a');
                     card.href = item.link;
                     card.target = '_blank';
-                    card.className = 'group relative flex flex-col p-4 bg-slate-900/40 border border-slate-800/60 rounded-xl hover:bg-slate-800/60 hover:border-primary-500/30 hover:shadow-lg hover:shadow-primary-500/5 transition-all duration-300 overflow-hidden';
+                    card.className = 'group bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 cursor-pointer flex flex-col h-full animate-[fadeIn_0.5s_ease-out]';
 
                     card.innerHTML = `
-                        <div class="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-primary-500/0 to-primary-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        
                         <div class="relative z-10 flex flex-col h-full">
                             <div class="flex items-start justify-between gap-2 mb-2">
-                                <h3 class="font-bold text-slate-200 group-hover:text-primary-400 transition-colors line-clamp-1" title="${item.name}">
+                                <h3 class="font-bold text-gray-900 group-hover:text-sky-600 transition-colors line-clamp-1" title="${item.name}">
                                     ${item.name}
                                 </h3>
-                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-600 group-hover:text-primary-400 transition-colors pt-1"></i>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-gray-400 group-hover:text-sky-500 transition-colors pt-1"></i>
                             </div>
                             
-                            <p class="text-sm text-slate-400 leading-relaxed grow line-clamp-4 group-hover:text-slate-300 transition-colors">
+                            <p class="text-sm text-gray-500 leading-relaxed grow line-clamp-4 group-hover:text-gray-600 transition-colors">
                                 ${item.description}
                             </p>
                         </div>
