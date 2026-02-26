@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aniyomi Setup Guide | Bang's Tools</title>
+
+    <!-- Meta -->
+    <meta name="description" content="A comprehensive guide to setting up Aniyomi for the ultimate anime and manga experience." />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Outfit", sans-serif;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen relative overflow-x-hidden">
+    <!-- Dynamic background -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-pink-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-rose-200/40 blur-[100px]"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-4xl p-6 my-8 animate-[fadeIn_0.5s_ease-out]">
+        <!-- Header -->
+        <div class="mb-8 flex flex-wrap gap-4 justify-between items-center bg-white/80 backdrop-blur-xl border border-white/50 rounded-2xl p-4 shadow-sm sticky top-4 z-50">
+            <a href="index.html" class="inline-flex items-center text-gray-500 hover:text-pink-600 transition-colors font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Home
+            </a>
+            <div class="flex items-center gap-3 shrink-0">
+                <h1 class="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent hidden sm:block">
+                    Aniyomi Guide
+                </h1>
+            </div>
+            <a href="https://aniyomi.org" target="_blank"
+                class="inline-flex items-center justify-end text-gray-400 hover:text-gray-600 transition-colors" title="Visit Aniyomi">
+                <i class="fa-solid fa-book-open text-xl"></i>
+            </a>
+        </div>
+
+        <!-- Title Section -->
+        <div class="mb-10 text-center max-w-3xl mx-auto mt-12 block">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+                The Ultimate Aniyomi Setup
+            </h2>
+            <p class="text-gray-500 text-lg">
+                Everything you need to know about setting up Aniyomi with Extension Repositories and Torrent Addons for a perfect anime and manga experience.
+            </p>
+        </div>
+
+        <!-- Guide Content -->
+        <div class="bg-white/90 backdrop-blur-xl border border-white/50 rounded-2xl shadow-sm overflow-hidden text-gray-700 leading-relaxed">
+            
+            <!-- Section 1: Downloading & Installing -->
+            <div class="p-8 border-b border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-download text-pink-500"></i> Step 1: Downloading Aniyomi
+                </h2>
+                <p class="mb-4">
+                    Aniyomi is not available on the Google Play Store, so you'll need to download it from the <a href="https://aniyomi.org/" target="_blank" class="text-pink-600 hover:underline font-medium">official website</a> or use a fork.
+                </p>
+                <div class="bg-pink-50 p-4 rounded-xl border border-pink-100 mt-4 text-pink-800 text-sm">
+                    <strong>Note:</strong> The Stable version is recommended for most users to avoid bugs, while the Preview version contains the latest experimental features.
+                </div>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <a href="https://aniyomi.org/download" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors inline-flex items-center gap-2 text-sm">
+                        <i class="fa-brands fa-android"></i> Download APK
+                    </a>
+                </div>
+                <div class="mt-6 space-y-2">
+                    <p>Once downloaded, open the APK file to install Aniyomi. You might need to allow installation from unknown sources in your Android settings.</p>
+                </div>
+            </div>
+
+            <!-- Section 2: Initial Setup -->
+            <div class="p-8 border-b border-gray-100 bg-gray-50/50">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-gear text-rose-500"></i> Step 2: Initial Setup
+                </h2>
+                <p class="mb-4">
+                    When you first open Aniyomi, follow the onboarding process carefully to set up your storage correctly.
+                </p>
+                <ul class="list-decimal pl-6 space-y-2 mb-4">
+                    <li>Choose your preferred theme and click <strong>Next</strong>.</li>
+                    <li>Select a storage folder. It is recommended to create a new folder called <strong>Aniyomi</strong> in your internal storage or SD card.</li>
+                    <li>Grant the application permission to access your storage so it can save manga chapters and anime episodes.</li>
+                    <li>If you use tracking services (like MyAnimeList or AniList), go to <strong>More > Settings > Tracking</strong> to sign in.</li>
+                </ul>
+            </div>
+
+            <!-- Section 3: Extension Repositories -->
+            <div class="p-8 border-b border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-down text-purple-500"></i> Step 3: Adding Extensions
+                </h2>
+                <p class="mb-4">
+                    Aniyomi relies on community-maintained extensions to fetch anime and manga. You must add these repositories to Aniyomi.
+                </p>
+                
+                <h3 class="text-lg font-bold text-gray-800 mt-6 mb-3">Adding Repositories Manually:</h3>
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
+                    <ol class="list-decimal pl-5 space-y-3">
+                        <li>Go to <strong>More > Settings > Browse</strong>.</li>
+                        <li>For Anime, click on <strong>Anime extension repos</strong>. For Manga, click <strong>Manga extension repos</strong>.</li>
+                        <li>Click <strong>+ Add</strong> and paste the repository URLs:</li>
+                    </ol>
+                    <div class="mt-4 space-y-3 pl-5">
+                        <div>
+                            <span class="font-semibold text-sm">Kohi Den (Anime):</span>
+                            <code class="block bg-gray-200 p-2 rounded text-xs mt-1 overflow-x-auto whitespace-nowrap">https://raw.githubusercontent.com/kohi-den/extensions/main/index.min.json</code>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-sm">Keiyoushi (Manga):</span>
+                            <code class="block bg-gray-200 p-2 rounded text-xs mt-1 overflow-x-auto whitespace-nowrap">https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Torrent Addons -->
+            <div class="p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-puzzle-piece text-fuchsia-500"></i> Step 4: Torrentio Anime (Optional)
+                </h2>
+                
+                <p class="mb-4">
+                    If you want to stream torrents directly (usually aided by a Debrid service), you can install the Torrentio Anime extension.
+                </p>
+                
+                <h3 class="text-lg font-bold text-gray-800 mt-4 mb-2">Configure Torrentio Anime</h3>
+                <ol class="list-decimal pl-5 space-y-3 mb-6">
+                    <li>Go to <strong>Browse > Anime Extensions</strong> and search for <em>Torrentio Anime</em>. Install it.</li>
+                    <li>Click the settings icon next to the extension, then click settings next to <strong>Multi</strong>.</li>
+                    <li>Select your Debrid Provider (e.g., Real Debrid, AllDebrid, TorBox).</li>
+                    <li>Enter your API Token from your Debrid provider.</li>
+                </ol>
+
+                <div class="mt-8 text-center border-t border-gray-100 pt-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">You're All Set! 🎉</h3>
+                    <p class="text-gray-600">Search for any anime or manga in the Browse tab, add to your Library, and enjoy!</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10">
+        <div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+        <div class="mt-2 text-xs">
+            Based on the comprehensive guide by <a href="https://github.com/Viren070/guides" target="_blank" class="hover:text-gray-900 transition-colors underline">Viren070</a>.
+        </div>
+    </footer>
+</body>
+</html>
