@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="utils/image-libs.js"></script>
     <style>
         body {
             font-family: "Inter", sans-serif;
@@ -192,12 +192,11 @@
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = (f) => {
-                fabric.Image.fromURL(f.target.result, (img) => {
-                    img.scaleToWidth(canvas.width * 0.3); // Default size
-                    canvas.add(img);
-                    canvas.setActiveObject(img);
-                });
+            reader.onload = async (f) => {
+                const img = await fabric.FabricImage.fromURL(f.target.result);
+                img.scaleToWidth(canvas.width * 0.3); // Default size
+                canvas.add(img);
+                canvas.setActiveObject(img);
             };
             reader.readAsDataURL(file);
             watermarkImageInput.value = "";
@@ -224,39 +223,39 @@
             }
         });
 
-        function initCanvas(e) {
+        async function initCanvas(e) {
             const file = e.target.files[0];
             if (!file) return;
             originalFile = file;
+            await ImageGlobals.loadFabric();
 
             const reader = new FileReader();
-            reader.onload = (f) => {
-                fabric.Image.fromURL(f.target.result, (img) => {
-                    uploadView.classList.add("hidden");
-                    workspaceView.classList.remove("hidden");
+            reader.onload = async (f) => {
+                const img = await fabric.FabricImage.fromURL(f.target.result);
+                uploadView.classList.add("hidden");
+                workspaceView.classList.remove("hidden");
 
-                    // Logic to fit image in container basically
-                    const container = document.getElementById("canvasContainer");
-                    const maxWidth = container.clientWidth - 64; // padding
-                    const maxHeight = window.innerHeight * 0.6;
+                // Logic to fit image in container basically
+                const container = document.getElementById("canvasContainer");
+                const maxWidth = container.clientWidth - 64; // padding
+                const maxHeight = window.innerHeight * 0.6;
 
-                    let scale = 1;
-                    if (img.width > maxWidth || img.height > maxHeight) {
-                        scale = Math.min(maxWidth / img.width, maxHeight / img.height);
-                    }
+                let scale = 1;
+                if (img.width > maxWidth || img.height > maxHeight) {
+                    scale = Math.min(maxWidth / img.width, maxHeight / img.height);
+                }
 
-                    // Create canvas
-                    canvas = new fabric.Canvas("canvas");
-                    canvas.setWidth(img.width * scale);
-                    canvas.setHeight(img.height * scale);
+                // Create canvas
+                canvas = new fabric.Canvas("canvas");
+                canvas.setDimensions({ width: img.width * scale, height: img.height * scale });
 
-                    img.scale(scale);
-                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                img.scale(scale);
+                canvas.backgroundImage = img;
+                canvas.requestRenderAll();
 
-                    // Hook events
-                    canvas.on("selection:created", updateControlFromSelection);
-                    canvas.on("selection:updated", updateControlFromSelection);
-                });
+                // Hook events
+                canvas.on("selection:created", updateControlFromSelection);
+                canvas.on("selection:updated", updateControlFromSelection);
             };
             reader.readAsDataURL(file);
         }

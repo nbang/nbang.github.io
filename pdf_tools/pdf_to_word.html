@@ -130,18 +130,17 @@
 
     <!-- Libraries -->
     <script src="utils/pdf-libs.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     <script src="utils/ui-manager.js"></script>
 
     <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-
         let selectedFile = null;
         let pdfDoc = null;
         let extractedText = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
+            // Load pdf.js (v5.5.207 ES module) + standard libs
+            await PDFGlobals.loadPdfJsLib();
             await PDFGlobals.loadStandardLib();
 
             const dropZone = document.getElementById('dropZone');

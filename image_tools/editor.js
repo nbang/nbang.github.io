@@ -128,37 +128,38 @@ dropZone.addEventListener("drop", (e) => {
     }
 });
 
-function initCanvas(e) {
+async function initCanvas(e) {
     const file = e.target.files[0];
     if (!file) return;
     originalFile = file;
+    await ImageGlobals.loadFabric();
+    await ImageGlobals.loadCropper();
 
     const reader = new FileReader();
-    reader.onload = (f) => {
-        fabric.Image.fromURL(f.target.result, (img) => {
-            uploadView.classList.add("hidden");
-            workspaceView.classList.remove("hidden");
+    reader.onload = async (f) => {
+        const img = await fabric.FabricImage.fromURL(f.target.result);
+        uploadView.classList.add("hidden");
+        workspaceView.classList.remove("hidden");
 
-            const container = document.getElementById("canvasContainer");
-            const maxWidth = container.clientWidth - 40;
-            const maxHeight = window.innerHeight * 0.7;
+        const container = document.getElementById("canvasContainer");
+        const maxWidth = container.clientWidth - 40;
+        const maxHeight = window.innerHeight * 0.7;
 
-            let scale = 1;
-            if (img.width > maxWidth || img.height > maxHeight) {
-                scale = Math.min(maxWidth / img.width, maxHeight / img.height);
-            }
+        let scale = 1;
+        if (img.width > maxWidth || img.height > maxHeight) {
+            scale = Math.min(maxWidth / img.width, maxHeight / img.height);
+        }
 
-            // Create canvas
-            if (canvas) canvas.dispose();
-            canvas = new fabric.Canvas("canvas");
-            canvas.setWidth(img.width * scale);
-            canvas.setHeight(img.height * scale);
+        // Create canvas
+        if (canvas) canvas.dispose();
+        canvas = new fabric.Canvas("canvas");
+        canvas.setDimensions({ width: img.width * scale, height: img.height * scale });
 
-            img.scale(scale);
-            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+        img.scale(scale);
+        canvas.backgroundImage = img;
+        canvas.requestRenderAll();
 
-            setMode("filter"); // Default mode
-        });
+        setMode("filter"); // Default mode
     };
     reader.readAsDataURL(file);
 }
@@ -208,9 +209,9 @@ function applyFilter(type) {
     if (!img) return;
     img.filters = []; // clear
 
-    if (type === "grayscale") img.filters.push(new fabric.Image.filters.Grayscale());
-    if (type === "sepia") img.filters.push(new fabric.Image.filters.Sepia());
-    if (type === "invert") img.filters.push(new fabric.Image.filters.Invert());
+    if (type === "grayscale") img.filters.push(new fabric.filters.Grayscale());
+    if (type === "sepia") img.filters.push(new fabric.filters.Sepia());
+    if (type === "invert") img.filters.push(new fabric.filters.Invert());
 
     img.applyFilters();
     canvas.renderAll();
@@ -279,27 +280,26 @@ function cancelCrop() {
     if (currentMode === 'crop') setMode('filter');
 }
 
-function applyCrop() {
+async function applyCrop() {
     if (!cropper) return;
     const croppedCanvas = cropper.getCroppedCanvas();
     const croppedDataURL = croppedCanvas.toDataURL('image/png');
 
     // Load into fabric
-    fabric.Image.fromURL(croppedDataURL, (img) => {
-        // Clear current canvas
-        canvas.clear();
+    const img = await fabric.FabricImage.fromURL(croppedDataURL);
+    // Clear current canvas
+    canvas.clear();
 
-        // Resize canvas
-        canvas.setWidth(img.width);
-        canvas.setHeight(img.height);
+    // Resize canvas
+    canvas.setDimensions({ width: img.width, height: img.height });
 
-        // Set new background
-        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+    // Set new background
+    canvas.backgroundImage = img;
+    canvas.requestRenderAll();
 
-        // Cleanup
-        cancelCrop(); // This also switches mode back
-        setMode('filter');
-    });
+    // Cleanup
+    cancelCrop(); // This also switches mode back
+    setMode('filter');
 }
 
 // --- Rotation Logic ---
@@ -330,8 +330,7 @@ function rotateCanvas(angle) {
     const newW = Math.abs(Math.sin(rad) * h) + Math.abs(Math.cos(rad) * w);
     const newH = Math.abs(Math.sin(rad) * w) + Math.abs(Math.cos(rad) * h);
 
-    canvas.setWidth(newW);
-    canvas.setHeight(newH);
+    canvas.setDimensions({ width: newW, height: newH });
 
     img.left = newW / 2;
     img.top = newH / 2;
@@ -390,8 +389,7 @@ function applyResize() {
         bg.scaleToHeight(h);
     }
 
-    canvas.setWidth(w);
-    canvas.setHeight(h);
+    canvas.setDimensions({ width: w, height: h });
 
     // NOTE: This doesn't scale added text/blobs. To do that, we'd need to group everything or scale them too.
     // For a simple "Image Editor", scaling the background is primary.

@@ -116,13 +116,6 @@
         </button>
     </div>
 
-    <!-- Load pdf.js explicitly for this tool -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-    <script>
-        // Set worker src
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-    </script>
-
     <script src="utils/pdf-libs.js"></script>
     <script src="utils/ui-manager.js"></script>
     <script>
@@ -130,7 +123,8 @@
         let pdfDocument = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Needed for ZIP
+            // Load pdf.js (v5.5.207 ES module) + standard libs for ZIP/FileSaver
+            await PDFGlobals.loadPdfJsLib();
             await PDFGlobals.loadStandardLib();
 
             const dropZone = document.getElementById('dropZone');
