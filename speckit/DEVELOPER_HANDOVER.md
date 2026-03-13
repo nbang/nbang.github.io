@@ -34,12 +34,11 @@ This project (`nbang.github.io`) is a comprehensive suite of web-based tools and
 - **Layout**: Responsive 2-column "Side-by-Side" design (Input Image vs Extracted Result).
 - **Caching Strategy**: Standard browser Cache API + Transformers.js internal caching.
 
-#### **Compress Image (`compress.html`)**
+#### **Image Processor (`image_process.html`)**
 
-- **Requirement**: Reduce file size of JPG/PNG/WebP.
-- **Requirement**: Reduce file size of JPG/PNG/WebP.
+- **Requirement**: Unified interface to convert formats (JPG/PNG/GIF/WebP) and compress image file sizes.
 - **Library**: `browser-image-compression`.
-- **Approach**: Uses a web worker to process images off the main thread. Adjusts quality and max dimensions based on user input.
+- **Approach**: Uses an off-screen Canvas for format conversion, resizing, and transparent background filling. Passes the resulting blob to `browser-image-compression` running in a web worker to optimize file sizes dynamically.
 
 #### **Photo Editor (`editor.html`)**
 
@@ -54,13 +53,10 @@ This project (`nbang.github.io`) is a comprehensive suite of web-based tools and
 
 #### **Converters & Other Utilities**
 
-- **To/From JPG (`convert_to_jpg.html`, `convert_from_jpg.html`)**:
-- **Requirement**: Convert between image formats (PNG/GIF/WebP <-> JPG).
-- **Approach**: Canvas `toDataURL('image/jpeg')` or `toDataURL('image/png')`.
 - **HTML to Image (`html_to_image.html`)**:
 - **Requirement**: Convert pasted HTML code to an image.
-- **Library**: `html2canvas`.
-- **Approach**: Renders the DOM node containing the HTML to a canvas, then exports as JPG.
+- **Library**: `snapdom`.
+- **Approach**: Renders the DOM node containing the HTML to a high-quality JPG image using snapDOM.
 
 ---
 
@@ -72,7 +68,7 @@ This project (`nbang.github.io`) is a comprehensive suite of web-based tools and
 - **Technical Approach**:
 - **Markdown**: `marked` library for parsing.
 - **Diagrams**: `mermaid.js`. Code blocks marked with `mermaid` are replaced with rendered SVGs.
-- **Export**: `html2canvas` captures the preview element as a PNG image.
+- **Export**: `snapdom` captures the preview element as a PNG image.
 - **URL Loading**: `fetch` API to load raw Markdown content from external URLs (CORS dependent).
 - **Styling**: GitHub-like typography using customized Tailwind CSS classes (`.prose`).
 

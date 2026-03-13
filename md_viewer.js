@@ -1,4 +1,4 @@
-/* global marked, mermaid, html2canvas */
+/* global marked, mermaid, snapdom */
 // Initialize Mermaid
 mermaid.initialize({ startOnLoad: false, theme: 'default' });
 
@@ -147,17 +147,12 @@ exportBtn.addEventListener('click', async () => {
         // Add some padding/background for the image
         previewContent.style.backgroundColor = '#ffffff';
 
-        const canvas = await html2canvas(previewContent, {
-            scale: 2, // Retinat/HiDPI
-            useCORS: true,
-            backgroundColor: '#ffffff', // Ensure white background
-            logging: false,
-            // scrollX/Y: 0, 
-            // windowWidth: document.documentElement.offsetWidth,
-            // windowHeight: document.documentElement.offsetHeight
+        const img = await snapdom.toPng(previewContent, {
+            dpr: 2, // HiDPI
+            backgroundColor: '#ffffff' // Ensure white background
         });
 
-        const image = canvas.toDataURL("image/png");
+        const image = img.src;
         const link = document.createElement('a');
         link.download = `markdown-export-${Date.now()}.png`;
         link.href = image;

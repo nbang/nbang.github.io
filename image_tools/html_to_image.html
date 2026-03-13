@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js"></script>
     <style>
         body {
             font-family: "Inter", sans-serif;
@@ -107,11 +107,12 @@
             btnConvert.disabled = true;
             btnConvert.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Rendering...';
 
-            html2canvas(previewContainer, {
-                scale: 2, // High DPI
-                backgroundColor: null, // Transparent logic if needed, but JPG doesn't support it
-            }).then((canvas) => {
-                const url = canvas.toDataURL("image/jpeg", 0.9);
+            snapdom.toJpeg(previewContainer, {
+                dpr: 2, // High DPI
+                backgroundColor: '#FFFFFF', // JPG fallback background
+                quality: 0.9
+            }).then((img) => {
+                const url = img.src;
                 downloadLink.href = url;
                 downloadLink.download = "html_render.jpg";
 
