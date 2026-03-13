@@ -186,7 +186,7 @@ These tools utilize `pdf-lib` for direct byte-level manipulation of PDF files.
 
 #### **Vietnam Admin Data (`vietnam-admin.html`)**
 
-- **Data Source**: `vietnam-data.js` (~1.4MB). Defines `window.vietnamData`.
+- **Data Source**: `vietnam-data.json` (~1.4MB). Fetched dynamically.
 - **Requirement**: Searchable, filterable table of all Vietnam administrative units.
 - **Approach**:
 - Data loaded into memory.
@@ -195,7 +195,7 @@ These tools utilize `pdf-lib` for direct byte-level manipulation of PDF files.
 
 #### **HCM Merger Data (`hcm-admin.html`)**
 
-- **Data Source**: `hcm-data.js`. Defines `window.hcmData`.
+- **Data Source**: `hcm-data.json`. Fetched dynamically.
 - **Requirement**: Track status of administrative unit mergers in HCMC.
 - **Approach**: Similiar to Vietnam Admin, but specific to HCMC merger logic.
 

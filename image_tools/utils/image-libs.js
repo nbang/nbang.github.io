@@ -2,7 +2,6 @@
  * Image Tools Shared Libraries Manager
  * Handles loading of external dependencies and common image utility functions.
  */
-/* global Cropper */
 
 const IMAGE_LIBS = {
     fabric: "https://cdn.jsdelivr.net/npm/fabric@7.2.0/dist/index.min.js",

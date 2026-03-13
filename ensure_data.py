@@ -3,7 +3,7 @@ import re
 import json
 
 URL = "https://raw.githubusercontent.com/ripienaar/free-for-dev/refs/heads/master/README.md"
-OUTPUT_FILE = "d:\\work\\nbang.github.io\\freefordev-data.js"
+OUTPUT_FILE = "d:\\work\\nbang.github.io\\freefordev-data.json"
 
 def fetch_data():
     print(f"Downloading data from {URL}...")
@@ -92,10 +92,9 @@ def parse_markdown(md_content):
 def save_js(data):
     print(f"Saving to {OUTPUT_FILE}...")
     json_str = json.dumps(data, indent=2)
-    js_content = f"// Generated data from free-for-dev README\nwindow.freeForDevData = {json_str};\n"
     
     with open(OUTPUT_FILE, "w", encoding='utf-8') as f:
-        f.write(js_content)
+        f.write(json_str)
     print("Done.")
 
 def main():

@@ -45,6 +45,16 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://github.bangndd.qzz.io/stremio-guide.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://github.bangndd.qzz.io/aniyomi-guide.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- Image Tools -->
   <url>
     <loc>https://github.bangndd.qzz.io/image_tools/index.html</loc>
@@ -52,27 +62,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://github.bangndd.qzz.io/image_tools/ocr.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://github.bangndd.qzz.io/image_tools/editor.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://github.bangndd.qzz.io/image_tools/compress.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://github.bangndd.qzz.io/image_tools/convert_from_jpg.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://github.bangndd.qzz.io/image_tools/convert_to_jpg.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -82,7 +72,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://github.bangndd.qzz.io/image_tools/image_process.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://github.bangndd.qzz.io/image_tools/meme.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://github.bangndd.qzz.io/image_tools/ocr.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

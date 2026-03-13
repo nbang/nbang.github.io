@@ -69,10 +69,10 @@ module.exports = [
                 DxfParser: "readonly",
                 proj4: "readonly",
                 tokml: "readonly",
-                hcmData: "readonly",
-                vietnamData: "readonly",
-                promptData: "readonly",
-                freeForDevData: "readonly"
+                Tesseract: "readonly",
+                ImageGlobals: "readonly",
+                fabric: "readonly",
+                Cropper: "readonly"
             },
         },
     },

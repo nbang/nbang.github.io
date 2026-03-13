@@ -4,15 +4,17 @@ let currentSortKey = 'code';
 let currentSortDirection = 'asc';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Use the global variable 'vietnamData' loaded from vietnam-data.js
-    if (typeof vietnamData !== 'undefined') {
-        processData(vietnamData);
-        populateFilters();
-        setupEventListeners();
-        sortAndRender();
-    } else {
-        console.error('Error: vietnamData is not defined. Make sure vietnam-data.js is loaded.');
-    }
+    fetch('vietnam-data.json')
+        .then(response => response.json())
+        .then(jsonData => {
+            processData(jsonData);
+            populateFilters();
+            setupEventListeners();
+            sortAndRender();
+        })
+        .catch(error => {
+            console.error('Error fetching vietnam-data.json:', error);
+        });
 });
 
 /**

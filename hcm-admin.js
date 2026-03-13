@@ -4,16 +4,18 @@ let currentSortKey = 'Code';
 let currentSortDirection = 'asc';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Use the global variable 'hcmData' loaded from data.js
-    if (typeof hcmData !== 'undefined') {
-        data = hcmData;
-        filteredData = [...data];
-        populateFilters();
-        setupEventListeners();
-        sortAndRender();
-    } else {
-        console.error('Error: hcmData is not defined. Make sure data.js is loaded.');
-    }
+    fetch('hcm-data.json')
+        .then(response => response.json())
+        .then(jsonData => {
+            data = jsonData;
+            filteredData = [...data];
+            populateFilters();
+            setupEventListeners();
+            sortAndRender();
+        })
+        .catch(error => {
+            console.error('Error fetching hcm-data.json:', error);
+        });
 });
 
 /**
