@@ -442,3 +442,17 @@ function saveImage() {
     btnSave.disabled = false;
     btnSave.innerHTML = 'Save Image <i class="fa-solid fa-floppy-disk"></i>';
 }
+
+// Expose functions for inline HTML template event handlers
+window.applyFilter = applyFilter;
+window.setCropRatio = setCropRatio;
+window.applyCrop = applyCrop;
+window.cancelCrop = cancelCrop;
+window.rotateCanvas = rotateCanvas;
+window.flipCanvas = flipCanvas;
+window.onResizeInput = onResizeInput;
+window.applyResize = applyResize;
+window.updateBrush = updateBrush;
+window.toggleDrawing = toggleDrawing;
+window.addNewText = addNewText;
+window.deleteActive = deleteActive;

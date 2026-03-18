@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.min.js"></script>
+    <script src="https://unpkg.com/@zumer/snapdom@latest/dist/snapdom.js"></script>
     <style>
         body {
             font-family: "Inter", sans-serif;
@@ -107,7 +107,7 @@
             btnConvert.disabled = true;
             btnConvert.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Rendering...';
 
-            snapdom.toJpeg(previewContainer, {
+            snapdom.toJpg(previewContainer, {
                 dpr: 2, // High DPI
                 backgroundColor: '#FFFFFF', // JPG fallback background
                 quality: 0.9
