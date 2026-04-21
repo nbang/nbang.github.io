@@ -6,7 +6,7 @@
         "Category": "Code Generation",
         "Prompt": "Create an interactive Sudoku game using HTML5, CSS3, and JavaScript. Build a clean, accessible game board with intuitive controls. Implement difficulty levels with appropriate puzzle generation algorithms. Add hint system with multiple levels of assistance. Include note-taking functionality for candidate numbers. Implement timer with pause and resume. Add error checking with optional immediate feedback. Include game saving and loading with multiple slots. Create statistics tracking for wins, times, and difficulty levels. Add printable puzzle generation. Implement keyboard controls and accessibility features.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-001",
@@ -33,7 +33,7 @@
         "Category": "Code Generation",
         "Prompt": "Develop a first-person shooter game using Three.js and JavaScript. Create detailed weapon models with realistic animations and effects. Implement precise hit detection and damage systems. Design multiple game levels with various environments and objectives. Add AI enemies with pathfinding and combat behaviors. Create particle effects for muzzle flashes, impacts, and explosions. Implement multiplayer mode with team-based objectives. Include weapon pickup and inventory system. Add sound effects for weapons, footsteps, and environment. Create detailed scoring and statistics tracking. Implement replay system for kill cams and match highlights.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-004",
@@ -42,7 +42,7 @@
         "Category": "Code Generation",
         "Prompt": "Create an exciting 3D racing game using Three.js and JavaScript. Implement realistic vehicle physics with suspension, tire friction, and aerodynamics. Create detailed car models with customizable paint and upgrades. Design multiple race tracks with varying terrain and obstacles. Add AI opponents with different difficulty levels and racing behaviors. Implement a split-screen multiplayer mode for local racing. Include a comprehensive HUD showing speed, lap times, position, and minimap. Create particle effects for tire smoke, engine effects, and weather. Add dynamic day/night cycle with realistic lighting. Implement race modes including time trial, championship, and elimination. Include replay system with multiple camera angles.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-005",
@@ -51,7 +51,7 @@
         "Category": "Code Generation",
         "Prompt": "Build an immersive 3D space exploration game using Three.js and JavaScript. Create a vast universe with procedurally generated planets, stars, and nebulae. Implement realistic spacecraft controls with Newtonian physics. Add detailed planet surfaces with terrain generation and atmospheric effects. Create space stations and outposts for trading and missions. Implement resource collection and cargo management systems. Add alien species with unique behaviors and interactions. Create wormhole travel effects between star systems. Include detailed ship customization and upgrade system. Implement mining and combat mechanics with weapon effects. Add mission system with story elements and objectives.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-006",
@@ -85,7 +85,7 @@
         "Category": "Code Generation",
         "Prompt": "Build a professional-grade color tool with HTML5, CSS3 and JavaScript for designers and developers. Create an intuitive interface with multiple selection methods including eyedropper, color wheel, sliders, and input fields. Implement real-time conversion between color formats (RGB, RGBA, HSL, HSLA, HEX, CMYK) with copy functionality. Add a color palette generator with options for complementary, analogous, triadic, tetradic, and monochromatic schemes. Include a favorites system with named collections and export options. Implement color harmony rules visualization with interactive adjustment. Create a gradient generator supporting linear, radial, and conic gradients with multiple color stops. Add an accessibility checker for WCAG compliance with contrast ratios and colorblindness simulation. Implement one-click copy for CSS, SCSS, and SVG code snippets. Include a color naming algorithm to suggest names for selected colors. Support exporting palettes to various formats (Adobe ASE, JSON, CSS variables, SCSS).",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-009",
@@ -116,7 +116,7 @@
         "Parameters": [
             "export_format:csv"
         ],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-012",
@@ -125,7 +125,7 @@
         "Category": "Code Generation",
         "Prompt": "Develop a feature-rich chess game using HTML5, CSS3, and JavaScript. Create a realistic chessboard with proper piece rendering. Implement standard chess rules with move validation. Add move highlighting and piece movement animation. Include game clock with multiple time control options. Implement notation recording with PGN export. Add game analysis with move evaluation. Include AI opponent with adjustable difficulty levels. Support online play with WebRTC or WebSocket. Add opening book and common patterns recognition. Implement tournament mode with brackets and scoring.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-013",
@@ -293,7 +293,7 @@
         "Category": "Code Generation",
         "Prompt": "Develop a comprehensive flashcard study system using HTML5, CSS3, and JavaScript. Create an intuitive interface for card creation and review. Implement spaced repetition algorithm for optimized learning. Add support for text, images, and audio on cards. Include card categorization with decks and tags. Implement study sessions with performance tracking. Add self-assessment with confidence levels. Create statistics dashboard showing learning progress. Support import/export of card decks in standard formats. Implement keyboard shortcuts for efficient review. Add dark mode and customizable themes.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-028",
@@ -313,7 +313,7 @@
         "Category": "Code Generation",
         "Prompt": "Create a high-performance HTTP benchmarking tool in Go. Implement concurrent request generation with configurable thread count. Add detailed statistics including latency, throughput, and error rates. Include support for HTTP/1.1, HTTP/2, and HTTP/3. Implement custom header and cookie management. Add request templating for dynamic content. Include response validation with regex and status code checking. Implement TLS configuration with certificate validation options. Add load profile configuration with ramp-up and steady-state phases. Include detailed reporting with percentiles and histograms. Implement distributed testing mode for high-load scenarios.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-030",
@@ -322,7 +322,7 @@
         "Category": "Code Generation",
         "Prompt": "Create a habit tracking application using HTML5, CSS3, and JavaScript. Build a clean interface showing daily, weekly, and monthly views. Implement habit creation with frequency, reminders, and goals. Add streak tracking with visual indicators and milestone celebrations. Include detailed statistics and progress graphs. Support habit categories and tags for organization. Implement calendar integration for scheduling. Add data visualization showing patterns and trends. Create a responsive design for all devices. Include data export and backup functionality. Add gamification elements with achievements and rewards.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-031",
@@ -358,7 +358,7 @@
         "Category": "Code Generation",
         "Prompt": "Build a Kanban project management board using HTML5, CSS3, and JavaScript. Create a flexible board layout with customizable columns (To Do, In Progress, Done, etc.). Implement drag-and-drop card movement between columns with smooth animations. Add card creation with rich text formatting, labels, due dates, and priority levels. Include user assignment with avatars and filtering by assignee. Implement card comments and activity history. Add board customization with column reordering and color themes. Support multiple boards with quick switching. Implement data persistence using localStorage with export/import functionality. Create a responsive design that adapts to different screen sizes. Add keyboard shortcuts for common actions.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-035",
@@ -412,7 +412,7 @@
         "Category": "Code Generation",
         "Prompt": "Create an immersive multiplayer airplane combat game using Three.js, HTML5, CSS3, and JavaScript with WebSocket for real-time networking. Implement a detailed 3D airplane model with realistic flight physics including pitch, yaw, roll, and throttle control. Add smooth camera controls that follow the player's plane with configurable views (cockpit, chase, orbital). Create a skybox environment with dynamic time of day and weather effects. Implement multiplayer functionality using WebSocket for real-time position updates, combat, and game state synchronization. Add weapons systems with projectile physics, hit detection, and damage models. Include particle effects for engine exhaust, weapon fire, explosions, and damage. Create a HUD displaying speed, altitude, heading, radar, health, and weapon status. Implement sound effects for engines, weapons, explosions, and environmental audio using the Web Audio API. Add match types including deathmatch and team battles with scoring system. Include customizable plane loadouts with different weapons and abilities. Create a lobby system for match creation and team assignment. Implement client-side prediction and lag compensation for smooth multiplayer experience. Add mini-map showing player positions and objectives. Include replay system for match playback and highlight creation. Create responsive controls supporting both keyboard/mouse and gamepad input.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-041",
@@ -1056,7 +1056,7 @@
         "Category": "Code Generation",
         "Prompt": "Create a client-side file encryption tool using HTML5, CSS3, and JavaScript with the Web Crypto API. Build a drag-and-drop interface for file selection with progress indicators. Implement AES-256-GCM encryption with secure key derivation from passwords (PBKDF2). Add support for encrypting multiple files simultaneously with batch processing. Include password strength enforcement with entropy calculation. Generate downloadable encrypted files with custom file extension. Create a decryption interface with password verification. Implement secure memory handling with automatic clearing of sensitive data. Add detailed logs of encryption operations without storing sensitive information. Include export/import of encryption keys with proper security warnings. Support for large files using streaming encryption and chunked processing.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-107",
@@ -1065,7 +1065,7 @@
         "Category": "Code Generation",
         "Prompt": "Build a high-performance file system indexer and search tool in Go. Implement recursive directory traversal with configurable depth. Add file metadata extraction including size, dates, and permissions. Include content indexing with optional full-text search. Implement advanced query syntax with boolean operators and wildcards. Add incremental indexing for performance. Include export functionality in JSON and CSV formats. Implement search result highlighting. Add duplicate file detection using checksums. Include performance statistics and progress reporting. Implement concurrent processing for multi-core utilization.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "DEV-108",
@@ -1083,10 +1083,10 @@
         "Category": "Code Generation",
         "Prompt": "Create a recipe finder application using HTML5, CSS3, JavaScript and a food API. Build a visually appealing interface with food photography and intuitive navigation. Implement advanced search with filtering by ingredients, cuisine, diet restrictions, and preparation time. Add user ratings and reviews with star system. Include detailed nutritional information with visual indicators for calories, macros, and allergens. Support recipe saving and categorization into collections. Implement a meal planning calendar with drag-and-drop functionality. Add automatic serving size adjustment with quantity recalculation. Include cooking mode with step-by-step instructions and timers. Support offline access to saved recipes. Add social sharing functionality for favorite recipes.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
-        "Id": "DEV-130",
+        "Id": "DEV-113",
         "Title": "Architect Guide for Programmers",
         "User": "Developer",
         "Category": "Documentation",
@@ -1440,7 +1440,7 @@
         "Id": "ENG-037",
         "Title": "Diagram customer journey through app",
         "User": "Engineer",
-        "Category": "Visualization",
+        "Category": "Customer Success",
         "Prompt": "Create a customer journey map through our mobile banking app. Context: Steps include onboarding, account linking, transactions, and support. Output: A visual flowchart with steps, screens, and decision points.",
         "Parameters": [],
         "Type": "IMAGE"
@@ -1473,10 +1473,10 @@
         "Type": "IMAGE"
     },
     {
-        "Id": "ENG-041",
+        "Id": "DEV-110",
         "Title": "Local Privacy-First PDF RAG System",
-        "User": "Engineer",
-        "Category": "Agent",
+        "User": "Developer",
+        "Category": "Code Generation",
         "Prompt": "# AI Development Specification (OpenSpec)\n**Project:** Local Privacy-First PDF RAG System\n**Goal:** Build a minimalistic, clean, and beautiful web app to process, index, and chat with PDFs securely offline.\n\n## 1. Product Requirements\n- **100% Local Execution:** Absolutely no internet-connected third-party APIs may be used for processing, embeddings, or text generation. Privacy is strictly mandated.\n- **Features:**\n  1. **Document Management:** Upload PDFs through the UI and extract their contents into structured local markdown files.\n  2. **Interactivity:** A conversational interface (chat) scoped specifically to the selected (already uploaded) PDFs utilizing a Retrieval-Augmented Generation (RAG) agent.\n  3. **Model Selection dynamically:** Allow the user to pick from available local LLMs for the chat directly via the UI interface.\n\n## 2. Technical Stack Specification\n- **UI Framework:** Streamlit (emphasize a minimalistic, easy-to-understand, and beautiful design)\n- **AI Orchestration Framework:** LangChain\n- **LLM Engine:** Ollama \n- **Document Processing:** Open-source Python PDF parsing library (e.g., PyMuPDF, Unstructured, or pdfplumber)\n- **Vector Storage:** In-memory vector database (e.g., ChromaDB, FAISS, or LanceDB)\n\n## 3. Design and Aesthetics Considerations\n- **Simplicity:** Ensure a clutter-free user experience with clear steps for uploading and querying.\n- **Feedback:** Provide reliable visual indicators (spinners, success messages) during vectorization and LLM inference generation.\n\n## 4. Acceptance Criteria\n- [ ] Application starts successfully with no required cloud credentials.\n- [ ] A PDF can be uploaded, parsed to markdown, and indexed into a local vector store without crashes.\n- [ ] Users can query the knowledge base and receive accurate citations back from the local LLM.\n- [ ] Users can switch the active local LLM from the user interface list. ",
         "Parameters": [],
         "Type": "AGENT"
@@ -1490,7 +1490,7 @@
         "Parameters": [
             "repositoryName"
         ],
-        "Type": "TEXT"
+        "Type": "AGENT"
     },
     {
         "Id": "ENG-043",
@@ -1695,7 +1695,7 @@
         "Id": "EXE-015",
         "Title": "Analyze quarterly business metrics",
         "User": "Executive",
-        "Category": "Strategy",
+        "Category": "Analysis",
         "Prompt": "I'm reviewing performance data for Q{{quarter}}. Analyze this dataset {{upload_csv}} for key trends in revenue, churn, and customer acquisition. Highlight 3 insights I should share with the board and suggest follow-up questions I should ask.",
         "Parameters": [
             "quarter",
@@ -1778,12 +1778,12 @@
         "Id": "EXE-022",
         "Title": "Illustrate a future product Vision",
         "User": "Executive",
-        "Category": "Strategy",
+        "Category": "Product Promotion",
         "Prompt": "Create a conceptual image of a future product vision for {{industry_or_product}}. Highlight features that reflect innovation and customer benefit. Style should be forward-looking, abstract but clear.",
         "Parameters": [
             "industry_or_product"
         ],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "EXE-023",
@@ -1827,7 +1827,7 @@
             "year_1",
             "year_3"
         ],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "EXE-027",
@@ -1855,7 +1855,7 @@
         "Id": "EXE-029",
         "Title": "Enterprise Sponsorship",
         "User": "Executive",
-        "Category": "Strategy",
+        "Category": "Finance",
         "Prompt": "Design enterprise-level sponsorship tiers ($500, $1000, $5000) with benefits like priority support, custom features, and brand visibility for my {{project}}.",
         "Parameters": [
             "project"
@@ -1915,7 +1915,7 @@
         "Id": "HRM-000",
         "Title": "Analyze exit survey themes",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Review the following employee exit survey responses and identify the top recurring themes, concerns, and sentiment trends. These responses are from {{department_or_timeframe}}. Provide a thematic summary with bullet points and representative quotes. {{responses_here}}",
         "Parameters": [
             "department_or_timeframe",
@@ -1927,7 +1927,7 @@
         "Id": "HRM-001",
         "Title": "Analyze trends in employee attrition",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Analysis",
         "Prompt": "Analyze this employee attrition dataset from the last 12 months. Focus on patterns by department, tenure, and exit reasons. Summarize key insights and suggest 2-3 actions HR should consider. Present findings as bullet points followed by a short paragraph. {{upload_your_csv_or_table_here}}",
         "Parameters": [
             "upload_your_csv_or_table_here"
@@ -1938,7 +1938,7 @@
         "Id": "HRM-002",
         "Title": "Benchmark average DEI budgets",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Research",
         "Prompt": "Research typical DEI program budgets and team sizes for companies with 500-5,000 employees in the US. Include industry benchmarks if available. Present key insights with 3 cited data points and include a simple bullet summary for leadership.",
         "Parameters": [],
         "Type": "TEXT"
@@ -1947,7 +1947,7 @@
         "Id": "HRM-003",
         "Title": "Brainstorm engagement initiatives",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Generate five practical ideas for improving employee engagement across {{company_or_team_or_region}}. Consider our hybrid work model, current engagement scores, and time/resource constraints. Present each idea with a short description, expected impact, and implementation effort level.",
         "Parameters": [
             "company_or_team_or_region"
@@ -1958,7 +1958,7 @@
         "Id": "HRM-004",
         "Title": "Brainstorm wellbeing initiatives",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Suggest three tailored wellbeing programs for employees at {{company_or_team}}, considering recent feedback and budget constraints. Include rationale, estimated costs, and potential success metrics. Present ideas as a short proposal summary.",
         "Parameters": [
             "company_or_team"
@@ -1969,7 +1969,7 @@
         "Id": "HRM-005",
         "Title": "Compare employee retention strategies across industries",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Research",
         "Prompt": "{{you_are_building_a_retention_initiative_for_a_midsized_tech_firm}} Research 3 innovative, high-impact employee retention strategies used in tech, healthcare, and financial services. Focus on post-pandemic engagement challenges. Include cited examples and summarize key elements in a side-by-side comparison chart.",
         "Parameters": [
             "you_are_building_a_retention_initiative_for_a_midsized_tech_firm"
@@ -1980,7 +1980,7 @@
         "Id": "HRM-006",
         "Title": "Create a DEI workshop outline",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Design a one-hour DEI workshop for employees at {{company_or_team}}. The goal is to foster inclusive communication and awareness. Include an agenda, key learning objectives, interactive activities, and 2-3 discussion questions.",
         "Parameters": [
             "company_or_team"
@@ -1991,7 +1991,7 @@
         "Id": "HRM-007",
         "Title": "Create interview questions",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Develop behavioral interview questions aligned to our company values for a {{role_title}} opening in {{team_or_department}}. We want to assess both technical skills and culture fit. Provide 6-8 questions grouped by competency.",
         "Parameters": [
             "role_title",
@@ -2003,7 +2003,7 @@
         "Id": "HRM-008",
         "Title": "Draft a return-to-office FAQ",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Write an employee-facing FAQ to support our return-to-office transition. Use this background information {{key_rto_plan_details}}. Cover top employee concerns (e.g. hybrid schedules, health protocols, expectations) in a warm and clear tone. Include 5-7 questions with answers.",
         "Parameters": [
             "key_rto_plan_details"
@@ -2014,7 +2014,7 @@
         "Id": "HRM-009",
         "Title": "Explore top HR tech trends for 2026",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "{{you_are_briefing_hr_leadership_on_tech_trends}} Research and summarize the top 5 HR technology trends expected to shape 2026. Include use cases, vendor examples, and implications for mid-sized companies. Synthesize insights into a short executive briefing with citations and actionable recommendations.",
         "Parameters": [
             "you_are_briefing_hr_leadership_on_tech_trends"
@@ -2025,7 +2025,7 @@
         "Id": "HRM-010",
         "Title": "Generate a compensation benchmarking report",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Based on this internal salary data and industry benchmarks, highlight pay discrepancies by role, gender, and level. Include averages, standard deviation, and a visual if possible. Provide a short summary for leadership review. {{upload_benchmark_and_internal_files}}",
         "Parameters": [
             "upload_benchmark_and_internal_files"
@@ -2036,7 +2036,7 @@
         "Id": "HRM-011",
         "Title": "Generate performance review prompts",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Develop a set of five questions for performance reviews that encourage reflection, future goal setting, and actionable feedback. Tailor to {{function_or_team}}, and keep the tone constructive and growth-oriented. Present the questions as a list for a review form.",
         "Parameters": [
             "function_or_team"
@@ -2047,7 +2047,7 @@
         "Id": "HRM-012",
         "Title": "Illustrate a hybrid work policy",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Generate an illustration showing a hybrid work scenario: a person working from home, a coworking space, and a modern office. Style: flat illustration or soft 3D. Intended for use in HR documentation.",
         "Parameters": [],
         "Type": "TEXT"
@@ -2056,7 +2056,7 @@
         "Id": "HRM-013",
         "Title": "Plan onboarding week",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Build a 5-day onboarding schedule for new hires in {{department_or_region}}. Include orientation goals, topics to cover, people to meet, and relevant tools or resources. Present it in a simple day-by-day table with time blocks if helpful.",
         "Parameters": [
             "department_or_region"
@@ -2067,7 +2067,7 @@
         "Id": "HRM-014",
         "Title": "Recruiter",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "I want you to act as a recruiter. I will provide some information about job openings, and it will be your job to come up with strategies for sourcing qualified applicants. This could include reaching out to potential candidates through social media, networking events or even attending career fairs in order to find the best people for each role. My first request is \"I need help improve my CV.\"",
         "Parameters": [],
         "Type": "TEXT"
@@ -2076,7 +2076,7 @@
         "Id": "HRM-015",
         "Title": "Write a job description draft",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Based on this information {{job_responsibilities_or_skills_or_team_context}}, write a professional job description for a {{job_title}}. Include a short intro, responsibilities, required qualifications, and what makes the role appealing.",
         "Parameters": [
             "job_responsibilities_or_skills_or_team_context",
@@ -2088,7 +2088,7 @@
         "Id": "HRM-016",
         "Title": "Write internal recognition blurb",
         "User": "HR",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Draft a short recognition message to celebrate {{employee_or_team}} for their recent accomplishment: {{describe_what_they_did}}. Write it in a warm, appreciative tone suitable for Slack or email. Keep it under 100 words.",
         "Parameters": [
             "employee_or_team",
@@ -2141,7 +2141,7 @@
         "Id": "HRM-021",
         "Title": "Create a welcome banner for onboarding",
         "User": "HR",
-        "Category": "Visualization",
+        "Category": "Personnel",
         "Prompt": "Create an image for a new employee onboarding welcome banner. Style: clean and modern. Mood: warm and inclusive. Format: horizontal banner with space for overlay text. Include visual cues like a diverse team, coffee cups, or digital collaboration tools.",
         "Parameters": [],
         "Type": "IMAGE"
@@ -2150,7 +2150,7 @@
         "Id": "HRM-022",
         "Title": "Design an internal DEI poster",
         "User": "HR",
-        "Category": "Visualization",
+        "Category": "Personnel",
         "Prompt": "Create a poster-style image for an internal DEI campaign. Style: bold, minimal. Include abstract representations of diversity (hands, overlapping shapes, color blocks). Mood: optimistic and forward-looking. Include placeholder space for a slogan or quote.",
         "Parameters": [],
         "Type": "IMAGE"
@@ -2159,7 +2159,7 @@
         "Id": "HRM-023",
         "Title": "Visualize the employee lifecycle",
         "User": "HR",
-        "Category": "Visualization",
+        "Category": "Personnel",
         "Prompt": "Create a simple visual diagram of the employee lifecycle: attract, onboard, develop, retain, offboard. Use icons or abstract figures to represent each phase. Style: corporate presentation-ready.",
         "Parameters": [],
         "Type": "IMAGE"
@@ -2691,13 +2691,13 @@
         "Category": "Finance",
         "Prompt": "Create an image of a revenue growth funnel with labeled stages: Acquisition → Activation → Revenue → Retention → Expansion. Use a clean, modern style suitable for an executive finance presentation. Include icons for each stage.",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "IMAGE"
     },
     {
         "Id": "MGR-023",
         "Title": "Draft employee survey questions",
         "User": "Manager",
-        "Category": "HRM",
+        "Category": "Personnel",
         "Prompt": "Write 6-8 employee survey questions designed to measure {{belonging_or_manager_trust_or_workload_balance}}. Ensure the questions are neutral and easy to understand. Format them as one question per line with rating scale suggestions.",
         "Parameters": [
             "belonging_or_manager_trust_or_workload_balance"
@@ -2847,7 +2847,7 @@
         "Id": "MGR-037",
         "Title": "Depict a team growth journey",
         "User": "Manager",
-        "Category": "Visualization",
+        "Category": "Personnel",
         "Prompt": "Design a visual metaphor for a team's growth journey over a year. Include representations of challenges, milestones, and collaboration. Style should be inspiring, like a timeline or path through a landscape.",
         "Parameters": [],
         "Type": "IMAGE"
@@ -2885,7 +2885,7 @@
         "Id": "MGR-041",
         "Title": "Summarize team culture visually",
         "User": "Manager",
-        "Category": "Visualization",
+        "Category": "Personnel",
         "Prompt": "Design an image that represents our team culture. Our values are {{3_to_5_values}}. Use icons or illustrations to match each value, and organize in a clean layout suitable for a wiki or mural board.",
         "Parameters": [
             "3_to_5_values"
@@ -4109,7 +4109,7 @@
         "Id": "SAL-021",
         "Title": "Draft a team celebration graphic",
         "User": "Sales",
-        "Category": "Visualization",
+        "Category": "Personnel",
         "Prompt": "Design a fun, modern graphic to celebrate “Top Rep of the Month.” Include a placeholder for name/photo and stylized trophy or badge. Style should match internal brand or newsletter vibe.",
         "Parameters": [],
         "Type": "IMAGE"
@@ -4118,7 +4118,7 @@
         "Id": "SAL-022",
         "Title": "Illustrate key sales personas",
         "User": "Sales",
-        "Category": "Visualization",
+        "Category": "Personnel",
         "Prompt": "Create professional illustrations for 3 personas: (1) CFO of a mid-market company, (2) VP of IT at a global enterprise, and (3) Operations Manager at a logistics firm. Style should be flat and modern, ideal for use in a one-pager or training slide.",
         "Parameters": [],
         "Type": "IMAGE"
@@ -4496,10 +4496,10 @@
         "Type": "TEXT"
     },
     {
-        "Id": "ALL-035",
+        "Id": "DEV-135",
         "Title": "Blender Object Maker",
-        "User": "Everyone",
-        "Category": "Role Play",
+        "User": "Developer",
+        "Category": "Code Generation",
         "Prompt": "Act as a Blender 3D artist. You are an expert in using Blender to create 3D objects and models with precision and creativity. Your task is to design a 3D object based on the user's specifications and generate a Blender file (.blend) for download.\n\nYou will:\n- Interpret the user's requirements and translate them into a detailed 3D model.\n- Suggest materials, textures, and lighting setups for the object.\n- Provide step-by-step guidance or scripts to help the user create the object themselves in Blender.\n- Generate a Blender file (.blend) containing the completed 3D model and provide it as a downloadable file.\n\nRules:\n- Ensure all steps are compatible with Blender's latest version.\n- Use concise and clear explanations.\n- Incorporate industry best practices to optimize the 3D model for rendering or animation.\n- Ensure the .blend file is organized with named collections, materials, and objects for better usability.\n\nExample:\nUser request: Create a 3D low-poly tree.\nResponse: \"To create a low-poly tree in Blender, follow these steps:...\n1. Open Blender and create a new project.\n2. Add a cylinder mesh for the tree trunk and scale it down...\n3. Add a cone mesh for the foliage and scale it appropriately...\"\n\nAdditionally, here is the .blend file for the low-poly tree: {{download_link}}.",
         "Parameters": [
             "download_link"
@@ -4687,7 +4687,7 @@
         "Category": "Role Play",
         "Prompt": "You are a senior career coach with a fun sci-fi obsession. Create a **Master Skills & Experience Summary** in markdown for [USER NAME].\n\nUSER JOB GOAL: [THEIR TARGET ROLE/INDUSTRY]\n\nUSER INPUT (raw bullets, stories, dates, tools, roles, achievements):  \n[PASTE EVERYTHING HERE]\n\nOUTPUT EXACTLY THIS STRUCTURE (no extras):\n\n# [USER NAME] - Master Skills & Experience Summary  \n*Last Updated: [CURRENT DATE & TIME EST] - **PATCH v[YYYY-MM-DD-HHMM]** applied*  \n*Latest Revision: [CURRENT DATE & TIME EST]*\n\n## Professional Overview  \n[1-paragraph bio: years exp, companies, top 3 wins **tied to job goal**, key tools, location/remote.]\n\n## Top 10 Market-Demand Skills Matrix (PRIORITIZE JOB GOAL)  \n**RESEARCH FIRST**: Use real-time web search (job boards, LinkedIn, Indeed, Glassdoor, O*NET, BLS, Google Jobs) to identify the **top 10 most frequently required or high-impact skills** for **[USER JOB GOAL]** in the current market (focus on [LOCATION] if specified, else national/remote trends).  \n- Scrape **5-10 recent job postings** (posted <90 days).  \n- Extract **technical + soft skills** listed as “required” or “preferred.”  \n- Rank by **frequency × criticality** (e.g., “must-have” > “nice-to-have”).  \n- Include **emerging tools/standards** (e.g., AI, Zero Trust, GenAI, etc.).  \n\n**THEN**: Map **USER INPUT** + known experience to each skill:  \n- **Expert**: Multiple examples, leadership, metrics  \n- **Strong**: Solid use, 1-2 projects  \n- **Partial**: Exposure, adjacent work, learning  \n- **No**: No evidence → **flag for user review**  \n- **STAR Proof**: 1-line proof (Situation-Task-Action-Result) or note  \n- **ATS Keywords**: Pull exact phrases from postings  \n\n| # | Skill | Level (Expert/Strong/Partial/No) | STAR Proof | ATS Keywords |\n|---|-------|-------|------------|--------------|\n| 1 | [Researched Skill #1] | ... | ... | ... |\n| ... up to 10 |\n\n## Skill Gap Action Plan  \n*Review & strengthen these to close the gap:*  \n- **[Skill X] (Partial)** → _Suggested proof: [tool/project/date idea]_  \n- **[Skill Y] (No)** → _Fast-track: [free course, cert, or micro-project]_  \n\n## Core Expertise Areas - Role-Tagged (GROUP BY JOB GOAL RELEVANCE)  \n### [Section #1 - most relevant to goal]  \n- [Bullet with metric + date]  \n  **Role:** [Role → Role - Company]  \n\n[Repeat sections ordered by goal fit]\n\n## Early Career Highlights  \n- [Bullet]  \n  **Role:** [Early Role - Company]  \n\n## Technical Competencies  \n- **Category**: Tools/Skills (highlight goal-related)  \n\n## Education  \n- [Degree/School]  \n\n## Certifications  \n- [Cert]  \n\n## Security Clearance  \n- [Status]  \n\n## One-Click LinkedIn Summary ([CHAR COUNT] chars)  \n[1400-char max, **open with job goal hook**, keywords, call-to-action]\n\n## Recruiter Email Template  \nSubject: [USER NAME] - Your Next [JOB GOAL TITLE] ([LOCATION])  \nHi [Name],  \n[3-line hook tied to goal + 1 metric]  \n[Sign-off with phone/LinkedIn]\n\n## Usage Notes  \nMaster reference... **[YEARS] years = interview superpower.**  \nPATCH ... applied.  \n*Skills sourced from live job postings on [list 2-3 sites, e.g., LinkedIn, Indeed, O*NET] as of [CURRENT DATE EST].*\n\nRULES:  \n- **Role-tag every bullet**  \n- **Honest & humble**  \n- **Goal-first**  \n- **ATS gold**  \n- **RESEARCH TOP 10 SKILLS**: Before generating the matrix, perform a live search across 5+ job listings for [USER JOB GOAL] to extract the most common technical + soft skills. Rank by frequency + criticality (e.g., \"required\" > \"preferred\"). Cite sources in **Usage Notes** only if asked.  \n- **USER REVIEW PROMPT**: For any skill rated **Partial** or **No**, add a note in **STAR Proof**:  \n  _\"→ Add story/tool/date to strengthen?\"_  \n  This invites the user to expand.  \n- **NEVER INVENT EXPERIENCE**: If no proof exists, mark **No** - do not fabricate.  \n- Friendly, professional tone. All markdown tables.  \n- **FUN SCI-FI CLOSE**: At the very end, add ONE random, fun, **non-inspirational** sci-fi movie/TV quote in italics.  \n  Pull from **any** sci-fi (Star Wars, Star Trek, Matrix, Dune, Hitchhiker's, Firefly, BSG, etc.).  \n  Keep it light, geeky, or absurd - e.g., _\"I am Groot.\"_, _\"These aren't the droids you're looking for.\"_, _\"So long, and thanks for all the fish.\"_  \n  **Never repeat the same quote in one session.**  \n\nCURRENT DATE/TIME: [INSERT TODAY'S DATE & TIME EST]",
         "Parameters": [],
-        "Type": "TEXT"
+        "Type": "STRUCTURED"
     },
     {
         "Id": "ALL-057",
@@ -5453,8 +5453,21 @@
         "Title": "Remote Worker Fitness Trainer",
         "User": "Everyone",
         "Category": "Role Play",
-        "Prompt": "I want you to act as a personal trainer. I will provide you with all the information needed about an individual looking to become fitter, stronger, and healthier through physical training, and your role is to devise the best plan for that person depending on their current fitness level, goals, and lifestyle habits. You should use your knowledge of exercise science, nutrition advice, and other relevant factors in order to create a plan suitable for them. Client Profile: - Age: {age} - Gender: {gender} - Occupation: {occupation} (remote worker) - Height: {height} - Weight: {weight} - Blood type: {blood_type} - Goal: {fitness_goal} - Workout constraints: {workout_constraints} - Specific concerns: {specific_concerns} - Workout preference: {workout_preference} - Open to supplements: {supplements_preference} Please design a comprehensive plan that includes: 1. A detailed {workout_days}-day weekly workout regimen with specific exercises, sets, reps, and rest periods 2. A sustainable nutrition plan that supports the goal and considers the client's blood type 3. Appropriate supplement recommendations 4. Techniques and exercises to address {specific_concerns} 5. Daily movement or mobility strategies for a remote worker to stay active and offset sitting 6. Simple tracking metrics for monitoring progress Provide practical implementation guidance that fits into a remote worker's routine, emphasizing sustainability, proper form, and injury prevention. My first request is: “I need help designing a complete fitness, nutrition, and mobility plan for a {age}-year-old {gender} {occupation} whose goal is {fitness_goal}.”",
-        "Parameters": [],
+        "Prompt": "I want you to act as a personal trainer. I will provide you with all the information needed about an individual looking to become fitter, stronger, and healthier through physical training, and your role is to devise the best plan for that person depending on their current fitness level, goals, and lifestyle habits. You should use your knowledge of exercise science, nutrition advice, and other relevant factors in order to create a plan suitable for them. Client Profile: - Age: {{age}} - Gender: {{gender}} - Occupation: {{occupation}} (remote worker) - Height: {{height}} - Weight: {{weight}} - Blood type: {{blood_type}} - Goal: {{fitness_goal}} - Workout constraints: {{workout_constraints}} - Specific concerns: {{specific_concerns}} - Workout preference: {{workout_preference}} - Open to supplements: {{supplements_preference}} Please design a comprehensive plan that includes: 1. A detailed {{workout_days}}-day weekly workout regimen with specific exercises, sets, reps, and rest periods 2. A sustainable nutrition plan that supports the goal and considers the client's blood type 3. Appropriate supplement recommendations 4. Techniques and exercises to address {{specific_concerns}} 5. Daily movement or mobility strategies for a remote worker to stay active and offset sitting 6. Simple tracking metrics for monitoring progress Provide practical implementation guidance that fits into a remote worker's routine, emphasizing sustainability, proper form, and injury prevention. My first request is: “I need help designing a complete fitness, nutrition, and mobility plan for a {{age}}-year-old {{gender}} {{occupation}} whose goal is {{fitness_goal}}.”",
+        "Parameters": [
+            "age",
+            "gender",
+            "occupation",
+            "height",
+            "weight",
+            "blood_type",
+            "fitness_goal",
+            "workout_constraints",
+            "specific_concerns",
+            "workout_preference",
+            "supplements_preference",
+            "workout_days"
+        ],
         "Type": "TEXT"
     },
     {
@@ -5773,7 +5786,7 @@
             "interests",
             "pace"
         ],
-        "Type": "TEXT"
+        "Type": "STRUCTURED"
     },
     {
         "Id": "ALL-197",
@@ -7460,5 +7473,14 @@
         "Prompt": "A cute baby (use uploaded photo) dressed as a little tour guide — wearing a button-up shirt, straw travel hat, and a small crossbody bag. The baby holds a toy map in one hand and a tiny flag in the other, smiling like leading a group. Around the scene are playful props: mini luggage, postcards, and a toy globe. The background is styled like a famous landmark scene with cultural decorations and bright daylight tones. The atmosphere is cheerful, adventurous, and heartwarming, captured in a cinematic studio portrait. Keep everything exactly the same — only replace the baby’s face with the one from the uploaded photo, preserving natural features and expression.",
         "Parameters": [],
         "Type": "IMAGE"
+    },
+    {
+        "Id": "DEV-111",
+        "Title": "SVG Generation",
+        "User": "Developer",
+        "Category": "Code Generation",
+        "Prompt": "Generate an SVG of a pelican riding a bicycle",
+        "Parameters": [],
+        "Type": "TEXT"
     }
 ]
