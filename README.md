@@ -2,10 +2,13 @@
 
 A collection of utilities and dashboards for data management, translation, AI tasks, and more.
 
-**Live Site:** [https://github.bangndd.qzz.io](https://github.bangndd.qzz.io)
+**Live Site:** [https://nbang.github.io](https://nbang.github.io)
 
 > [!NOTE]
-> **For Developers:** Please refer to [DEVELOPER_HANDOVER.md](speckit/DEVELOPER_HANDOVER.md) for architecture details and handover instructions.
+> **For Developers:** We follow Spec-Driven Development (SDD) principles. You can explore our methodology mappings in the `specs/` directory:
+> - [SpecKit Methodology](specs/speckit.md)
+> - [Superpowers Methodology](specs/superpower.md)
+> - [OpenSpec Methodology](specs/openspec.md)
 
 
 ## Available Tools
@@ -32,6 +35,7 @@ This repository is organized as follows:
 nbang.github.io/
 ├── index.html               # Main landing page listing all tools
 ├── CNAME                    # Custom domain configuration
+├── specs/                   # Methodology mappings (SpecKit, Superpowers, OpenSpec)
 │
 ├── image_tools/             # Image manipulation tools
 │   ├── index.html           # Image tools landing page
