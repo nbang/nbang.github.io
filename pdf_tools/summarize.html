@@ -307,7 +307,7 @@
                 await window.PDFGlobals.loadPdfJsLib();
                 
                 // Initialize Transformers
-                const transformers = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers");
+                const transformers = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@4");
                 pipeline = transformers.pipeline;
                 env = transformers.env;
                 env.allowLocalModels = false;
@@ -456,21 +456,19 @@
             try {
                 // Load Model
                 if (!summarizer || summarizer.modelName !== currentModel) {
-                     // Check webgpu support for these models
-                     // Note: We are not explicitly forcing device=webgpu here to keep code simple, 
-                     // but Transformers.js v3 should handle it if params are passed or auto-detection works.
-                     // For now, we rely on default behavior or add explicit device check if needed.
-                     
                     updateStatus(`Loading model ${currentModel.split('/')[1]}...`, 35);
                     progressBar.style.width = "35%";
                     progressBar.classList.add("pulse");
-                    
+
+                    const deviceHint = isChatModel && navigator.gpu ? 'webgpu' : 'wasm';
+
                     summarizer = await pipeline(pipelineTask, currentModel, {
+                        device: deviceHint,
                         progress_callback: (data) => {
-                             if (data.status === 'progress') {
-                                 const p = 35 + (data.progress * 55); 
-                                 progressBar.style.width = `${p}%`;
-                             }
+                            if (data.status === 'progress') {
+                                const p = 35 + (data.progress * 55);
+                                progressBar.style.width = `${p}%`;
+                            }
                         }
                     });
                     summarizer.modelName = currentModel;
@@ -497,7 +495,7 @@
                         { role: "system", content: "You are a helpful assistant that summarizes text concisely." },
                         { role: "user", content: `Summarize the following text in a ${lengthSetting} paragraph:\n\n${textToProcess}` }
                     ];
-                    // Apply chat template manually or let pipeline handle it if supported (v3 handles list of messages)
+                    // v4 pipeline natively handles message arrays for text-generation
                     output = await summarizer(messages, {
                         max_new_tokens: maxNewTokens,
                         do_sample: false,

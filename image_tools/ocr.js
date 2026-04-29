@@ -1,32 +1,10 @@
 
-import { AutoModel, AutoProcessor, AutoTokenizer, RawImage, env, AutoModelForVision2Seq } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers';
+import { AutoModel, AutoProcessor, AutoTokenizer, RawImage, env, AutoModelForVision2Seq, LogLevel } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4';
 
 // Configuration
 env.allowLocalModels = false;
 env.useBrowserCache = true;
-
-// Suppress expected ONNX Runtime warnings
-const originalConsoleWarn = console.warn;
-const originalConsoleError = console.error;
-
-console.warn = function (...args) {
-    const message = args.join(' ');
-    if (message.includes('VerifyEachNodeIsAssignedToAnEp') ||
-        message.includes('session_state.cc')) {
-        return;
-    }
-    originalConsoleWarn.apply(console, args);
-};
-
-console.error = function (...args) {
-    const message = args.join(' ');
-    if (message.includes('VerifyEachNodeIsAssignedToAnEp') ||
-        message.includes('session_state.cc') ||
-        message.includes('[W:onnxruntime')) {
-        return;
-    }
-    originalConsoleError.apply(console, args);
-};
+env.logLevel = LogLevel.WARNING;
 
 // Element Refs
 const els = {
