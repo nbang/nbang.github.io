@@ -84,16 +84,18 @@
                     <label for="model-select" class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2 ml-1">AI Model</label>
                     <div class="relative">
                         <select id="model-select" class="w-full pl-5 pr-10 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-800 font-medium appearance-none focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all cursor-pointer hover:bg-white hover:border-gray-300">
-                            <option value="tesseract" selected>Tesseract.js (Standard)</option>
-                            <option value="florence2">Florence-2 (Microsoft)</option>
-                            <option value="smolvlm">SmolVLM (HuggingFace)</option>
-                            <option value="granite">Granite Docling (IBM)</option>
+                            <option value="tesseract" selected>Tesseract.js — Multi-language (WASM)</option>
+                            <option value="florence2">Florence-2 Base (Microsoft) — ~198 MB</option>
+                            <option value="smolvlm">SmolVLM 256M (HuggingFace) — ~189 MB</option>
+                            <option value="granite">Granite Docling 258M (IBM) — ~264 MB</option>
+                            <option value="lfm2vl">LFM2-VL 450M (LiquidAI) — ~548 MB</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
                             <i class="fa-solid fa-chevron-down text-sm"></i>
                         </div>
                     </div>
                     <p class="text-xs text-gray-400 mt-1.5 ml-1" id="model-desc">Standard powerful OCR model.</p>
+                    <div id="webgpu-badge" class="hidden mt-2 ml-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"></div>
                 </div>
 
                 <!-- Language / Status -->

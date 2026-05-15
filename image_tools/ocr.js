@@ -1,5 +1,5 @@
 
-import { AutoModel, AutoProcessor, AutoTokenizer, RawImage, env, AutoModelForVision2Seq, LogLevel } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4';
+import { AutoModel, AutoProcessor, AutoTokenizer, RawImage, env, AutoModelForVision2Seq, AutoModelForImageTextToText, LogLevel } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4';
 
 // Configuration
 env.allowLocalModels = false;
@@ -21,8 +21,10 @@ const els = {
     status: document.getElementById('status-text'),
     loadingOverlay: document.getElementById('loading-overlay'),
     progressOverlay: document.getElementById('progress-bar-overlay'),
+    progressBar: document.getElementById('progress-bar'),
     loadingTitle: document.getElementById('loading-title'),
-    loadingMessage: document.getElementById('loading-message')
+    loadingMessage: document.getElementById('loading-message'),
+    webgpuBadge: document.getElementById('webgpu-badge'),
 };
 
 // Models
@@ -31,13 +33,15 @@ const MODELS = {
     florence2: 'onnx-community/Florence-2-base-ft',
     smolvlm: 'HuggingFaceTB/SmolVLM-256M-Instruct',
     granite: 'ibm-granite/granite-docling-258M-WebGPU',
+    lfm2vl: 'onnx-community/LFM2-VL-450M-ONNX',
 };
 
 const MODEL_DESCS = {
-    tesseract: "Tesseract.js. Classic and reliable OCR running in WASM.",
-    florence2: "Standard powerful OCR model. Good for general text.",
-    smolvlm: "Small Vision Language Model. Excellent for complex reasoning and structure.",
-    granite: "IBM Granite Docling (258M). Optimized for document understanding."
+    tesseract: "Classic WASM OCR — fast, reliable, supports 11 languages.",
+    florence2: "Florence-2 Base · ~198 MB via WebGPU. Best for structured document OCR.",
+    smolvlm: "SmolVLM 256M · ~189 MB via WebGPU. Compact vision-language model.",
+    granite: "Granite Docling 258M · ~264 MB via WebGPU. Optimized for document understanding.",
+    lfm2vl: "LFM2-VL 450M (LiquidAI) · ~548 MB via WebGPU. Hybrid Mamba+attention VLM, 32K context.",
 };
 
 // Tesseract Languages
@@ -82,11 +86,43 @@ function showLoading(show, title = "Loading...", message = "") {
         els.loadingMessage.textContent = message;
     } else {
         els.loadingOverlay.classList.add('hidden');
+        els.progressBar.style.width = "0%";
     }
 }
 
 function updateProgress(pct) {
     els.progressOverlay.style.width = pct + "%";
+    els.progressBar.style.width = pct + "%";
+}
+
+async function checkWebGPU() {
+    const badge = els.webgpuBadge;
+    if (!badge) return false;
+
+    badge.className = 'mt-2 ml-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500';
+    badge.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-xs"></i> Checking WebGPU...';
+    badge.classList.remove('hidden');
+
+    if (!navigator.gpu) {
+        badge.className = 'mt-2 ml-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200';
+        badge.innerHTML = '<i class="fa-solid fa-microchip text-xs"></i> WebGPU unavailable — CPU/WASM only';
+        return false;
+    }
+
+    try {
+        const adapter = await navigator.gpu.requestAdapter();
+        if (adapter) {
+            badge.className = 'mt-2 ml-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200';
+            badge.innerHTML = '<i class="fa-solid fa-bolt text-xs"></i> WebGPU available';
+            return true;
+        }
+    } catch (e) {
+        console.warn('WebGPU adapter request failed:', e);
+    }
+
+    badge.className = 'mt-2 ml-1 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200';
+    badge.innerHTML = '<i class="fa-solid fa-microchip text-xs"></i> WebGPU unavailable — CPU/WASM only';
+    return false;
 }
 
 // Populate Languages
@@ -130,7 +166,8 @@ async function initModel(device = 'webgpu') {
         const modelNameMap = {
             smolvlm: 'SmolVLM',
             florence2: 'Florence-2',
-            granite: 'Granite Docling'
+            granite: 'Granite Docling',
+            lfm2vl: 'LFM2-VL',
         };
 
         if (state.currentModelId !== 'tesseract') {
@@ -138,29 +175,21 @@ async function initModel(device = 'webgpu') {
             updateProgress(0);
         }
 
-        // Config
-        const dtypeConfig = {
-            embed_tokens: 'fp32',
-            vision_encoder: 'fp32',
-            encoder_model: 'q4',
-            decoder_model_merged: 'q4',
-        };
-
         const options = {
-            device: device,
-            dtype: dtypeConfig,
+            device,
+            dtype: 'q4f16',
         };
 
         const selectedModelId = MODELS[state.currentModelId];
         console.log(`Initializing model ${selectedModelId} with options:`, options);
 
-        // Load Processor & Tokenizer (Skip for Tesseract)
+        // Load Processor & Tokenizer (Skip for Tesseract; lfm2vl tokenizer is inside processor)
         if (state.currentModelId !== 'tesseract') {
             if (!state.processor) {
                 showLoading(true, "Loading Processor", "Preparing inputs...");
                 state.processor = await AutoProcessor.from_pretrained(selectedModelId);
             }
-            if (!state.tokenizer) {
+            if (!state.tokenizer && state.currentModelId !== 'lfm2vl') {
                 showLoading(true, "Loading Tokenizer", "Preparing text handler...");
                 state.tokenizer = await AutoTokenizer.from_pretrained(selectedModelId);
             }
@@ -208,7 +237,13 @@ async function initModel(device = 'webgpu') {
 
         showLoading(true, "Loading Model Weights", "This is the heavy part...");
 
-        if (state.currentModelId === 'smolvlm' || state.currentModelId === 'granite') {
+        if (state.currentModelId === 'lfm2vl') {
+            state.model = await AutoModelForImageTextToText.from_pretrained(selectedModelId, {
+                device,
+                dtype: { vision_encoder: 'fp16', embed_tokens: 'fp16', decoder_model_merged: 'q4f16' },
+                progress_callback: progressCallback,
+            });
+        } else if (state.currentModelId === 'smolvlm' || state.currentModelId === 'granite') {
             state.model = await AutoModelForVision2Seq.from_pretrained(selectedModelId, {
                 ...options,
                 progress_callback: progressCallback
@@ -252,7 +287,7 @@ async function performOCR(imageUrl) {
             alert("Tesseract not ready!");
             return;
         }
-    } else if (!state.model || !state.processor || !state.tokenizer) {
+    } else if (!state.model || !state.processor || (!state.tokenizer && state.currentModelId !== 'lfm2vl')) {
         alert("Model not ready!");
         return;
     }
@@ -326,6 +361,18 @@ async function performOCR(imageUrl) {
                 const promptText = state.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
                 generatedText = generatedFullText.replace(promptText, '').trim();
             }
+
+        } else if (state.currentModelId === 'lfm2vl') {
+            const messages = [
+                { role: "system", content: "You are a helpful multimodal assistant." },
+                { role: "user", content: [{ type: "image" }, { type: "text", text: "Extract all text from this image. Output only the extracted text, preserving line breaks." }] },
+            ];
+            const chatPrompt = state.processor.apply_chat_template(messages, { add_generation_prompt: true });
+            const inputs = await state.processor(image, chatPrompt, { add_special_tokens: false });
+            const outputs = await state.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false });
+            const fullText = state.processor.tokenizer.decode(outputs[0], { skip_special_tokens: true });
+            const promptText = state.processor.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
+            generatedText = fullText.replace(promptText, '').trim();
 
         } else {
             // Florence-2 Logic
@@ -430,9 +477,9 @@ els.clearCacheBtn.addEventListener('click', async () => {
 
 // Initialize on load
 window.addEventListener('load', () => {
-    // Set initial model from select
     state.currentModelId = els.modelSelect.value;
     els.modelDesc.textContent = MODEL_DESCS[state.currentModelId] || "";
     initLanguageSelect();
+    checkWebGPU();
     initModel('webgpu');
 });

@@ -35,7 +35,7 @@
         "description": "Manage your book translation pipeline, scrape chapters, translate content, and edit files.",
         "url": "translation.html",
         "category": "utility",
-        "color": "purple",
+        "color": "indigo",
         "icon": "fa-solid fa-language",
         "cta": "Open Dashboard"
     },
@@ -55,7 +55,7 @@
         "description": "Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000 coordinate support.",
         "url": "cat2map.html",
         "category": "utility",
-        "color": "orange",
+        "color": "amber",
         "icon": "fa-solid fa-map-location-dot",
         "cta": "Open Tool"
     },
@@ -65,7 +65,7 @@
         "description": "A curated list of software (SaaS, PaaS, IaaS) with free tiers for developers.",
         "url": "freefordev.html",
         "category": "data",
-        "color": "cyan",
+        "color": "teal",
         "icon": "fa-solid fa-layer-group",
         "cta": "Open Resources"
     },
@@ -105,7 +105,7 @@
         "description": "The ultimate guide to setting up Stremio for seamless movie & TV streaming.",
         "url": "stremio-guide.html",
         "category": "guide",
-        "color": "violet",
+        "color": "indigo",
         "icon": "fa-solid fa-circle-play",
         "cta": "Read Guide"
     },
@@ -115,7 +115,7 @@
         "description": "The complete guide to setting up Aniyomi for your manga and anime needs.",
         "url": "aniyomi-guide.html",
         "category": "guide",
-        "color": "rose",
+        "color": "red",
         "icon": "fa-solid fa-book-open",
         "cta": "Read Guide"
     }

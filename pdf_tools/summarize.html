@@ -74,10 +74,12 @@
                 <div class="relative">
                     <select id="model-select"
                         class="w-full md:w-80 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 appearance-none focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/20 transition-all cursor-pointer hover:bg-white">
-                        <option value="Xenova/distilbart-cnn-6-6">DistilBART CNN 6-6 (Fast, CPU Friendly)</option>
-                        <option value="onnx-community/Qwen2.5-0.5B-Instruct">Qwen2.5 0.5B (WebGPU Recommended)</option>
-                        <option value="onnx-community/Llama-3.2-1B-Instruct">Llama 3.2 1B (High Quality, Heavy)</option>
-                        <option value="Xenova/LaMini-Flan-T5-248M">LaMini Flan-T5 248M (Balanced)</option>
+                        <option value="Xenova/distilbart-cnn-6-6">DistilBART CNN 6-6 — ~284 MB (fast, WASM)</option>
+                        <option value="onnx-community/LFM2.5-350M-ONNX">LFM2.5 350M (LiquidAI) — ~200 MB (WebGPU)</option>
+                        <option value="HuggingFaceTB/SmolLM2-360M-Instruct">SmolLM2 360M (HuggingFace) — ~273 MB (WebGPU)</option>
+                        <option value="onnx-community/Falcon-H1-Tiny-90M-Instruct-ONNX">Falcon H1 Tiny 90M (TII) — ~97 MB (WebGPU)</option>
+                        <option value="onnx-community/Bonsai-1.7B-ONNX">Bonsai 1.7B (PrismML) — ~291 MB q1 (WebGPU)</option>
+                        <option value="Xenova/LaMini-Flan-T5-248M">LaMini Flan-T5 248M — ~225 MB (light, WASM)</option>
                     </select>
                     <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-red-500">
                         <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -100,6 +102,10 @@
                 </div>
             </div>
         </section>
+
+        <div class="flex justify-center -mt-3 mb-6">
+            <div id="webgpu-badge" class="hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"></div>
+        </div>
 
         <section class="mb-8 relative" id="drop-zone">
             <input type="file" id="file-input" accept="application/pdf" hidden />
@@ -179,6 +185,15 @@
         let summarizer = null;
         let currentModel = "Xenova/distilbart-cnn-6-6";
         let isProcessing = false;
+
+        const MODEL_CONFIGS = {
+            'Xenova/distilbart-cnn-6-6':                          { task: 'summarization',   dtype: 'quantized', device: 'wasm'   },
+            'onnx-community/LFM2.5-350M-ONNX':                    { task: 'text-generation', dtype: 'q4',        device: 'webgpu' },
+            'HuggingFaceTB/SmolLM2-360M-Instruct':                { task: 'text-generation', dtype: 'q4f16',     device: 'webgpu' },
+            'onnx-community/Falcon-H1-Tiny-90M-Instruct-ONNX':    { task: 'text-generation', dtype: 'q4f16',     device: 'webgpu' },
+            'onnx-community/Bonsai-1.7B-ONNX':                    { task: 'text-generation', dtype: 'q1',        device: 'webgpu' },
+            'Xenova/LaMini-Flan-T5-248M':                         { task: 'summarization',   dtype: 'q4f16',     device: 'wasm'   },
+        };
         
         // Chunked Caching Logic (Shared with OCR tool)
         const DB_NAME = "TransformersChunkedCache";
@@ -302,11 +317,41 @@
 
         let loadedPdfText = "";
 
+        async function checkWebGPU() {
+            const badge = document.getElementById('webgpu-badge');
+            if (!badge) return false;
+
+            badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500';
+            badge.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-xs"></i> Checking WebGPU...';
+            badge.classList.remove('hidden');
+
+            if (!navigator.gpu) {
+                badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200';
+                badge.innerHTML = '<i class="fa-solid fa-microchip text-xs"></i> WebGPU unavailable — CPU/WASM only';
+                return false;
+            }
+
+            try {
+                const adapter = await navigator.gpu.requestAdapter();
+                if (adapter) {
+                    badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200';
+                    badge.innerHTML = '<i class="fa-solid fa-bolt text-xs"></i> WebGPU available';
+                    return true;
+                }
+            } catch (e) {
+                console.warn('WebGPU adapter request failed:', e);
+            }
+
+            badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200';
+            badge.innerHTML = '<i class="fa-solid fa-microchip text-xs"></i> WebGPU unavailable — CPU/WASM only';
+            return false;
+        }
+
         async function init() {
             try {
                 // Initialize PDF libs
                 await window.PDFGlobals.loadPdfJsLib();
-                
+
                 // Initialize Transformers
                 const transformers = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@4");
                 pipeline = transformers.pipeline;
@@ -314,6 +359,7 @@
                 env.allowLocalModels = false;
                 env.useBrowserCache = false;
 
+                checkWebGPU();
                 setupEventListeners();
                 console.log("Summarizer Initialized");
             } catch (error) {
@@ -451,8 +497,9 @@
             if (lengthSetting === 'short') { maxNewTokens = 100; minNewTokens = 20; }
             if (lengthSetting === 'long') { maxNewTokens = 500; minNewTokens = 150; }
 
-            const isChatModel = currentModel.includes("Qwen") || currentModel.includes("Llama");
-            const pipelineTask = isChatModel ? 'text-generation' : 'summarization';
+            const cfg = MODEL_CONFIGS[currentModel] || { task: 'summarization', dtype: 'quantized', device: 'wasm' };
+            const isChatModel = cfg.task === 'text-generation';
+            const pipelineTask = cfg.task;
 
             try {
                 // Load Model
@@ -461,14 +508,25 @@
                     progressBar.style.width = "35%";
                     progressBar.classList.add("pulse");
 
-                    const deviceHint = isChatModel && navigator.gpu ? 'webgpu' : 'wasm';
+                    const deviceHint = cfg.device === 'webgpu' && navigator.gpu ? 'webgpu' : 'wasm';
 
                     summarizer = await pipeline(pipelineTask, currentModel, {
                         device: deviceHint,
+                        dtype: cfg.dtype,
                         progress_callback: (data) => {
-                            if (data.status === 'progress') {
+                            if (data.status === 'initiate') {
+                                const fileName = data.file ? data.file.split('/').pop() : 'file';
+                                updateStatus(`Preparing ${fileName}...`, 36);
+                            } else if (data.status === 'download') {
+                                const fileName = data.file ? data.file.split('/').pop() : 'file';
+                                updateStatus(`Downloading ${fileName}...`, 37);
+                            } else if (data.status === 'progress') {
                                 const p = 35 + (data.progress * 55);
-                                progressBar.style.width = `${p}%`;
+                                const fileName = data.file ? data.file.split('/').pop() : 'model';
+                                updateStatus(`Downloading ${fileName} (${Math.round(data.progress)}%)`, p);
+                            } else if (data.status === 'done') {
+                                const fileName = data.file ? data.file.split('/').pop() : 'file';
+                                updateStatus(`Loaded ${fileName}`, 90);
                             }
                         }
                     });
