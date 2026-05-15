@@ -4,7 +4,7 @@
     "description": "A collection of utilities and dashboards for data management, translation, AI tasks, and more.",
     "main": "cat2map.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "node tests/smoke.test.mjs",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix"
     },
@@ -25,6 +25,7 @@
         "@html-eslint/parser": "^0.52.0",
         "eslint": "^9.39.2",
         "eslint-plugin-tailwindcss": "^3.18.2",
-        "globals": "^17.0.0"
+        "globals": "^17.0.0",
+        "puppeteer": "^24.0.0"
     }
 }

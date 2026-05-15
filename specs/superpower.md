@@ -25,7 +25,7 @@ Before applying Superpowers, agents must internalize the project's architectural
 ### 2. 🌲 Workspaces (`using-git-worktrees`)
 **Trigger**: After design approval, before writing code.
 - Create an isolated workspace on a new branch.
-- Verify a clean baseline by checking that the static server can start (`python -m http.server 8000`) and the strict linter passes (`npm run lint`).
+- Verify a clean baseline: static server starts (`python -m http.server 8000`), linter passes (`npm run lint`), and smoke tests pass (`npm test`).
 
 ### 3. 📝 Planning (`writing-plans`)
 **Trigger**: With an approved design in a clean workspace.
@@ -37,8 +37,9 @@ Before applying Superpowers, agents must internalize the project's architectural
 ### 4. 🔴🟢 Test-Driven Development (`test-driven-development`)
 **Trigger**: During implementation.
 - **Strict RED-GREEN-REFACTOR**: This is mandatory.
-- Write a failing test, watch it fail, write minimal vanilla JS to make it pass, and commit.
-- Because there is no build step, use browser-native testing approaches (e.g., simple DOM assertions or a lightweight script like QUnit/Jasmine via CDN if necessary) before implementing the visual components.
+- **Smoke tests** (`tests/smoke.test.mjs`) run via `npm test` using Puppeteer. They verify every page in `tools-manifest.json` loads with HTTP 200, a non-empty `<title>`, a heading, and no uncaught JS errors.
+- For new tools: add the entry to `tools-manifest.json` first so the smoke test discovers it, then implement the HTML/JS until `npm test` passes.
+- For logic-heavy utilities (e.g., coordinate conversions, calendar algorithms): write inline assertions or a small standalone test script before implementing.
 - Delete any code written before the tests.
 
 ### 5. 🤖 Execution (`subagent-driven-development` & `executing-plans`)
@@ -63,7 +64,12 @@ Before applying Superpowers, agents must internalize the project's architectural
 
 ### 8. 🏁 Finishing up (`finishing-a-development-branch`)
 **Trigger**: When all tasks are completed and verified.
-- Verify all tests and lints pass (`npm run lint`).
+- Verify lint and smoke tests pass:
+  ```bash
+  npm run lint
+  npm test
+  ```
+- Confirm that any new tool is registered in `tools-manifest.json` and appears on the index page.
 - Present options to the user (merge / PR / discard).
 - Clean up the git worktree and return to the main branch.
 

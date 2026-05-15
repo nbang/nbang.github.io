@@ -19,6 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         body {
@@ -28,7 +29,30 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: "Outfit", sans-serif;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-animate {
+            animation: fadeIn 0.5s ease-out both;
+        }
+
+        .dark body { background-color: rgb(17 24 39); color: rgb(229 231 235); }
+        .dark .bg-gray-50 { background-color: rgb(17 24 39); }
+        .dark .bg-white\/80 { background-color: rgb(31 41 55 / 0.8); }
+        .dark .text-gray-800 { color: rgb(229 231 235); }
+        .dark .text-gray-900 { color: rgb(243 244 246); }
+        .dark .text-gray-600 { color: rgb(156 163 175); }
+        .dark .text-gray-500 { color: rgb(107 114 128); }
+        .dark .border-white\/50 { border-color: rgb(55 65 81 / 0.5); }
     </style>
+    <script>
+        if (localStorage.getItem('bang-dark-mode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
 </head>
 
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
@@ -39,298 +63,37 @@
     </div>
 
     <main class="flex-grow container mx-auto px-4 py-12 max-w-6xl">
-        <header class="text-center mb-16 animate-[fadeIn_0.6s_ease-out]">
+        <header class="text-center mb-12 card-animate relative">
+            <button id="dark-mode-btn"
+                class="absolute right-0 top-0 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label="Toggle dark mode">
+            </button>
             <h1 class="text-5xl font-extrabold mb-4 pb-2 tracking-tight bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
                 Bang's Tools
             </h1>
             <p class="text-xl text-gray-500">A collection of utilities and dashboards.</p>
         </header>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Card 1 -->
-            <a href="hcm-admin.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_0.8s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">HCM Merger Data</h2>
-                    <div class="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">View and filter detailed data regarding the merger of
-                    administrative units in Ho Chi Minh City.</p>
-                <div class="mt-6 flex items-center text-blue-600 font-medium">
-                    <span>Open Dashboard</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
+        <!-- Search + Category Filters -->
+        <div class="mb-8" style="animation: fadeIn 0.5s ease-out 0.15s both;">
+            <div class="relative mb-4">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                <input id="search-input" type="text" placeholder="Search tools..."
+                    class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/80 backdrop-blur-xl border border-white/50 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 text-gray-700 placeholder-gray-400 transition-all" />
+            </div>
+            <div id="category-tabs" class="flex gap-2 overflow-x-auto pb-2"></div>
+        </div>
 
-            <!-- Card 2 -->
-            <a href="vietnam-admin.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_0.9s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">Vietnam
-                        Admin Data</h2>
-                    <div class="p-2 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 7m0 13V7" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">Comprehensive dataset of administrative units across all
-                    provinces in Vietnam.</p>
-                <div class="mt-6 flex items-center text-green-600 font-medium">
-                    <span>Open Dashboard</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
+        <!-- Tools Grid -->
+        <div id="tools-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <!-- Cards injected by JS -->
+        </div>
 
-            <!-- Card: Lunar Converter -->
-            <a href="calendar-converter.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.0s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-amber-500 transition-colors">Lunar Converter
-                    </h2>
-                    <div class="p-2 bg-amber-50 rounded-lg group-hover:bg-amber-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">Convert between Solar and Vietnamese Lunar dates with calendar view.</p>
-                <div class="mt-6 flex items-center text-amber-500 font-medium">
-                    <span>Open Tool</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 3 -->
-            <a href="translation.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.0s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
-                        Translation Workflow</h2>
-                    <div class="p-2 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">Manage your book translation pipeline, scrape chapters,
-                    translate content, and edit files.</p>
-                <div class="mt-6 flex items-center text-purple-600 font-medium">
-                    <span>Open Dashboard</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-
-
-            <!-- Card 5: Prompts Library -->
-            <a href="prompt.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.2s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">AI
-                        Prompts Library</h2>
-                    <div class="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">Browse, search, and customize a collection of useful AI prompts
-                    for various tasks.</p>
-                <div class="mt-6 flex items-center text-indigo-600 font-medium">
-                    <span>Open Library</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 6: Cat-2-Map -->
-            <a href="cat2map.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.3s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-amber-600 transition-colors">Cat-2-Map
-                        (GIS)</h2>
-                    <div class="p-2 bg-amber-50 rounded-lg group-hover:bg-amber-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 7m0 13V7" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000
-                    coordinate support.</p>
-                <div class="mt-6 flex items-center text-amber-600 font-medium">
-                    <span>Open Tool</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 7: Free-For-Dev -->
-            <a href="freefordev.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.4s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">Free For
-                        Dev</h2>
-                    <div class="p-2 bg-cyan-50 rounded-lg group-hover:bg-cyan-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">A curated list of software (SaaS, PaaS, IaaS) with free tiers
-                    for developers.</p>
-                <div class="mt-6 flex items-center text-cyan-600 font-medium">
-                    <span>Opening Resources</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 8: Image Tools -->
-            <a href="image_tools/index.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.5s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-pink-600 transition-colors">Image Tools
-                    </h2>
-                    <div class="p-2 bg-pink-50 rounded-lg group-hover:bg-pink-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">A suite of image manipulation tools: Compress, Resize, convert,
-                    and more.</p>
-                <div class="mt-6 flex items-center text-pink-600 font-medium">
-                    <span>Open Tools</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 9: PDF Tools -->
-            <a href="pdf_tools/index.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.6s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">PDF Tools
-                    </h2>
-                    <div class="p-2 bg-red-50 rounded-lg group-hover:bg-red-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">Merge, split, compress, convert, rotate, unlock and watermark PDFs.</p>
-                <div class="mt-6 flex items-center text-red-600 font-medium">
-                    <span>Open Tools</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 10: Markdown Viewer -->
-            <a href="md_viewer.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.7s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">Markdown Viewer</h2>
-                    <div class="p-2 bg-teal-50 rounded-lg group-hover:bg-teal-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">View and render Markdown files with Mermaid diagrams support. Export to PNG.</p>
-                <div class="mt-6 flex items-center text-teal-600 font-medium">
-                    <span>Open Viewer</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 11: Stremio Guide -->
-            <a href="stremio-guide.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.8s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">Stremio Guide</h2>
-                    <div class="p-2 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">The ultimate guide to setting up Stremio for seamless movie & TV streaming.</p>
-                <div class="mt-6 flex items-center text-purple-600 font-medium">
-                    <span>Read Guide</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
-            <!-- Card 12: Aniyomi Guide -->
-            <a href="aniyomi-guide.html"
-                class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 animate-[fadeIn_1.9s_ease-out]">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900 group-hover:text-pink-600 transition-colors">Aniyomi Guide</h2>
-                    <div class="p-2 bg-pink-50 rounded-lg group-hover:bg-pink-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 leading-relaxed">The complete guide to setting up Aniyomi for your manga and anime needs.</p>
-                <div class="mt-6 flex items-center text-pink-600 font-medium">
-                    <span>Read Guide</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </a>
-
+        <!-- No Results -->
+        <div id="no-results" class="hidden col-span-full py-20 text-center text-gray-400">
+            <i class="fa-solid fa-magnifying-glass text-5xl mb-4 block opacity-30"></i>
+            <p class="text-lg">No tools found matching your search.</p>
+            <button onclick="clearSearch()" class="mt-4 text-indigo-500 hover:text-indigo-700 text-sm font-medium transition-colors">Clear search</button>
         </div>
     </main>
 
@@ -340,6 +103,142 @@
             Contact: <a href="mailto:bangndd@gmail.com" class="hover:text-gray-900 transition-colors font-medium">bangndd@gmail.com</a>
         </div>
     </footer>
+
+    <script>
+        const PALETTES = {
+            blue:   { text: 'text-blue-600',   bg: 'bg-blue-50',   bgHover: 'group-hover:bg-blue-100',   textHover: 'group-hover:text-blue-600' },
+            green:  { text: 'text-green-600',  bg: 'bg-green-50',  bgHover: 'group-hover:bg-green-100',  textHover: 'group-hover:text-green-600' },
+            amber:  { text: 'text-amber-500',  bg: 'bg-amber-50',  bgHover: 'group-hover:bg-amber-100',  textHover: 'group-hover:text-amber-500' },
+            purple: { text: 'text-purple-600', bg: 'bg-purple-50', bgHover: 'group-hover:bg-purple-100', textHover: 'group-hover:text-purple-600' },
+            indigo: { text: 'text-indigo-600', bg: 'bg-indigo-50', bgHover: 'group-hover:bg-indigo-100', textHover: 'group-hover:text-indigo-600' },
+            orange: { text: 'text-orange-600', bg: 'bg-orange-50', bgHover: 'group-hover:bg-orange-100', textHover: 'group-hover:text-orange-600' },
+            cyan:   { text: 'text-cyan-600',   bg: 'bg-cyan-50',   bgHover: 'group-hover:bg-cyan-100',   textHover: 'group-hover:text-cyan-600' },
+            pink:   { text: 'text-pink-600',   bg: 'bg-pink-50',   bgHover: 'group-hover:bg-pink-100',   textHover: 'group-hover:text-pink-600' },
+            red:    { text: 'text-red-600',    bg: 'bg-red-50',    bgHover: 'group-hover:bg-red-100',    textHover: 'group-hover:text-red-600' },
+            teal:   { text: 'text-teal-600',   bg: 'bg-teal-50',   bgHover: 'group-hover:bg-teal-100',   textHover: 'group-hover:text-teal-600' },
+            violet: { text: 'text-violet-600', bg: 'bg-violet-50', bgHover: 'group-hover:bg-violet-100', textHover: 'group-hover:text-violet-600' },
+            rose:   { text: 'text-rose-600',   bg: 'bg-rose-50',   bgHover: 'group-hover:bg-rose-100',   textHover: 'group-hover:text-rose-600' },
+        };
+
+        const CATEGORY_LABELS = {
+            all: 'All', data: 'Data', utility: 'Utility', ai: 'AI',
+            image: 'Image', pdf: 'PDF', guide: 'Guide',
+        };
+
+        let allTools = [];
+        let activeCategory = 'all';
+        let searchQuery = '';
+
+        function renderCards() {
+            const grid = document.getElementById('tools-grid');
+            const noResults = document.getElementById('no-results');
+
+            const filtered = allTools.filter(tool => {
+                const matchesCategory = activeCategory === 'all' || tool.category === activeCategory;
+                const q = searchQuery.toLowerCase();
+                const matchesSearch = !q || tool.title.toLowerCase().includes(q) || tool.description.toLowerCase().includes(q);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = filtered.map((tool, i) => {
+                const p = PALETTES[tool.color] || PALETTES.blue;
+                return `
+                    <a href="${tool.url}"
+                        class="group block bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm hover:shadow-xl border border-white/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-6 card-animate"
+                        style="animation-delay: ${(i * 0.07).toFixed(2)}s">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-2xl font-bold text-gray-900 ${p.textHover} transition-colors">${tool.title}</h2>
+                            <div class="p-2 ${p.bg} rounded-lg ${p.bgHover} transition-colors flex-shrink-0">
+                                <i class="${tool.icon} ${p.text} text-xl w-6 text-center"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">${tool.description}</p>
+                        <div class="mt-6 flex items-center ${p.text} font-medium">
+                            <span>${tool.cta}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        function renderTabs() {
+            const categories = ['all', ...new Set(allTools.map(t => t.category))];
+            const tabs = document.getElementById('category-tabs');
+            tabs.innerHTML = categories.map(cat => {
+                const isActive = cat === activeCategory;
+                const base = 'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 cursor-pointer';
+                const active = 'bg-indigo-600 text-white shadow-md';
+                const inactive = 'bg-white/80 text-gray-600 hover:bg-white border border-white/50';
+                return `<button class="${base} ${isActive ? active : inactive}" data-category="${cat}">${CATEGORY_LABELS[cat] || cat}</button>`;
+            }).join('');
+
+            tabs.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activeCategory = btn.dataset.category;
+                    renderTabs();
+                    renderCards();
+                });
+            });
+        }
+
+        function clearSearch() {
+            searchQuery = '';
+            document.getElementById('search-input').value = '';
+            renderCards();
+        }
+
+        // ── Dark mode ─────────────────────────────────────────────────────────
+        function isDark() { return document.documentElement.classList.contains('dark'); }
+
+        function updateDarkIcon() {
+            const btn = document.getElementById('dark-mode-btn');
+            if (!btn) return;
+            btn.innerHTML = isDark()
+                ? '<i class="fa-solid fa-sun text-amber-400"></i>'
+                : '<i class="fa-solid fa-moon text-gray-500"></i>';
+        }
+
+        document.getElementById('dark-mode-btn').addEventListener('click', () => {
+            const nowDark = !isDark();
+            document.documentElement.classList.toggle('dark', nowDark);
+            localStorage.setItem('bang-dark-mode', String(nowDark));
+            updateDarkIcon();
+        });
+
+        updateDarkIcon();
+
+        // ── Tools ─────────────────────────────────────────────────────────────
+        async function init() {
+            try {
+                const res = await fetch('tools-manifest.json');
+                allTools = await res.json();
+            } catch {
+                document.getElementById('tools-grid').innerHTML =
+                    '<p class="col-span-full text-center text-red-500 py-12">Failed to load tools. Please refresh the page.</p>';
+                return;
+            }
+
+            renderTabs();
+            renderCards();
+
+            document.getElementById('search-input').addEventListener('input', e => {
+                searchQuery = e.target.value;
+                renderCards();
+            });
+        }
+
+        init();
+    </script>
 </body>
 
 </html>

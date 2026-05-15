@@ -60,7 +60,7 @@ const localPlugin = {
 
 module.exports = [
     {
-        files: ["**/*.js"],
+        files: ["**/*.js", "**/*.mjs"],
         languageOptions: {
             globals: {
                 ...globals.node,
@@ -78,7 +78,7 @@ module.exports = [
     },
     pluginJs.configs.recommended,
     {
-        files: ["**/*.js"],
+        files: ["**/*.js", "**/*.mjs"],
         rules: {
             "max-len": ["warn", { "code": 160, "ignoreComments": true, "ignoreUrls": true, "ignoreStrings": true, "ignoreTemplateLiterals": true }]
         }

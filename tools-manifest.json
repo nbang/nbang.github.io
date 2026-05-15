@@ -1,0 +1,122 @@
+[
+    {
+        "id": "hcm-admin",
+        "title": "HCM Merger Data",
+        "description": "View and filter detailed data regarding the merger of administrative units in Ho Chi Minh City.",
+        "url": "hcm-admin.html",
+        "category": "data",
+        "color": "blue",
+        "icon": "fa-solid fa-location-dot",
+        "cta": "Open Dashboard"
+    },
+    {
+        "id": "vietnam-admin",
+        "title": "Vietnam Admin Data",
+        "description": "Comprehensive dataset of administrative units across all provinces in Vietnam.",
+        "url": "vietnam-admin.html",
+        "category": "data",
+        "color": "green",
+        "icon": "fa-solid fa-map",
+        "cta": "Open Dashboard"
+    },
+    {
+        "id": "calendar-converter",
+        "title": "Lunar Converter",
+        "description": "Convert between Solar and Vietnamese Lunar dates with calendar view.",
+        "url": "calendar-converter.html",
+        "category": "utility",
+        "color": "amber",
+        "icon": "fa-solid fa-moon",
+        "cta": "Open Tool"
+    },
+    {
+        "id": "translation",
+        "title": "Translation Workflow",
+        "description": "Manage your book translation pipeline, scrape chapters, translate content, and edit files.",
+        "url": "translation.html",
+        "category": "utility",
+        "color": "purple",
+        "icon": "fa-solid fa-language",
+        "cta": "Open Dashboard"
+    },
+    {
+        "id": "prompt",
+        "title": "AI Prompts Library",
+        "description": "Browse, search, and customize a collection of useful AI prompts for various tasks.",
+        "url": "prompt.html",
+        "category": "ai",
+        "color": "indigo",
+        "icon": "fa-solid fa-comments",
+        "cta": "Open Library"
+    },
+    {
+        "id": "cat2map",
+        "title": "Cat-2-Map (GIS)",
+        "description": "Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000 coordinate support.",
+        "url": "cat2map.html",
+        "category": "utility",
+        "color": "orange",
+        "icon": "fa-solid fa-map-location-dot",
+        "cta": "Open Tool"
+    },
+    {
+        "id": "freefordev",
+        "title": "Free For Dev",
+        "description": "A curated list of software (SaaS, PaaS, IaaS) with free tiers for developers.",
+        "url": "freefordev.html",
+        "category": "data",
+        "color": "cyan",
+        "icon": "fa-solid fa-layer-group",
+        "cta": "Open Resources"
+    },
+    {
+        "id": "image-tools",
+        "title": "Image Tools",
+        "description": "A suite of image manipulation tools: Compress, Resize, convert, and more.",
+        "url": "image_tools/index.html",
+        "category": "image",
+        "color": "pink",
+        "icon": "fa-solid fa-image",
+        "cta": "Open Tools"
+    },
+    {
+        "id": "pdf-tools",
+        "title": "PDF Tools",
+        "description": "Merge, split, compress, convert, rotate, unlock and watermark PDFs.",
+        "url": "pdf_tools/index.html",
+        "category": "pdf",
+        "color": "red",
+        "icon": "fa-solid fa-file-pdf",
+        "cta": "Open Tools"
+    },
+    {
+        "id": "md-viewer",
+        "title": "Markdown Viewer",
+        "description": "View and render Markdown files with Mermaid diagrams support. Export to PNG.",
+        "url": "md_viewer.html",
+        "category": "utility",
+        "color": "teal",
+        "icon": "fa-solid fa-file-lines",
+        "cta": "Open Viewer"
+    },
+    {
+        "id": "stremio-guide",
+        "title": "Stremio Guide",
+        "description": "The ultimate guide to setting up Stremio for seamless movie & TV streaming.",
+        "url": "stremio-guide.html",
+        "category": "guide",
+        "color": "violet",
+        "icon": "fa-solid fa-circle-play",
+        "cta": "Read Guide"
+    },
+    {
+        "id": "aniyomi-guide",
+        "title": "Aniyomi Guide",
+        "description": "The complete guide to setting up Aniyomi for your manga and anime needs.",
+        "url": "aniyomi-guide.html",
+        "category": "guide",
+        "color": "rose",
+        "icon": "fa-solid fa-book-open",
+        "cta": "Read Guide"
+    }
+]
