@@ -177,7 +177,6 @@
     <!-- Load Utils -->
     <script src="/js/utils/common.js"></script>
     <script src="utils/pdf-libs.js"></script>
-    <script src="utils/ui-manager.js"></script>
 
     <script>
         // Global variables for AI
@@ -369,8 +368,25 @@
         }
 
         function setupEventListeners() {
-            // UI Manager Dropzone
-            window.UIManager.setupDropZone('drop-zone', 'file-input', handleFileSelect);
+            // Dropzone setup (inlined — avoids dependency on external UIManager script)
+            dropZone.addEventListener('click', e => {
+                if (!e.target.closest('button')) fileInput.click();
+            });
+            dropZone.addEventListener('dragover', e => {
+                e.preventDefault();
+                dropZone.querySelector('.upload-area')?.classList.add('border-red-500', 'bg-red-50');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.querySelector('.upload-area')?.classList.remove('border-red-500', 'bg-red-50');
+            });
+            dropZone.addEventListener('drop', e => {
+                e.preventDefault();
+                dropZone.querySelector('.upload-area')?.classList.remove('border-red-500', 'bg-red-50');
+                if (e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files);
+            });
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) handleFileSelect(fileInput.files);
+            });
             
             removeFileBtn.addEventListener('click', (e) => {
                 e.stopPropagation();

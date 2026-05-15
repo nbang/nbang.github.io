@@ -32,7 +32,7 @@ const MODELS = {
     tesseract: 'tesseract',
     florence2: 'onnx-community/Florence-2-base-ft',
     smolvlm: 'HuggingFaceTB/SmolVLM-256M-Instruct',
-    granite: 'ibm-granite/granite-docling-258M-WebGPU',
+    granite: 'onnx-community/granite-docling-258M-ONNX',
     lfm2vl: 'onnx-community/LFM2-VL-450M-ONNX',
 };
 
@@ -197,15 +197,14 @@ async function initModel(device = 'webgpu') {
 
         // Load Model
         const progressCallback = (data) => {
+            const fileName = data.file ? data.file.split('/').pop() : '';
             if (data.status === 'progress') {
                 const percent = data.progress ? data.progress.toFixed(1) : 0;
                 updateProgress(percent);
-                if (data.file) {
-                    els.loadingMessage.textContent = `Downloading ${data.file} (${percent}%)`;
-                }
+                if (fileName) els.loadingMessage.textContent = `Downloading ${fileName} (${percent}%)`;
             } else if (data.status === 'initiate') {
                 updateProgress(0);
-                els.loadingMessage.textContent = `Initiating ${data.file}...`;
+                if (fileName) els.loadingMessage.textContent = `Preparing ${fileName}…`;
             }
         };
 
