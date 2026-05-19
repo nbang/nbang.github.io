@@ -118,5 +118,15 @@
         "color": "red",
         "icon": "fa-solid fa-book-open",
         "cta": "Read Guide"
+    },
+    {
+        "id": "vram-calculator",
+        "title": "LLM VRAM Calculator",
+        "description": "Calculate VRAM requirements for Inference, LoRA, and Full Training.",
+        "url": "vram-calculator.html",
+        "category": "ai",
+        "color": "indigo",
+        "icon": "fa-solid fa-microchip",
+        "cta": "Calculate VRAM"
     }
 ]

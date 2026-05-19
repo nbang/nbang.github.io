@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="LLM VRAM Calculator - Estimate VRAM required for Inference and Training based on Model Parameters, Quantization, and GPU specifications." />
+    <title>LLM VRAM Calculator | Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: "Outfit", sans-serif; }
+        
+        .dark body { background-color: rgb(17 24 39); color: rgb(229 231 235); }
+        .dark .bg-gray-50 { background-color: rgb(17 24 39); }
+        .dark .bg-white { background-color: rgb(31 41 55); }
+        .dark .text-gray-800, .dark .text-gray-900 { color: rgb(243 244 246); }
+        .dark .text-gray-600, .dark .text-gray-700 { color: rgb(209 213 219); }
+        .dark .text-gray-500 { color: rgb(156 163 175); }
+        .dark .border-gray-200 { border-color: rgb(55 65 81); }
+        .dark input, .dark select { background-color: rgb(55 65 81); color: white; border-color: rgb(75 85 99); }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    </style>
+    <script>
+        if (localStorage.getItem('bang-dark-mode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col transition-colors duration-200">
+    <nav class="bg-white border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Tools
+                    </a>
+                    <span class="ml-4 text-xl font-bold text-gray-900 tracking-tight">VRAM Calculator</span>
+                </div>
+                <div class="flex items-center">
+                    <button id="dark-mode-btn" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Toggle dark mode"></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Settings Panel -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- Hardware & Mode -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-fade-in">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2 flex items-center gap-2"><i class="fa-solid fa-server text-indigo-500"></i> Setup</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">GPU Profile</label>
+                            <select id="gpu-select" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow"></select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Operation Mode</label>
+                            <div class="flex bg-gray-100 p-1 rounded-xl w-full dark:bg-gray-700">
+                                <button class="mode-btn flex-1 py-1.5 px-3 rounded-lg text-sm font-medium bg-white text-indigo-600 shadow-sm transition-all" data-mode="inference">Inference</button>
+                                <button class="mode-btn flex-1 py-1.5 px-3 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all" data-mode="lora">LoRA Fine-Tune</button>
+                                <button class="mode-btn flex-1 py-1.5 px-3 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all" data-mode="training">Full Train</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Configuration -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-fade-in" style="animation-delay: 0.1s;">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2 flex items-center gap-2"><i class="fa-solid fa-brain text-purple-500"></i> Model Specs</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Preset Model</label>
+                            <select id="model-select" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow"></select>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Parameters (B)</label>
+                                <input type="number" id="model-params" step="0.1" value="8" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantization</label>
+                                <select id="quantization" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    <option value="16">FP16 / BF16 (16-bit)</option>
+                                    <option value="8">INT8 (8-bit)</option>
+                                    <option value="6">Q6_K (6-bit)</option>
+                                    <option value="5">Q5_K_M (5-bit)</option>
+                                    <option value="4" selected>INT4 / Q4_K_M (4-bit)</option>
+                                    <option value="3">Q3_K_M (3-bit)</option>
+                                    <option value="2">Q2_K (2-bit)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Model Info (Collapsible or just small text) -->
+                        <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg text-xs space-y-2 mt-2">
+                            <div class="flex justify-between"><span>Layers:</span> <span id="info-layers" class="font-mono font-medium">32</span></div>
+                            <div class="flex justify-between"><span>Hidden Size:</span> <span id="info-hidden" class="font-mono font-medium">4096</span></div>
+                            <div class="flex justify-between"><span>Attention Heads:</span> <span id="info-heads" class="font-mono font-medium">32</span></div>
+                            <div class="flex justify-between"><span>KV Heads:</span> <span id="info-kv-heads" class="font-mono font-medium text-indigo-500">8</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Execution Context -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2 flex items-center gap-2"><i class="fa-solid fa-sliders text-teal-500"></i> Execution</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Context Length</label>
+                            <input type="number" id="context-length" value="4096" step="512" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Batch Size</label>
+                            <input type="number" id="batch-size" value="1" min="1" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                        </div>
+                    </div>
+                    
+                    <div id="lora-settings" class="mt-4 hidden space-y-4 pt-4 border-t border-gray-100">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">LoRA Rank (r)</label>
+                                <input type="number" id="lora-rank" value="16" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">LoRA Alpha</label>
+                                <input type="number" id="lora-alpha" value="32" class="w-full rounded-xl border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="lg:col-span-8 space-y-6">
+                <!-- VRAM Usage Overview -->
+                <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 relative overflow-hidden animate-fade-in" style="animation-delay: 0.3s;">
+                    <!-- Decor -->
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="flex items-center justify-between mb-8 relative z-10">
+                        <h2 class="text-2xl font-bold">Total VRAM Required</h2>
+                        <div id="status-badge" class="px-4 py-1.5 rounded-full text-sm font-bold bg-green-100 text-green-700 flex items-center gap-2">
+                            <i class="fa-solid fa-check-circle"></i> Fits in GPU
+                        </div>
+                    </div>
+
+                    <div class="flex items-end gap-2 mb-6 relative z-10">
+                        <span id="total-vram" class="text-6xl font-black tracking-tight text-indigo-600">0.00</span>
+                        <span class="text-2xl font-semibold text-gray-500 mb-1">GB</span>
+                        <span class="text-sm text-gray-400 ml-2 mb-2">/ <span id="gpu-vram-limit">24</span> GB Available</span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-100 rounded-full h-6 mb-2 overflow-hidden flex relative z-10">
+                        <div id="bar-weights" class="bg-blue-500 h-6 transition-all duration-500" style="width: 0%" title="Weights"></div>
+                        <div id="bar-kv" class="bg-purple-500 h-6 transition-all duration-500" style="width: 0%" title="KV Cache"></div>
+                        <div id="bar-opt" class="bg-amber-500 h-6 transition-all duration-500" style="width: 0%" title="Optimizer"></div>
+                        <div id="bar-act" class="bg-emerald-500 h-6 transition-all duration-500" style="width: 0%" title="Activations"></div>
+                        <div id="bar-grad" class="bg-red-500 h-6 transition-all duration-500" style="width: 0%" title="Gradients"></div>
+                        <div id="bar-overhead" class="bg-gray-400 h-6 transition-all duration-500" style="width: 0%" title="Overhead"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-medium px-1 relative z-10">
+                        <span>0%</span>
+                        <span>50%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <!-- Breakdown Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in" style="animation-delay: 0.4s;">
+                    <!-- Weights -->
+                    <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-2 text-blue-600 font-semibold mb-2">
+                            <div class="w-3 h-3 rounded-full bg-blue-500"></div> Model Weights
+                        </div>
+                        <div class="text-3xl font-bold mt-auto"><span id="val-weights">0.00</span> <span class="text-sm font-medium text-gray-400">GB</span></div>
+                    </div>
+                    
+                    <!-- KV Cache -->
+                    <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-2 text-purple-600 font-semibold mb-2">
+                            <div class="w-3 h-3 rounded-full bg-purple-500"></div> KV Cache
+                        </div>
+                        <div class="text-3xl font-bold mt-auto"><span id="val-kv">0.00</span> <span class="text-sm font-medium text-gray-400">GB</span></div>
+                    </div>
+
+                    <!-- Optimizer -->
+                    <div id="card-opt" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col hidden">
+                        <div class="flex items-center gap-2 text-amber-600 font-semibold mb-2">
+                            <div class="w-3 h-3 rounded-full bg-amber-500"></div> Optimizer States
+                        </div>
+                        <div class="text-3xl font-bold mt-auto"><span id="val-opt">0.00</span> <span class="text-sm font-medium text-gray-400">GB</span></div>
+                    </div>
+
+                    <!-- Activations -->
+                    <div id="card-act" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col hidden">
+                        <div class="flex items-center gap-2 text-emerald-600 font-semibold mb-2">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div> Activations
+                        </div>
+                        <div class="text-3xl font-bold mt-auto"><span id="val-act">0.00</span> <span class="text-sm font-medium text-gray-400">GB</span></div>
+                    </div>
+
+                    <!-- Gradients -->
+                    <div id="card-grad" class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col hidden">
+                        <div class="flex items-center gap-2 text-red-600 font-semibold mb-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div> Gradients
+                        </div>
+                        <div class="text-3xl font-bold mt-auto"><span id="val-grad">0.00</span> <span class="text-sm font-medium text-gray-400">GB</span></div>
+                    </div>
+
+                    <!-- CUDA Overhead -->
+                    <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col">
+                        <div class="flex items-center gap-2 text-gray-600 font-semibold mb-2">
+                            <div class="w-3 h-3 rounded-full bg-gray-400"></div> Context & Overhead
+                        </div>
+                        <div class="text-3xl font-bold mt-auto"><span id="val-overhead">0.60</span> <span class="text-sm font-medium text-gray-400">GB</span></div>
+                    </div>
+                </div>
+
+                <!-- Simulation Panel -->
+                <div class="bg-gradient-to-br from-indigo-50 to-sky-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-6 border border-indigo-100 dark:border-gray-700 animate-fade-in" style="animation-delay: 0.5s;">
+                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fa-solid fa-gauge-high text-indigo-500"></i> Estimated Performance</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white/60 dark:bg-gray-700/60 p-4 rounded-xl backdrop-blur-sm">
+                            <div class="text-sm text-gray-600 dark:text-gray-300 mb-1">Max Generation Speed</div>
+                            <div class="text-2xl font-bold text-gray-900 dark:text-white"><span id="sim-speed">0</span> <span class="text-sm font-medium text-gray-500">tokens/s</span></div>
+                            <div class="text-xs text-gray-500 mt-1">Memory bound (Bandwidth)</div>
+                        </div>
+                        <div class="bg-white/60 dark:bg-gray-700/60 p-4 rounded-xl backdrop-blur-sm">
+                            <div class="text-sm text-gray-600 dark:text-gray-300 mb-1">Hardware Setup</div>
+                            <div id="sim-hw-name" class="font-semibold text-gray-900 dark:text-white">NVIDIA RTX 4090</div>
+                            <div class="text-xs text-gray-500 mt-1"><span id="sim-hw-bw">1008</span> GB/s Bandwidth</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-6 text-gray-500 text-sm mt-auto">
+        <div>&copy; 2026 Bang's Tools. Calculations are estimates. Real-world memory footprint may vary.</div>
+    </footer>
+
+    <script src="vram-calculator.js"></script>
+    <script>
+        function isDark() { return document.documentElement.classList.contains('dark'); }
+        function updateDarkIcon() {
+            const btn = document.getElementById('dark-mode-btn');
+            if (btn) btn.innerHTML = isDark() ? '<i class="fa-solid fa-sun text-amber-400 text-xl"></i>' : '<i class="fa-solid fa-moon text-gray-500 text-xl"></i>';
+        }
+        document.getElementById('dark-mode-btn')?.addEventListener('click', () => {
+            const nowDark = !isDark();
+            document.documentElement.classList.toggle('dark', nowDark);
+            localStorage.setItem('bang-dark-mode', String(nowDark));
+            updateDarkIcon();
+        });
+        updateDarkIcon();
+    </script>
+</body>
+</html>

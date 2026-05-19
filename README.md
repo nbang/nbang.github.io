@@ -18,6 +18,7 @@ A collection of utilities and dashboards for data management, translation, AI ta
 | **Image** | Image Tools | A suite of image manipulation tools: Compress, Resize, convert, and more. | [Open Tools](https://github.bangndd.qzz.io/image_tools/index.html) |
 | **PDF** | PDF Tools | Merge, split, compress, convert, rotate, unlock and watermark PDFs. | [Open Tools](https://github.bangndd.qzz.io/pdf_tools/index.html) |
 | **AI** | AI Prompts Library | Browse, search, and customize a collection of useful AI prompts for various tasks. | [Open Library](https://github.bangndd.qzz.io/prompt.html) |
+| **AI** | VRAM Calculator | Calculate VRAM requirements for Inference, LoRA, and Full Training. | [Calculate VRAM](https://github.bangndd.qzz.io/vram-calculator.html) |
 | **Utility** | Cat-2-Map (GIS) | Convert AutoCAD DXF files to Map (KML, GeoJSON) with VN-2000 coordinate support. | [Open Tool](https://github.bangndd.qzz.io/cat2map.html) |
 | **Utility** | Lunar Converter | Convert between Solar and Vietnamese Lunar dates with calendar view. | [Open Tool](https://github.bangndd.qzz.io/calendar-converter.html) |
 | **Utility** | Translation Workflow | Manage your book translation pipeline, scrape chapters, translate content, and edit files. | [Open Dashboard](https://github.bangndd.qzz.io/translation.html) |
@@ -70,6 +71,8 @@ nbang.github.io/
 ├── vietnam-admin.html           # Vietnam Admin Data dashboard
 ├── translation.html             # Translation Workflow tool
 ├── prompt.html                  # AI Prompts Library
+├── vram-calculator.html         # LLM VRAM Calculator
+├── vram-data.json               # JSON metadata for GPUs and Models
 ├── md_viewer.html               # Markdown Viewer
 ├── cat2map.html                 # AutoCAD DXF → KML/GeoJSON converter
 ├── calendar-converter.html      # Lunar ↔ Solar calendar converter
