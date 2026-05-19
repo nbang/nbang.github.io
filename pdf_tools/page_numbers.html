@@ -78,52 +78,52 @@
             <input type="file" class="hidden" accept=".pdf" id="fileInput" />
         </div>
     
-    <!-- Action Area (Hidden by default) -->
-    <div id="actionArea" class="hidden w-full max-w-2xl mt-8 animate-[fadeIn_0.5s_ease-out]">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-gray-800">Selected File</h3>
-            <button id="clearBtn" class="text-red-500 hover:text-red-700 font-medium text-sm">Clear</button>
-        </div>
-        <div id="filePreview" class="mb-6 text-left"></div>
+        <!-- Action Area (Hidden by default) -->
+        <div id="actionArea" class="hidden w-full max-w-2xl mt-8 animate-[fadeIn_0.5s_ease-out]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Selected File</h3>
+                <button id="clearBtn" class="text-red-500 hover:text-red-700 font-medium text-sm">Clear</button>
+            </div>
+            <div id="filePreview" class="mb-6 text-left"></div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 text-left">
-            <h4 class="font-bold text-gray-800 mb-4">Numbering Options</h4>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 text-left">
+                <h4 class="font-bold text-gray-800 mb-4">Numbering Options</h4>
 
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
-                    <select id="positionInput" class="w-full border-2 border-gray-200 rounded-xl p-2 outline-none focus:border-red-500 bg-white">
-                        <option value="bottom-center">Bottom Center</option>
-                        <option value="bottom-right">Bottom Right</option>
-                        <option value="bottom-left">Bottom Left</option>
-                        <option value="top-center">Top Center</option>
-                        <option value="top-right">Top Right</option>
-                        <option value="top-left">Top Left</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                        <select id="positionInput" class="w-full border-2 border-gray-200 rounded-xl p-2 outline-none focus:border-red-500 bg-white">
+                            <option value="bottom-center">Bottom Center</option>
+                            <option value="bottom-right">Bottom Right</option>
+                            <option value="bottom-left">Bottom Left</option>
+                            <option value="top-center">Top Center</option>
+                            <option value="top-right">Top Right</option>
+                            <option value="top-left">Top Left</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Format</label>
+                        <select id="styleInput" class="w-full border-2 border-gray-200 rounded-xl p-2 outline-none focus:border-red-500 bg-white">
+                            <option value="n">Page 1</option>
+                            <option value="n-of-m">Page 1 of 5</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Format</label>
-                    <select id="styleInput" class="w-full border-2 border-gray-200 rounded-xl p-2 outline-none focus:border-red-500 bg-white">
-                        <option value="n">Page 1</option>
-                        <option value="n-of-m">Page 1 of 5</option>
-                    </select>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Start From Number</label>
+                    <input type="number" id="startNumberInput" value="1" min="1"
+                        class="w-full border-2 border-gray-200 rounded-xl p-2 outline-none focus:border-red-500" />
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Start From Number</label>
-                <input type="number" id="startNumberInput" value="1" min="1"
-                    class="w-full border-2 border-gray-200 rounded-xl p-2 outline-none focus:border-red-500" />
-            </div>
+            <button id="processBtn"
+                class="bg-red-600 text-white w-full py-4 rounded-xl font-bold text-xl shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+                <span id="btnText">Add Page Numbers</span>
+                <i class="fa-solid fa-list-ol ml-3"></i>
+            </button>
         </div>
-
-        <button id="processBtn"
-            class="bg-red-600 text-white w-full py-4 rounded-xl font-bold text-xl shadow-lg hover:bg-red-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
-            <span id="btnText">Add Page Numbers</span>
-            <i class="fa-solid fa-list-ol ml-3"></i>
-        </button>
-    </div>
-</main>
+    </main>
 
     <footer class="text-center py-8 text-gray-500 text-sm relative z-10"><div>&copy; 2026 Bang's Tools. All rights reserved.</div>
         <div class="mt-2">

@@ -138,7 +138,7 @@
                 <div class="h-full bg-gradient-to-r from-red-400 to-indigo-500 transition-all duration-300 rounded-full" id="progress-bar" style="width: 0%">
                 </div>
             </div>
-            <p id="status-text" class="text-center text-sm text-gray-500 min-h-[1.25rem]">Ready to summarize</p>
+            <p id="status-text" class="text-center text-sm text-gray-500 h-8 flex items-center justify-center overflow-hidden">Ready to summarize</p>
         </section>
 
         <section class="mb-6 flex justify-center hidden" id="action-section">
@@ -346,8 +346,25 @@
             return false;
         }
 
+        async function waitForServiceWorker() {
+            if (!('serviceWorker' in navigator)) return;
+            try {
+                await navigator.serviceWorker.register('/sw.js');
+                if (!navigator.serviceWorker.controller) {
+                    await Promise.race([
+                        new Promise(r => navigator.serviceWorker.addEventListener('controllerchange', r, { once: true })),
+                        new Promise(r => setTimeout(r, 3000)),
+                    ]);
+                }
+            } catch (e) {
+                console.warn('Service Worker registration failed:', e);
+            }
+        }
+
         async function init() {
             try {
+                await waitForServiceWorker();
+
                 // Initialize PDF libs
                 await window.PDFGlobals.loadPdfJsLib();
 
@@ -356,7 +373,7 @@
                 pipeline = transformers.pipeline;
                 env = transformers.env;
                 env.allowLocalModels = false;
-                env.useBrowserCache = false;
+                env.useBrowserCache = true;
 
                 checkWebGPU();
                 setupEventListeners();
@@ -418,17 +435,13 @@
             });
 
             clearCacheBtn.addEventListener('click', async () => {
-                if (confirm("Clear AI model cache? You will need to download models again.")) {
-                     try {
-                        indexedDB.deleteDatabase(DB_NAME);
-                        const keys = await caches.keys();
-                        for (const key of keys) {
-                            if (key.includes("transformers")) await caches.delete(key);
-                        }
-                        alert("Cache cleared.");
-                        location.reload();
-                     } catch(e) { alert("Error clearing cache"); }
-                }
+                if (!confirm("Clear AI model cache? You will need to download models again.")) return;
+                try {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                    alert("Cache cleared. Reloading...");
+                    location.reload();
+                } catch(e) { alert("Error clearing cache: " + e.message); }
             });
         }
 
@@ -530,19 +543,20 @@
                         device: deviceHint,
                         dtype: cfg.dtype,
                         progress_callback: (data) => {
+                            const name = data.file
+                                ? data.file.split('/').pop()
+                                    .replace(/[_-]?(q4f16|q4|fp16|fp32|int8|quantized)(\.(onnx_data|onnx|bin))?$/i, '')
+                                    .replace(/\.(onnx_data|onnx|bin)$/i, '')
+                                : '';
                             if (data.status === 'initiate') {
-                                const fileName = data.file ? data.file.split('/').pop() : 'file';
-                                updateStatus(`Preparing ${fileName}...`, 36);
+                                updateStatus(name ? `Preparing ${name}…` : 'Preparing…', 36);
                             } else if (data.status === 'download') {
-                                const fileName = data.file ? data.file.split('/').pop() : 'file';
-                                updateStatus(`Downloading ${fileName}...`, 37);
+                                updateStatus(name ? `Downloading ${name}…` : 'Downloading…', 37);
                             } else if (data.status === 'progress') {
                                 const p = 35 + (data.progress * 55);
-                                const fileName = data.file ? data.file.split('/').pop() : 'model';
-                                updateStatus(`Downloading ${fileName} (${Math.round(data.progress)}%)`, p);
+                                updateStatus(name ? `Downloading ${name} (${Math.round(data.progress)}%)` : `Downloading… (${Math.round(data.progress)}%)`, p);
                             } else if (data.status === 'done') {
-                                const fileName = data.file ? data.file.split('/').pop() : 'file';
-                                updateStatus(`Loaded ${fileName}`, 90);
+                                updateStatus(name ? `Loaded ${name}` : 'Loaded', 90);
                             }
                         }
                     });
