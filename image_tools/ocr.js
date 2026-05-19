@@ -196,15 +196,40 @@ async function initModel(device = 'webgpu') {
         }
 
         // Load Model
+        const shortName = f => f
+            ? f.split('/').pop()
+                .replace(/[_-]?(q4f16|q4|fp16|fp32|int8|quantized)(\.(onnx_data|onnx|bin))?$/i, '')
+                .replace(/\.(onnx_data|onnx|bin)$/i, '')
+            : '';
+
+        const fileProgress = {};
+        const fileSizes = {};
+
+        const calcOverall = () => {
+            const files = Object.keys(fileProgress);
+            if (!files.length) return 0;
+            let totalBytes = 0, loadedBytes = 0;
+            for (const f of files) {
+                const size = fileSizes[f] || 1;
+                totalBytes += size;
+                loadedBytes += size * (fileProgress[f] / 100);
+            }
+            return totalBytes > 0 ? (loadedBytes / totalBytes) * 100 : 0;
+        };
+
         const progressCallback = (data) => {
-            const fileName = data.file ? data.file.split('/').pop() : '';
-            if (data.status === 'progress') {
-                const percent = data.progress ? data.progress.toFixed(1) : 0;
-                updateProgress(percent);
-                if (fileName) els.loadingMessage.textContent = `Downloading ${fileName} (${percent}%)`;
-            } else if (data.status === 'initiate') {
-                updateProgress(0);
-                if (fileName) els.loadingMessage.textContent = `Preparing ${fileName}…`;
+            const name = shortName(data.file);
+            if (data.status === 'initiate') {
+                fileProgress[data.file] = 0;
+                if (name) els.loadingMessage.textContent = `Preparing ${name}…`;
+            } else if (data.status === 'progress') {
+                fileProgress[data.file] = data.progress || 0;
+                if (data.total) fileSizes[data.file] = data.total;
+                updateProgress(calcOverall().toFixed(1));
+                if (name) els.loadingMessage.textContent = `Downloading ${name}…`;
+            } else if (data.status === 'done') {
+                fileProgress[data.file] = 100;
+                updateProgress(calcOverall().toFixed(1));
             }
         };
 
@@ -248,9 +273,10 @@ async function initModel(device = 'webgpu') {
                 progress_callback: progressCallback
             });
         } else {
-            // Florence-2
+            // Florence-2: q4f16 export has an ONNX subgraph graph bug; fp16 is clean
             state.model = await AutoModel.from_pretrained(selectedModelId, {
-                ...options,
+                device,
+                dtype: 'fp16',
                 progress_callback: progressCallback
             });
         }
@@ -279,125 +305,99 @@ async function initModel(device = 'webgpu') {
     }
 }
 
-// OCR Logic
+// ── Per-model OCR handlers ────────────────────────────────────────────────────
+// Each function receives a RawImage (or the original URL for Tesseract) and
+// returns the extracted text string. They rely on the shared `state` object.
+
+async function ocrTesseract(imageUrl) {
+    const result = await state.tesseractWorker.recognize(imageUrl);
+    return result.data.text;
+}
+
+async function ocrSmolVLM(image) {
+    const messages = [{
+        role: 'user',
+        content: [{ type: 'image' }, { type: 'text', text: 'Extract all text from this image exactly as written, preserving all diacritical marks and special characters.' }],
+    }];
+    const applyTemplate = state.processor.apply_chat_template ?? state.tokenizer.apply_chat_template;
+    if (!applyTemplate) throw new Error('No apply_chat_template found');
+    const textInputs = applyTemplate.call(state.processor.apply_chat_template ? state.processor : state.tokenizer, messages, { render_bos_token: false });
+    const inputs = await state.processor(textInputs, [image]);
+    const outputs = await state.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false, repetition_penalty: 1.1 });
+    const full = state.tokenizer.decode(outputs[0], { skip_special_tokens: true });
+    const prompt = state.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
+    return full.replace(prompt, '').replace(/^A:\s*/, '').trim();
+}
+
+async function ocrGranite(image) {
+    // Encoder-decoder seq2seq — processor expects (text, [images]) order
+    const inputs = await state.processor('Convert this document to text, preserving all diacritical marks and special characters.', [image]);
+    const outputs = await state.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false, repetition_penalty: 1.3 });
+    const full = state.tokenizer.decode(outputs[0], { skip_special_tokens: true });
+    const prompt = state.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
+    return full.replace(prompt, '').trim();
+}
+
+async function ocrLFM2VL(image) {
+    const messages = [
+        { role: 'system', content: 'You are a helpful multimodal assistant.' },
+        { role: 'user', content: [{ type: 'image' }, { type: 'text', text: 'Extract all text from this image exactly as written, preserving all diacritical marks, special characters, and line breaks. Output only the extracted text.' }] },
+    ];
+    const chatPrompt = state.processor.apply_chat_template(messages, { add_generation_prompt: true });
+    const inputs = await state.processor(image, chatPrompt, { add_special_tokens: false });
+    const outputs = await state.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false });
+    const full = state.processor.tokenizer.decode(outputs[0], { skip_special_tokens: true });
+    const prompt = state.processor.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
+    return full.replace(prompt, '').trim();
+}
+
+async function ocrFlorence2(image) {
+    const inputs = await state.processor(image, '<OCR>');
+    const outputs = await state.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false, repetition_penalty: 1.1 });
+    return state.tokenizer.batch_decode(outputs, { skip_special_tokens: false })[0]
+        .replaceAll('<s>', '').replaceAll('</s>', '').replace('<OCR>', '').trim();
+}
+
+// ── Dispatcher ────────────────────────────────────────────────────────────────
+
+const OCR_HANDLERS = {
+    tesseract: (imageUrl) => ocrTesseract(imageUrl),
+    smolvlm:   (_, image) => ocrSmolVLM(image),
+    granite:   (_, image) => ocrGranite(image),
+    lfm2vl:    (_, image) => ocrLFM2VL(image),
+    florence2: (_, image) => ocrFlorence2(image),
+};
+
 async function performOCR(imageUrl) {
-    if (state.currentModelId === 'tesseract') {
-        if (!state.tesseractWorker) {
-            alert("Tesseract not ready!");
-            return;
-        }
-    } else if (!state.model || !state.processor || (!state.tokenizer && state.currentModelId !== 'lfm2vl')) {
-        alert("Model not ready!");
-        return;
-    }
+    const isReady = state.currentModelId === 'tesseract'
+        ? !!state.tesseractWorker
+        : state.model && state.processor && (state.tokenizer || state.currentModelId === 'lfm2vl');
+    if (!isReady) { alert('Model not ready!'); return; }
 
     state.isProcessing = true;
-    showLoading(true, "Processing Image", "Extracting text...");
-    els.result.value = "";
-    updateProgress(0); // Indeterminate or just show spinner
+    showLoading(true, 'Processing Image', 'Extracting text...');
+    els.result.value = '';
+    updateProgress(0);
 
     try {
-        const image = await RawImage.fromURL(imageUrl);
-        let generatedText = '';
-
-        if (state.currentModelId === 'tesseract') {
-            if (!state.tesseractWorker) throw new Error("Worker not ready");
-            const result = await state.tesseractWorker.recognize(imageUrl);
-            generatedText = result.data.text;
-        } else if (state.currentModelId === 'smolvlm' || state.currentModelId === 'granite') {
-            // Vision Language Model Logic (SmolVLM & Granite)
-            let messages = [];
-
-            if (state.currentModelId === 'smolvlm') {
-                messages = [
-                    {
-                        role: "user",
-                        content: [
-                            { type: "image" },
-                            { type: "text", text: "Extract all text from this image." }
-                        ]
-                    }
-                ];
-            } else {
-                // Granite
-                messages = [
-                    {
-                        role: "user",
-                        content: [
-                            { type: "image" },
-                            { type: "text", text: "What is written in this image?" }
-                        ]
-                    }
-                ];
-            }
-
-            let text_inputs;
-            if (state.processor.apply_chat_template) {
-                text_inputs = state.processor.apply_chat_template(messages, { render_bos_token: false });
-            } else if (state.tokenizer.apply_chat_template) {
-                text_inputs = state.tokenizer.apply_chat_template(messages, { render_bos_token: false });
-            } else {
-                throw new Error('No apply_chat_template found');
-            }
-
-            const inputs = await state.processor(text_inputs, [image]);
-
-            const outputs = await state.model.generate({
-                ...inputs,
-                max_new_tokens: 1024,
-                do_sample: false,
-            });
-
-            // Decode
-            const generatedFullText = state.tokenizer.decode(outputs[0], { skip_special_tokens: true });
-
-            if (state.currentModelId === 'smolvlm') {
-                // SmolVLM Logic
-                const promptText = state.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
-                generatedText = generatedFullText.replace(promptText, '').replace(/^A:\s*/, '').trim();
-            } else {
-                // Granite Logic
-                const promptText = state.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
-                generatedText = generatedFullText.replace(promptText, '').trim();
-            }
-
-        } else if (state.currentModelId === 'lfm2vl') {
-            const messages = [
-                { role: "system", content: "You are a helpful multimodal assistant." },
-                { role: "user", content: [{ type: "image" }, { type: "text", text: "Extract all text from this image. Output only the extracted text, preserving line breaks." }] },
-            ];
-            const chatPrompt = state.processor.apply_chat_template(messages, { add_generation_prompt: true });
-            const inputs = await state.processor(image, chatPrompt, { add_special_tokens: false });
-            const outputs = await state.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false });
-            const fullText = state.processor.tokenizer.decode(outputs[0], { skip_special_tokens: true });
-            const promptText = state.processor.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
-            generatedText = fullText.replace(promptText, '').trim();
-
-        } else {
-            // Florence-2 Logic
-            const prompt = '<OCR>';
-            const inputs = await state.processor(image, prompt);
-
-            const outputs = await state.model.generate({
-                ...inputs,
-                max_new_tokens: 1024,
-                do_sample: false,
-            });
-
-            generatedText = state.tokenizer.batch_decode(outputs, { skip_special_tokens: false })[0];
-            const promptStr = '<OCR>';
-            generatedText = generatedText.replaceAll('<s>', '').replaceAll('</s>', '').replaceAll(promptStr, '').trim();
-        }
-
-        els.result.value = generatedText;
+        const image = state.currentModelId !== 'tesseract' ? await RawImage.fromURL(imageUrl) : null;
+        const handler = OCR_HANDLERS[state.currentModelId];
+        els.result.value = await handler(imageUrl, image);
         showLoading(false);
         setStatus(`<i class="fa-solid fa-check text-green-500"></i> Completed (${state.currentDevice.toUpperCase()})`, true);
-
     } catch (error) {
         console.error('OCR Error:', error);
         showLoading(false);
-        setStatus(`<i class="fa-solid fa-triangle-exclamation text-red-500"></i> Processing Error`);
-        els.result.value = `Error: ${error.message}`;
+        if (error instanceof DOMException) {
+            // WebGPU device lost — reset and reload
+            Object.assign(state, { model: null, processor: null, tokenizer: null, currentDevice: null });
+            els.fileInput.disabled = true;
+            setStatus(`<i class="fa-solid fa-rotate-right text-amber-500"></i> GPU context lost, reloading model…`);
+            await initModel();
+        } else {
+            setStatus(`<i class="fa-solid fa-triangle-exclamation text-red-500"></i> Processing Error`);
+            els.result.value = `Error: ${error.message}`;
+        }
     } finally {
         state.isProcessing = false;
     }
@@ -462,23 +462,38 @@ els.copyBtn.addEventListener('click', () => {
 });
 
 els.clearCacheBtn.addEventListener('click', async () => {
-    if (confirm("This will delete all downloaded models. Are you sure?")) {
-        try {
-            const cacheKeys = await caches.keys();
-            for (const key of cacheKeys) {
-                if (key.includes('transformers')) await caches.delete(key);
-            }
-            alert("Cache cleared. Reloading...");
-            location.reload();
-        } catch (e) { alert("Error clearing cache: " + e.message); }
-    }
+    if (!confirm("This will delete all cached models. Are you sure?")) return;
+    try {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+        alert("Cache cleared. Reloading...");
+        location.reload();
+    } catch (e) { alert("Error clearing cache: " + e.message); }
 });
 
+// Wait for Service Worker to control the page before loading models,
+// so the first download is also cached.
+async function waitForServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    try {
+        await navigator.serviceWorker.register('/sw.js');
+        if (!navigator.serviceWorker.controller) {
+            await Promise.race([
+                new Promise(r => navigator.serviceWorker.addEventListener('controllerchange', r, { once: true })),
+                new Promise(r => setTimeout(r, 3000)),
+            ]);
+        }
+    } catch (e) {
+        console.warn('Service Worker registration failed:', e);
+    }
+}
+
 // Initialize on load
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     state.currentModelId = els.modelSelect.value;
     els.modelDesc.textContent = MODEL_DESCS[state.currentModelId] || "";
     initLanguageSelect();
     checkWebGPU();
+    await waitForServiceWorker();
     initModel('webgpu');
 });
