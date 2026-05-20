@@ -128,5 +128,15 @@
         "color": "indigo",
         "icon": "fa-solid fa-microchip",
         "cta": "Calculate VRAM"
+    },
+    {
+        "id": "models-directory",
+        "title": "AI Models Directory",
+        "description": "Explore, filter, and discover open-weight and hosted Large Language Models.",
+        "url": "models.html",
+        "category": "ai",
+        "color": "teal",
+        "icon": "fa-solid fa-robot",
+        "cta": "Explore Models"
     }
 ]
