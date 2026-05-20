@@ -138,5 +138,15 @@
         "color": "teal",
         "icon": "fa-solid fa-robot",
         "cta": "Explore Models"
+    },
+    {
+        "id": "model-test-suite",
+        "title": "AI Diagnostics Suite",
+        "description": "A comprehensive test and benchmarking suite for local WASM and WebGPU AI models.",
+        "url": "tests/test_runner.html",
+        "category": "ai",
+        "color": "rose",
+        "icon": "fa-solid fa-flask",
+        "cta": "Run Benchmarks"
     }
 ]

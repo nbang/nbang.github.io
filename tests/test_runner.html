@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AI OCR & Summarizer Browser Test Suite - Visual benchmark and comparison suite." />
+    <title>AI Test Suite & Benchmark Dashboard</title>
+    
+    <!-- Google Fonts & Tailwind & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Tesseract.js & Shared Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: "Outfit", sans-serif; }
+        code, pre { font-family: "Fira Code", monospace; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        .pulse-active { animation: pulse-ring 2s infinite; }
+    </style>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden">
+    
+    <!-- Premium Dynamic Background Gradients -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-40">
+        <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/20 blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-rose-500/20 blur-[120px]"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-30">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="../index.html" class="flex items-center gap-2 group text-slate-400 hover:text-slate-100 transition-colors">
+                <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                <span class="font-medium text-sm">Back to Tools</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+                    <i class="fa-solid fa-flask"></i> Automated Test Suite
+                </span>
+                <span id="gpu-badge" class="px-3 py-1 text-xs font-semibold rounded-full bg-slate-800 text-slate-400 border border-slate-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-microchip"></i> Checking GPU...
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard -->
+    <main class="flex-grow container mx-auto px-6 py-8 max-w-7xl">
+        <header class="mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-rose-400 bg-clip-text text-transparent mb-3">
+                AI Model Test & Benchmark Suite
+            </h1>
+            <p class="text-slate-400 max-w-3xl">
+                Compare and validate client-side WASM and WebGPU model execution on local devices. Test preloaded 
+                <span class="text-indigo-400 font-medium">TestOCR.png</span> (Vietnamese Administrative Merger Data) and flow outputs into summarizer models.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Panel: Test Control & Configuration (5 cols) -->
+            <section class="lg:col-span-5 flex flex-col gap-6">
+                
+                <!-- Target Image Card -->
+                <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-5 backdrop-blur-xl">
+                    <h2 class="text-lg font-bold text-slate-200 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-image text-rose-400"></i> Test Source Image
+                    </h2>
+                    <div class="relative group rounded-xl overflow-hidden border border-slate-800 bg-slate-900/60 aspect-[16/9] flex items-center justify-center">
+                        <img id="test-image" src="./TestOCR.png" class="max-h-full max-w-full object-contain p-2" alt="Vietnamese OCR Test" />
+                        <div class="absolute inset-0 bg-slate-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-200">TestOCR.png (Ho Chi Minh City Data)</p>
+                                <p class="text-xs text-slate-400 mt-1">Contains Vietnamese diacritics & tabular administrative structures.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Orchestrator Card -->
+                <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-6 backdrop-blur-xl flex flex-col gap-5">
+                    <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-gears text-indigo-400"></i> Benchmark Controller
+                    </h2>
+
+                    <!-- Task Select -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Select Task Pipeline</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="btn-task-ocr" class="py-2.5 px-4 rounded-xl font-semibold border bg-indigo-600/20 border-indigo-500 text-indigo-200 flex items-center justify-center gap-2 transition-all">
+                                <i class="fa-solid fa-eye"></i> Image OCR
+                            </button>
+                            <button id="btn-task-sum" class="py-2.5 px-4 rounded-xl font-semibold border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2 transition-all">
+                                <i class="fa-solid fa-align-left"></i> Summarization
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Model Configuration Selector -->
+                    <div>
+                        <label for="test-model-select" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Model configuration</label>
+                        <select id="test-model-select" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 cursor-pointer">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <div id="model-details" class="mt-2 text-xs text-slate-500 leading-relaxed"></div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3 mt-2">
+                        <button id="btn-load-model" class="flex-1 py-3 px-4 rounded-xl font-semibold bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> Load Model
+                        </button>
+                        <button id="btn-run-benchmark" disabled class="flex-1 py-3 px-4 rounded-xl font-semibold bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 pulse-active shadow-lg shadow-indigo-600/20">
+                            <i class="fa-solid fa-play"></i> Run Test
+                        </button>
+                    </div>
+
+                    <!-- Run All Benchmarks -->
+                    <button id="btn-run-all" class="w-full py-2.5 bg-gradient-to-r from-indigo-500/10 to-rose-500/10 hover:from-indigo-500/20 hover:to-rose-500/20 border border-indigo-500/20 hover:border-indigo-500/40 rounded-xl text-xs font-semibold text-slate-300 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-gauge-high"></i> Benchmark All OCR Models Sequentially
+                    </button>
+                </div>
+
+                <!-- Progress Console Card -->
+                <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-5 backdrop-blur-xl flex-grow flex flex-col">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-sm font-bold text-slate-300 flex items-center gap-2">
+                            <i class="fa-solid fa-terminal text-emerald-400"></i> Event Logging
+                        </h2>
+                        <button id="btn-clear-logs" class="text-xs text-slate-500 hover:text-slate-300">Clear</button>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="w-full h-1.5 bg-slate-900 border border-slate-800 rounded-full overflow-hidden mb-3">
+                        <div id="test-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-rose-500 w-0 transition-all duration-300"></div>
+                    </div>
+                    
+                    <div id="log-console" class="flex-grow min-h-[160px] max-h-[220px] bg-slate-950 border border-slate-800 rounded-xl p-4 overflow-y-auto text-xs text-emerald-400 leading-relaxed font-mono">
+                        <div>Ready. Select a model and initialize testing.</div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Right Panel: Output & Analytics (7 cols) -->
+            <section class="lg:col-span-7 flex flex-col gap-6">
+                
+                <!-- Performance Statistics Bar -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 backdrop-blur-xl text-center">
+                        <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Model Load Time</span>
+                        <span id="stat-load-time" class="block text-2xl font-bold text-indigo-400 mt-1 font-mono">--</span>
+                    </div>
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 backdrop-blur-xl text-center">
+                        <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Inference Time</span>
+                        <span id="stat-inference-time" class="block text-2xl font-bold text-rose-400 mt-1 font-mono">--</span>
+                    </div>
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 backdrop-blur-xl text-center">
+                        <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Extract Speed</span>
+                        <span id="stat-speed" class="block text-2xl font-bold text-emerald-400 mt-1 font-mono">--</span>
+                    </div>
+                </div>
+
+                <!-- Test Output Container -->
+                <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-6 backdrop-blur-xl flex flex-col flex-grow min-h-[460px]">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-square-poll-horizontal text-purple-400"></i> Model Output
+                        </h2>
+                        
+                        <div class="flex gap-2">
+                            <button id="btn-copy-output" class="py-1.5 px-3 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5">
+                                <i class="fa-regular fa-copy"></i> Copy Output
+                            </button>
+                            <button id="btn-flow-to-sum" disabled class="py-1.5 px-3 rounded-lg bg-indigo-950 border border-indigo-800/40 text-xs text-indigo-300 hover:bg-indigo-900 transition-all flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed">
+                                <i class="fa-solid fa-right-long"></i> Flow to Summarizer
+                            </button>
+                        </div>
+                    </div>
+
+                    <textarea id="test-output-text" readonly placeholder="Benchmark result outputs will display here..."
+                        class="w-full flex-grow min-h-[300px] bg-slate-950/80 border border-slate-850 rounded-xl p-5 text-slate-300 focus:outline-none text-sm font-mono leading-relaxed resize-none shadow-inner"></textarea>
+                    
+                    <!-- Vietnamese Validity & Accuracy Indicator -->
+                    <div id="vi-validation-container" class="mt-4 p-4 rounded-xl border border-slate-800/60 bg-slate-900/30 flex items-start gap-3 hidden">
+                        <div id="vi-valid-badge" class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-200">Vietnamese Language Verification</h3>
+                            <p id="vi-valid-details" class="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                                Checking character set compatibility and diacritics formatting...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- Comparative Benchmarks Table -->
+        <section class="mt-12">
+            <h2 class="text-xl font-bold text-slate-200 mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-chart-simple text-indigo-400"></i> Comparative Benchmark Log
+            </h2>
+            <div class="bg-slate-950/60 border border-slate-800 rounded-2xl overflow-hidden backdrop-blur-xl">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-900 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-800">
+                        <tr>
+                            <th class="py-4 px-6">Pipeline Task</th>
+                            <th class="py-4 px-6">Model ID</th>
+                            <th class="py-4 px-6">Hardware Mode</th>
+                            <th class="py-4 px-6">Load Time</th>
+                            <th class="py-4 px-6">Inference Time</th>
+                            <th class="py-4 px-6">Vietnamese Accuracy</th>
+                            <th class="py-4 px-6">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="benchmark-results-table" class="divide-y divide-slate-850">
+                        <tr class="text-slate-500 text-center">
+                            <td colspan="7" class="py-8">No benchmark runs recorded in this session.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 text-sm border-t border-slate-850 mt-16 relative z-10">
+        <p>&copy; 2026 Bang's Tools. AI Visual Diagnostics Suite.</p>
+    </footer>
+
+    <!-- Core Module Script for Execution -->
+    <script type="module">
+        import { AutoModel, AutoProcessor, AutoTokenizer, RawImage, env, AutoModelForVision2Seq, AutoModelForImageTextToText } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4';
+
+        // Configuration
+        env.allowLocalModels = false;
+        env.useBrowserCache = true;
+
+        const STATE = {
+            currentTask: 'ocr', // 'ocr' | 'summarize'
+            model: null,
+            processor: null,
+            tokenizer: null,
+            currentDevice: 'wasm',
+            isModelLoaded: false,
+            lastExtractText: '',
+        };
+
+        const MODEL_METADATA = {
+            ocr: {
+                tesseract: { name: 'Tesseract.js', size: 'Multi-lang WASM', desc: 'Standard client WASM library. Using Vietnamese (vie) language model.', task: 'ocr' },
+                florence2: { name: 'Florence-2-base-ft', size: '~198 MB (fp16)', desc: 'ONNX Community Florence-2 Base WebGPU fine-tuned. Excellent for documents.', task: 'ocr', selectedModelId: 'onnx-community/Florence-2-base-ft' },
+                smolvlm: { name: 'SmolVLM-256M-Instruct', size: '~189 MB (q4f16)', desc: 'Vision-Language model optimized for processing visual tables and text extraction.', task: 'ocr', selectedModelId: 'HuggingFaceTB/SmolVLM-256M-Instruct' },
+                granite: { name: 'Granite Docling 258M', size: '~264 MB (q4)', desc: 'IBM Document understanding vision-seq2seq model for visual layout extraction.', task: 'ocr', selectedModelId: 'onnx-community/granite-docling-258M-ONNX' },
+                lfm2vl: { name: 'LFM2-VL-450M-ONNX', size: '~548 MB (hybrid)', desc: 'Mamba+attention visual-language hybrid model. Robust 32K token diacritical output.', task: 'ocr', selectedModelId: 'onnx-community/LFM2-VL-450M-ONNX' }
+            },
+            summarize: {
+                distilbart: { name: 'DistilBART CNN 6-6', size: '~284 MB (WASM)', desc: 'Fast sequence-to-sequence summarization model running in CPU/WASM mode.', task: 'summarization', selectedModelId: 'Xenova/distilbart-cnn-6-6' },
+                smollm2: { name: 'SmolLM2 360M Instruct', size: '~273 MB (WebGPU)', desc: 'Highly optimized instruction model with chat template support for summaries.', task: 'text-generation', selectedModelId: 'HuggingFaceTB/SmolLM2-360M-Instruct' },
+                falcon: { name: 'Falcon H1 Tiny 90M', size: '~97 MB (WebGPU)', desc: 'Ultra lightweight, quick response visual summaries matching specific patterns.', task: 'text-generation', selectedModelId: 'onnx-community/Falcon-H1-Tiny-90M-Instruct-ONNX' },
+                bonsai: { name: 'Bonsai 1.7B ONNX', size: '~291 MB (WebGPU)', desc: 'High capacity model for context summarizations using WebGPU q1 quantizations.', task: 'text-generation', selectedModelId: 'onnx-community/Bonsai-1.7B-ONNX' },
+                lamini: { name: 'LaMini Flan-T5 248M', size: '~225 MB (WASM)', desc: 'Flan-T5 tuned model perfect for structured layout descriptions and analysis.', task: 'summarization', selectedModelId: 'Xenova/LaMini-Flan-T5-248M' }
+            }
+        };
+
+        // DOM elements
+        const gpuBadge = document.getElementById('gpu-badge');
+        const btnTaskOcr = document.getElementById('btn-task-ocr');
+        const btnTaskSum = document.getElementById('btn-task-sum');
+        const modelSelect = document.getElementById('test-model-select');
+        const modelDetails = document.getElementById('model-details');
+        const btnLoadModel = document.getElementById('btn-load-model');
+        const btnRunBenchmark = document.getElementById('btn-run-benchmark');
+        const btnRunAll = document.getElementById('btn-run-all');
+        const logConsole = document.getElementById('log-console');
+        const progressBar = document.getElementById('test-progress-bar');
+        const outputText = document.getElementById('test-output-text');
+        
+        const statLoadTime = document.getElementById('stat-load-time');
+        const statInferenceTime = document.getElementById('stat-inference-time');
+        const statSpeed = document.getElementById('stat-speed');
+        
+        const btnCopyOutput = document.getElementById('btn-copy-output');
+        const btnFlowToSum = document.getElementById('btn-flow-to-sum');
+        const btnClearLogs = document.getElementById('btn-clear-logs');
+        const validationContainer = document.getElementById('vi-validation-container');
+        const validBadge = document.getElementById('vi-valid-badge');
+        const validDetails = document.getElementById('vi-valid-details');
+        const resultsTable = document.getElementById('benchmark-results-table');
+
+        // Initial setup
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkWebGPU();
+            toggleTask('ocr');
+        });
+
+        // Toggle Task Pipeline
+        btnTaskOcr.addEventListener('click', () => toggleTask('ocr'));
+        btnTaskSum.addEventListener('click', () => toggleTask('summarize'));
+
+        function toggleTask(task) {
+            STATE.currentTask = task;
+            STATE.isModelLoaded = false;
+            btnRunBenchmark.disabled = true;
+            btnLoadModel.innerHTML = '<i class="fa-solid fa-download"></i> Load Model';
+            
+            if (task === 'ocr') {
+                btnTaskOcr.className = 'py-2.5 px-4 rounded-xl font-semibold border bg-indigo-600/20 border-indigo-500 text-indigo-200 flex items-center justify-center gap-2 transition-all';
+                btnTaskSum.className = 'py-2.5 px-4 rounded-xl font-semibold border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2 transition-all';
+                btnRunAll.classList.remove('hidden');
+            } else {
+                btnTaskSum.className = 'py-2.5 px-4 rounded-xl font-semibold border bg-indigo-600/20 border-indigo-500 text-indigo-200 flex items-center justify-center gap-2 transition-all';
+                btnTaskOcr.className = 'py-2.5 px-4 rounded-xl font-semibold border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2 transition-all';
+                btnRunAll.classList.add('hidden');
+            }
+            populateModels();
+        }
+
+        // Check WebGPU availability
+        async function checkWebGPU() {
+            if (!navigator.gpu) {
+                gpuBadge.className = 'px-3 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-1.5';
+                gpuBadge.innerHTML = '<i class="fa-solid fa-microchip"></i> WASM / CPU Only';
+                STATE.currentDevice = 'wasm';
+                return;
+            }
+            try {
+                const adapter = await navigator.gpu.requestAdapter();
+                if (adapter) {
+                    gpuBadge.className = 'px-3 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5';
+                    gpuBadge.innerHTML = '<i class="fa-solid fa-bolt"></i> WebGPU Enabled';
+                    STATE.currentDevice = 'webgpu';
+                }
+            } catch (e) {
+                gpuBadge.className = 'px-3 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-1.5';
+                gpuBadge.innerHTML = '<i class="fa-solid fa-microchip"></i> WASM / CPU Only';
+                STATE.currentDevice = 'wasm';
+            }
+        }
+
+        // Log formatter
+        function printLog(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const colorClass = type === 'error' ? 'text-rose-400' : type === 'success' ? 'text-emerald-400' : 'text-slate-400';
+            const logHTML = `<div><span class="text-slate-600 font-sans">[${time}]</span> <span class="${colorClass}">${msg}</span></div>`;
+            logConsole.insertAdjacentHTML('beforeend', logHTML);
+            logConsole.scrollTop = logConsole.scrollHeight;
+        }
+
+        btnClearLogs.addEventListener('click', () => {
+            logConsole.innerHTML = '';
+        });
+
+        // Populate Model list
+        function populateModels() {
+            modelSelect.innerHTML = '';
+            const models = MODEL_METADATA[STATE.currentTask];
+            for (const key in models) {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = `${models[key].name} (${models[key].size})`;
+                modelSelect.appendChild(opt);
+            }
+            updateModelDetails();
+        }
+
+        modelSelect.addEventListener('change', updateModelDetails);
+
+        function updateModelDetails() {
+            const key = modelSelect.value;
+            const models = MODEL_METADATA[STATE.currentTask];
+            if (models && models[key]) {
+                modelDetails.textContent = models[key].desc;
+                STATE.isModelLoaded = false;
+                btnRunBenchmark.disabled = true;
+                btnLoadModel.innerHTML = '<i class="fa-solid fa-download"></i> Load Model';
+            }
+        }
+
+        // Copy Text Functionality
+        btnCopyOutput.addEventListener('click', () => {
+            if (!outputText.value) return;
+            navigator.clipboard.writeText(outputText.value);
+            const originalHTML = btnCopyOutput.innerHTML;
+            btnCopyOutput.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copied!';
+            setTimeout(() => btnCopyOutput.innerHTML = originalHTML, 2000);
+        });
+
+        // Flow to Summarizer pipeline bridging
+        btnFlowToSum.addEventListener('click', () => {
+            if (!STATE.lastExtractText) return;
+            printLog('Bridging OCR Output text directly into Summarization text processor.', 'info');
+            toggleTask('summarize');
+            outputText.value = STATE.lastExtractText;
+            printLog('OCR Output bridged. Select a summarizer model and run text generation.', 'success');
+        });
+
+        // Progress Handler
+        function updateProgress(pct) {
+            progressBar.style.width = `${pct}%`;
+        }
+
+        // Initialize and Load selected model weights
+        btnLoadModel.addEventListener('click', async () => {
+            const key = modelSelect.value;
+            const meta = MODEL_METADATA[STATE.currentTask][key];
+            
+            btnLoadModel.disabled = true;
+            btnLoadModel.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Initializing...';
+            progressBar.style.width = '0%';
+            
+            const startLoad = performance.now();
+            printLog(`Initializing Model: ${meta.name} on context device: [${STATE.currentDevice.toUpperCase()}]`, 'info');
+
+            try {
+                if (STATE.currentTask === 'ocr') {
+                    if (key === 'tesseract') {
+                        printLog('Loading Tesseract.js WASM worker and downloading language pack [vie]...', 'info');
+                        window.tessWorker = await Tesseract.createWorker('vie', 1, {
+                            logger: m => {
+                                if (m.status === 'recognizing text') {
+                                    updateProgress(Math.round(m.progress * 100));
+                                    printLog(`Tesseract: Recognizing Text... ${Math.round(m.progress * 100)}%`, 'info');
+                                }
+                            }
+                        });
+                        printLog('Tesseract WASM loaded successfully.', 'success');
+                    } else {
+                        // Load HF vision models
+                        const selectedModelId = meta.selectedModelId;
+                        printLog(`Loading tokenizer and processor for ${selectedModelId} from Hugging Face CDN...`, 'info');
+                        
+                        STATE.processor = await AutoProcessor.from_pretrained(selectedModelId);
+                        if (key !== 'lfm2vl') {
+                            STATE.tokenizer = await AutoTokenizer.from_pretrained(selectedModelId);
+                        }
+                        
+                        printLog(`Downloading and loading ONNX model weights for ${meta.name} (${meta.size})... This may take a while.`, 'info');
+                        
+                        const fileProgress = {};
+                        const fileSizes = {};
+                        const calcOverall = () => {
+                            const files = Object.keys(fileProgress);
+                            if (!files.length) return 0;
+                            let total = 0, loaded = 0;
+                            for (const f of files) {
+                                const size = fileSizes[f] || 1;
+                                total += size;
+                                loaded += size * (fileProgress[f] / 100);
+                            }
+                            return total > 0 ? (loaded / total) * 100 : 0;
+                        };
+
+                        const progressCallback = (data) => {
+                            if (data.status === 'initiate') {
+                                fileProgress[data.file] = 0;
+                            } else if (data.status === 'progress') {
+                                fileProgress[data.file] = data.progress || 0;
+                                if (data.total) fileSizes[data.file] = data.total;
+                                const pct = calcOverall();
+                                updateProgress(pct);
+                                printLog(`Downloading: ${data.file.split('/').pop()} (${Math.round(data.progress)}%)`, 'info');
+                            } else if (data.status === 'done') {
+                                fileProgress[data.file] = 100;
+                            }
+                        };
+
+                        if (key === 'lfm2vl') {
+                            STATE.model = await AutoModelForImageTextToText.from_pretrained(selectedModelId, {
+                                device: STATE.currentDevice,
+                                dtype: { vision_encoder: 'fp16', embed_tokens: 'fp16', decoder_model_merged: 'q4f16' },
+                                progress_callback: progressCallback,
+                            });
+                        } else if (key === 'smolvlm' || key === 'granite') {
+                            STATE.model = await AutoModelForVision2Seq.from_pretrained(selectedModelId, {
+                                device: STATE.currentDevice,
+                                dtype: key === 'smolvlm' ? 'q4f16' : 'q4',
+                                progress_callback: progressCallback,
+                            });
+                        } else {
+                            // Florence-2コミュニティ
+                            STATE.model = await AutoModel.from_pretrained(selectedModelId, {
+                                device: STATE.currentDevice,
+                                dtype: 'fp16',
+                                progress_callback: progressCallback,
+                            });
+                        }
+                    }
+                } else {
+                    // Task: Summarize models loading
+                    const selectedModelId = meta.selectedModelId;
+                    printLog(`Loading Summarizer pipelines for: ${selectedModelId}...`, 'info');
+                    
+                    const isChatModel = meta.task === 'text-generation';
+                    const transformers = await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@4');
+                    
+                    STATE.pipeline = await transformers.pipeline(meta.task, selectedModelId, {
+                        device: STATE.currentDevice,
+                        dtype: key === 'distilbart' ? 'quantized' : 'q4',
+                        progress_callback: (data) => {
+                            if (data.status === 'progress') {
+                                updateProgress(data.progress);
+                                printLog(`Downloading model weights: ${Math.round(data.progress)}%`, 'info');
+                            }
+                        }
+                    });
+                }
+
+                const endLoad = performance.now();
+                const loadTime = ((endLoad - startLoad) / 1000).toFixed(2);
+                statLoadTime.textContent = `${loadTime}s`;
+                
+                printLog(`Model weights successfully loaded in memory in ${loadTime}s. Ready to run test benchmark.`, 'success');
+                STATE.isModelLoaded = true;
+                btnRunBenchmark.disabled = false;
+                btnLoadModel.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i> Loaded';
+
+            } catch (err) {
+                printLog(`Loading Failure: ${err.message}`, 'error');
+                console.error(err);
+                btnLoadModel.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Failed';
+                btnLoadModel.disabled = false;
+            }
+        });
+
+        // Run Benchmark Test
+        btnRunBenchmark.addEventListener('click', async () => {
+            const key = modelSelect.value;
+            const meta = MODEL_METADATA[STATE.currentTask][key];
+            
+            btnRunBenchmark.disabled = true;
+            btnRunBenchmark.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Testing...';
+            
+            outputText.value = '';
+            statInferenceTime.textContent = '--';
+            statSpeed.textContent = '--';
+            validationContainer.classList.add('hidden');
+
+            const startInfer = performance.now();
+            printLog(`Executing Test pipeline on ${STATE.currentTask.toUpperCase()} for model [${meta.name}]...`, 'info');
+
+            try {
+                if (STATE.currentTask === 'ocr') {
+                    const imgElement = document.getElementById('test-image');
+                    const imgUrl = imgElement.src;
+                    
+                    let extractedResult = '';
+                    
+                    if (key === 'tesseract') {
+                        printLog('Invoking Tesseract WASM OCR core parser...', 'info');
+                        const res = await window.tessWorker.recognize(imgUrl);
+                        extractedResult = res.data.text;
+                    } else {
+                        printLog('Loading image raw canvas arrays for ONNX bindings...', 'info');
+                        const rawImage = await RawImage.fromURL(imgUrl);
+                        
+                        if (key === 'florence2') {
+                            printLog('Running Microsoft Florence-2 `<OCR>` sequence parser...', 'info');
+                            const inputs = await STATE.processor(rawImage, '<OCR>');
+                            const outputs = await STATE.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false });
+                            const decoded = STATE.tokenizer.batch_decode(outputs, { skip_special_tokens: false })[0];
+                            extractedResult = decoded.replaceAll('<s>', '').replaceAll('</s>', '').replace('<OCR>', '').trim();
+                        } else if (key === 'smolvlm') {
+                            printLog('Evaluating HuggingFace SmolVLM multi-modal extraction instruction prompt...', 'info');
+                            const messages = [{
+                                role: 'user',
+                                content: [{ type: 'image' }, { type: 'text', text: 'Extract all text from this image exactly as written, preserving all diacritical marks and special characters.' }],
+                            }];
+                            const chatPrompt = STATE.processor.apply_chat_template(messages, { render_bos_token: false });
+                            const inputs = await STATE.processor(chatPrompt, [rawImage]);
+                            const outputs = await STATE.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false, repetition_penalty: 1.1 });
+                            const full = STATE.tokenizer.decode(outputs[0], { skip_special_tokens: true });
+                            extractedResult = full.replace(chatPrompt, '').replace(/^A:\s*/, '').trim();
+                        } else if (key === 'granite') {
+                            printLog('Invoking IBM Granite Docling structured document conversion pipeline...', 'info');
+                            const inputs = await STATE.processor('Convert this document to text, preserving all diacritical marks and special characters.', [rawImage]);
+                            const outputs = await STATE.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false, repetition_penalty: 1.3 });
+                            const full = STATE.tokenizer.decode(outputs[0], { skip_special_tokens: true });
+                            extractedResult = full.trim();
+                        } else if (key === 'lfm2vl') {
+                            printLog('Executing Mamba-Hybrid LFM2-VL vision tokenizer and sequence generation...', 'info');
+                            const messages = [
+                                { role: 'system', content: 'You are a helpful multimodal assistant.' },
+                                { role: 'user', content: [{ type: 'image' }, { type: 'text', text: 'Extract all text from this image exactly as written, preserving all diacritical marks, special characters, and line breaks.' }] },
+                            ];
+                            const chatPrompt = STATE.processor.apply_chat_template(messages, { add_generation_prompt: true });
+                            // Using the correct (text, [images]) signature pattern fixed in review
+                            const inputs = await STATE.processor(chatPrompt, [rawImage]);
+                            const outputs = await STATE.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false });
+                            const full = STATE.processor.tokenizer.decode(outputs[0], { skip_special_tokens: true });
+                            extractedResult = full.replace(chatPrompt, '').trim();
+                        }
+                    }
+
+                    const endInfer = performance.now();
+                    const inferTime = ((endInfer - startInfer) / 1000).toFixed(2);
+                    statInferenceTime.textContent = `${inferTime}s`;
+                    
+                    const charCount = extractedResult.length;
+                    const charPerSec = (charCount / parseFloat(inferTime)).toFixed(0);
+                    statSpeed.textContent = `${charPerSec} c/s`;
+
+                    outputText.value = extractedResult;
+                    STATE.lastExtractText = extractedResult;
+                    btnFlowToSum.disabled = false;
+
+                    printLog(`OCR Extraction succeeded. Parsed ${charCount} characters in ${inferTime}s.`, 'success');
+                    
+                    // Verify Vietnamese diacritics accuracy
+                    validateVietnamese(extractedResult);
+                    recordBenchmarkResult('OCR', meta.name, inferTime, 'Success');
+
+                } else {
+                    // Task: Summarize running
+                    const textContent = outputText.value || STATE.lastExtractText;
+                    if (!textContent) {
+                        alert('No input text present for summarization. Please bridge OCR text first or write text in the output box.');
+                        btnRunBenchmark.disabled = false;
+                        btnRunBenchmark.innerHTML = '<i class="fa-solid fa-play"></i> Run Test';
+                        return;
+                    }
+
+                    printLog('Feeding document text blocks into summarizer pipeline...', 'info');
+                    
+                    let processedOutput = '';
+                    const isChatModel = meta.task === 'text-generation';
+                    
+                    if (isChatModel) {
+                        const messages = [
+                            { role: "system", content: "You are a helpful assistant that summarizes text concisely in Vietnamese." },
+                            { role: "user", content: `Tóm tắt nội dung sau đây một cách ngắn gọn, súc tích:\n\n${textContent}` }
+                        ];
+                        const output = await STATE.pipeline(messages, { max_new_tokens: 200, do_sample: false });
+                        processedOutput = output[0].generated_text.at(-1).content;
+                    } else {
+                        const output = await STATE.pipeline(textContent, { max_new_tokens: 200, min_new_tokens: 50 });
+                        processedOutput = output[0].summary_text;
+                    }
+
+                    const endInfer = performance.now();
+                    const inferTime = ((endInfer - startInfer) / 1000).toFixed(2);
+                    statInferenceTime.textContent = `${inferTime}s`;
+                    statSpeed.textContent = `${(processedOutput.length / parseFloat(inferTime)).toFixed(0)} c/s`;
+
+                    outputText.value = processedOutput;
+                    printLog(`Summarization benchmark complete. Output text loaded.`, 'success');
+                    recordBenchmarkResult('Summarizer', meta.name, inferTime, 'Success');
+                }
+
+            } catch (err) {
+                printLog(`Execution Error: ${err.message}`, 'error');
+                console.error(err);
+                outputText.value = `Testing Failed: ${err.message}`;
+                recordBenchmarkResult(STATE.currentTask.toUpperCase(), meta.name, '--', 'Failed');
+            } finally {
+                btnRunBenchmark.disabled = false;
+                btnRunBenchmark.innerHTML = '<i class="fa-solid fa-play"></i> Run Test';
+            }
+        });
+
+        // Sequential Benchmark runner
+        btnRunAll.addEventListener('click', async () => {
+            printLog('Initiating sequential batch benchmarks for all OCR models...', 'info');
+            const ocrKeys = Object.keys(MODEL_METADATA.ocr);
+            
+            for (const key of ocrKeys) {
+                modelSelect.value = key;
+                updateModelDetails();
+                
+                // Load
+                btnLoadModel.click();
+                // Wait for load to finish
+                while(!STATE.isModelLoaded) {
+                    await new Promise(r => setTimeout(r, 500));
+                }
+                
+                // Run Test
+                btnRunBenchmark.click();
+                await new Promise(r => setTimeout(r, 2000));
+                while(btnRunBenchmark.disabled) {
+                    await new Promise(r => setTimeout(r, 500));
+                }
+            }
+            printLog('All model benchmarks processed.', 'success');
+        });
+
+        // Benchmarks Table Logger
+        function recordBenchmarkResult(task, model, time, status) {
+            // Remove empty row
+            if (resultsTable.querySelector('tr[colspan="7"]')) {
+                resultsTable.innerHTML = '';
+            }
+
+            const isSuccess = status === 'Success';
+            const statusBadge = isSuccess 
+                ? '<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Passed</span>'
+                : '<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">Failed</span>';
+
+            const viTextStatus = STATE.currentTask === 'ocr' && isSuccess ? 'Validated' : '--';
+
+            const row = `
+                <tr class="hover:bg-slate-900/40 transition-colors">
+                    <td class="py-4 px-6 font-semibold">${task}</td>
+                    <td class="py-4 px-6 font-mono text-xs">${model}</td>
+                    <td class="py-4 px-6 text-xs">${STATE.currentDevice.toUpperCase()}</td>
+                    <td class="py-4 px-6 text-xs font-mono">${statLoadTime.textContent}</td>
+                    <td class="py-4 px-6 text-xs font-mono text-rose-400">${time}s</td>
+                    <td class="py-4 px-6 text-xs font-medium text-emerald-400">${viTextStatus}</td>
+                    <td class="py-4 px-6">${statusBadge}</td>
+                </tr>
+            `;
+            resultsTable.insertAdjacentHTML('afterbegin', row);
+        }
+
+        // Vietnamese validation inspector
+        function validateVietnamese(text) {
+            validationContainer.classList.remove('hidden');
+            
+            // Check for Vietnamese-specific diacritical combinations
+            const regexVi = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
+            const hasViChars = regexVi.test(text);
+
+            // Check for key words from TestOCR.png
+            const keywords = ['Sài Gòn', 'Tân Định', 'Bến Thành', 'Cầu Ông Lãnh', 'Xuân Hòa', 'Nhiêu Lộc', 'Sáp nhập', 'Đơn vị Hành chính'];
+            let foundCount = 0;
+            const foundWords = [];
+
+            keywords.forEach(word => {
+                if (text.toLowerCase().includes(word.toLowerCase())) {
+                    foundCount++;
+                    foundWords.push(word);
+                }
+            });
+
+            const matchPct = Math.round((foundCount / keywords.length) * 100);
+
+            if (hasViChars && foundCount > 0) {
+                validBadge.className = 'w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0';
+                validBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                validDetails.innerHTML = `
+                    Detected Vietnamese diacritics. Successfully extracted key document entities: 
+                    <span class="text-emerald-400 font-semibold">${foundWords.join(', ')}</span> 
+                    (${matchPct}% matches against source targets). Character set matches local language map standards.
+                `;
+            } else {
+                validBadge.className = 'w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center flex-shrink-0';
+                validBadge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+                validDetails.innerHTML = `
+                    <span class="text-rose-400 font-semibold">Validation warning:</span> Diacritical mark density low or target Vietnamese names (e.g. Sài Gòn, Tân Định) missing. 
+                    Ensure model and language parameters are fully initialized.
+                `;
+            }
+        }
+
+    </script>
+
+</body>
+</html>

@@ -344,7 +344,7 @@ async function ocrLFM2VL(image) {
         { role: 'user', content: [{ type: 'image' }, { type: 'text', text: 'Extract all text from this image exactly as written, preserving all diacritical marks, special characters, and line breaks. Output only the extracted text.' }] },
     ];
     const chatPrompt = state.processor.apply_chat_template(messages, { add_generation_prompt: true });
-    const inputs = await state.processor(image, chatPrompt, { add_special_tokens: false });
+    const inputs = await state.processor(chatPrompt, [image]);
     const outputs = await state.model.generate({ ...inputs, max_new_tokens: 1024, do_sample: false });
     const full = state.processor.tokenizer.decode(outputs[0], { skip_special_tokens: true });
     const prompt = state.processor.tokenizer.decode(inputs.input_ids[0], { skip_special_tokens: true });
