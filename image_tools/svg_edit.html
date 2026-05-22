@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Free online SVG editor - load, preview and edit SVG files with visual tools and live code editor" />
+  <title>SVG Editor - Bang's Tools</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-2QJTEKK89H");
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="/js/utils/common.js"></script>
+
+  <style>
+    body { font-family: "Inter", sans-serif; }
+    h1, h2, h3, h4, h5, h6 { font-family: "Outfit", sans-serif; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Canvas */
+    #canvas-container {
+      overflow: hidden;
+      position: relative;
+      background-color: #e8e8e8;
+      background-image:
+        linear-gradient(45deg, #d0d0d0 25%, transparent 25%),
+        linear-gradient(-45deg, #d0d0d0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #d0d0d0 75%),
+        linear-gradient(-45deg, transparent 75%, #d0d0d0 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+
+    #svg-wrapper {
+      position: absolute;
+      transform-origin: 0 0;
+      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.18));
+    }
+
+    #overlay-svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* Tool buttons */
+    .tool-btn {
+      width: 32px; height: 32px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 8px; border: 1.5px solid transparent;
+      color: #6b7280; font-size: 13px;
+      cursor: pointer; background: transparent;
+      transition: all 0.15s;
+    }
+    .tool-btn:hover { background: #fff7ed; color: #f97316; }
+    .tool-btn.active { background: #fff7ed; border-color: #f97316; color: #f97316; }
+    .tool-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* CodeMirror */
+    .cm-editor { height: 220px; font-size: 13px; }
+    .cm-editor.cm-focused { outline: none !important; }
+    .cm-scroller { font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace !important; }
+    .cm-gutters { background: #fafafa !important; border-right: 1px solid #f0f0f0 !important; }
+
+    /* Layers */
+    .layer-item { cursor: pointer; transition: background 0.12s; border-left: 3px solid transparent; }
+    .layer-item:hover { background: rgba(249,115,22,0.07); }
+    .layer-item.selected { background: rgba(249,115,22,0.12); border-left-color: #f97316; }
+
+    /* Color swatch */
+    input[type="color"] {
+      -webkit-appearance: none; border: none;
+      width: 28px; height: 26px; cursor: pointer; border-radius: 4px; padding: 0;
+    }
+    input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+    input[type="color"]::-webkit-color-swatch { border: none; border-radius: 3px; }
+
+    /* Prop input */
+    .prop-input {
+      width: 100%; padding: 3px 8px; font-size: 12px;
+      border: 1px solid #e5e7eb; border-radius: 6px;
+      outline: none; background: white;
+    }
+    .prop-input:focus { border-color: #f97316; box-shadow: 0 0 0 2px rgba(249,115,22,0.15); }
+    .prop-label { font-size: 10px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 p-4 md:p-6">
+
+  <!-- BG blobs -->
+  <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-50">
+    <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-orange-200/40 blur-[100px]"></div>
+    <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-amber-200/40 blur-[100px]"></div>
+  </div>
+
+  <div class="max-w-screen-xl mx-auto">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-5 animate-[fadeIn_0.6s_ease-out]">
+      <a href="index.html" class="flex items-center gap-2 text-gray-500 hover:text-orange-600 transition-colors text-sm font-medium">
+        <i class="fa-solid fa-arrow-left"></i> All Tools
+      </a>
+      <h1 class="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">SVG Editor</h1>
+      <div class="w-24"></div>
+    </header>
+
+    <!-- ── Upload View ──────────────────────────────────────────────────── -->
+    <div id="upload-view" class="animate-[fadeIn_0.7s_ease-out]">
+      <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-8 max-w-2xl mx-auto">
+        <div id="drop-zone"
+          class="border-2 border-dashed border-gray-300 rounded-xl p-14 text-center cursor-pointer transition-all hover:border-orange-400 hover:bg-orange-50/40 select-none"
+          onclick="document.getElementById('file-input').click()">
+          <i class="fa-regular fa-file-code text-5xl text-orange-300 mb-4 block"></i>
+          <p class="text-lg font-semibold text-gray-600 mb-1">Drop an SVG file here</p>
+          <p class="text-sm text-gray-400 mb-5">or click to browse</p>
+          <span class="px-5 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors">Choose SVG File</span>
+          <input type="file" id="file-input" accept=".svg,image/svg+xml" class="hidden" />
+        </div>
+        <div class="mt-5 text-center text-sm text-gray-400">
+          or <button id="toggle-paste-btn" onclick="togglePasteArea()" class="text-orange-500 hover:underline">paste SVG code</button>
+        </div>
+        <div id="paste-area" class="hidden mt-4 space-y-2">
+          <textarea id="paste-input" rows="7"
+            class="w-full p-3 rounded-xl border border-gray-200 font-mono text-xs resize-none focus:outline-none focus:ring-2 focus:ring-orange-300"
+            placeholder="&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; ...&gt;&#10;  ...&#10;&lt;/svg&gt;"></textarea>
+          <button onclick="loadFromPaste()" class="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors">Load SVG</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Workspace ────────────────────────────────────────────────────── -->
+    <div id="workspace-view" class="hidden animate-[fadeIn_0.5s_ease-out] space-y-3">
+
+      <!-- Toolbar -->
+      <div class="bg-white/85 backdrop-blur-xl rounded-2xl shadow border border-white/50 px-4 py-2 flex flex-wrap items-center gap-2">
+        <!-- Drawing tools -->
+        <div class="flex items-center gap-1 pr-3 border-r border-gray-200">
+          <button class="tool-btn active" id="tool-select" title="Select  V" onclick="setTool('select')"><i class="fa-solid fa-arrow-pointer"></i></button>
+          <button class="tool-btn" id="tool-rect"   title="Rectangle  R" onclick="setTool('rect')"><i class="fa-regular fa-square"></i></button>
+          <button class="tool-btn" id="tool-circle" title="Circle  C"     onclick="setTool('circle')"><i class="fa-regular fa-circle"></i></button>
+          <button class="tool-btn" id="tool-line"   title="Line  L"       onclick="setTool('line')"><i class="fa-solid fa-minus rotate-45"></i></button>
+          <button class="tool-btn" id="tool-text"   title="Text  T"       onclick="setTool('text')"><i class="fa-solid fa-t text-xs font-bold"></i></button>
+        </div>
+        <!-- Undo/redo/clean -->
+        <div class="flex items-center gap-1 pr-3 border-r border-gray-200">
+          <button class="tool-btn" id="btn-undo" title="Undo  Ctrl+Z"       onclick="undo()"><i class="fa-solid fa-rotate-left"></i></button>
+          <button class="tool-btn" id="btn-redo" title="Redo  Ctrl+Shift+Z" onclick="redo()"><i class="fa-solid fa-rotate-right"></i></button>
+          <button class="tool-btn" title="Clean SVG — remove editor metadata, empty groups, hidden elements" onclick="doCleanSVG()"><i class="fa-solid fa-broom"></i></button>
+        </div>
+        <!-- File info -->
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+          <span id="file-badge" class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium truncate max-w-[180px]"></span>
+          <span id="elem-count" class="text-xs text-gray-400"></span>
+        </div>
+        <!-- Export dropdown -->
+        <div class="relative" id="export-wrap">
+          <button onclick="toggleExportMenu()" class="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-medium transition-colors">
+            <i class="fa-solid fa-download text-xs"></i> Export <i class="fa-solid fa-chevron-down text-xs"></i>
+          </button>
+          <div id="export-menu" class="hidden absolute right-0 top-full mt-1 w-44 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-30">
+            <button onclick="doExportSVG()" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-2"><i class="fa-regular fa-file-code text-orange-400 w-4"></i> Download SVG</button>
+            <button onclick="showPNGModal()"  class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-2"><i class="fa-regular fa-image text-orange-400 w-4"></i> Download PNG…</button>
+            <button onclick="doCopyCode()"   class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 flex items-center gap-2"><i class="fa-regular fa-copy text-orange-400 w-4"></i> Copy SVG code</button>
+          </div>
+        </div>
+        <button class="tool-btn" title="Close file" onclick="closeFile()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Main area -->
+      <div class="flex gap-3" style="height: calc(100vh - 230px); min-height: 500px;">
+
+        <!-- Canvas -->
+        <div class="flex-1 flex flex-col bg-white/80 backdrop-blur-xl rounded-2xl shadow border border-white/50 overflow-hidden">
+          <div id="canvas-container" class="flex-1 relative select-none">
+            <div id="svg-wrapper"></div>
+            <svg id="overlay-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <!-- Zoom bar -->
+          <div class="flex items-center gap-2 px-4 py-2 border-t border-gray-100 bg-white/60">
+            <button onclick="zoomBy(-0.1)" class="tool-btn w-6 h-6 text-xs"><i class="fa-solid fa-minus"></i></button>
+            <input type="range" id="zoom-slider" min="10" max="400" value="100" step="5"
+              class="w-28 accent-orange-500" oninput="setZoom(this.value/100)" />
+            <button onclick="zoomBy(0.1)" class="tool-btn w-6 h-6 text-xs"><i class="fa-solid fa-plus"></i></button>
+            <span id="zoom-label" class="text-xs text-gray-400 w-9">100%</span>
+            <button onclick="fitToView()" class="text-xs text-orange-500 hover:underline">Fit</button>
+          </div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="w-72 flex flex-col bg-white/80 backdrop-blur-xl rounded-2xl shadow border border-white/50 overflow-hidden">
+          <!-- Tabs -->
+          <div class="flex border-b border-gray-100 shrink-0">
+            <button onclick="showTab('properties')" id="tab-properties"
+              class="flex-1 py-2.5 text-xs font-semibold text-orange-600 border-b-2 border-orange-500">Properties</button>
+            <button onclick="showTab('layers')" id="tab-layers"
+              class="flex-1 py-2.5 text-xs font-semibold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors">Layers</button>
+          </div>
+
+          <!-- Properties -->
+          <div id="panel-properties" class="flex-1 overflow-y-auto p-3 space-y-3">
+            <div id="no-sel" class="text-center py-10 text-gray-400 text-sm">
+              <i class="fa-regular fa-hand-pointer text-3xl text-gray-200 block mb-2"></i>
+              Click an element to select it
+            </div>
+            <div id="sel-props" class="hidden space-y-3"></div>
+          </div>
+
+          <!-- Layers -->
+          <div id="panel-layers" class="hidden flex-1 overflow-y-auto flex flex-col">
+            <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between shrink-0">
+              <span class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Elements</span>
+              <span id="layers-count" class="text-xs text-gray-400"></span>
+            </div>
+            <div id="layers-list" class="flex-1 py-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code editor -->
+      <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow border border-white/50 overflow-hidden">
+        <button onclick="toggleCodePanel()" class="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50/60 transition-colors">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-code text-orange-500"></i> Code Editor</span>
+          <div class="flex items-center gap-2" onclick="event.stopPropagation()">
+            <button onclick="doFormatCode()" class="text-xs text-gray-400 hover:text-orange-500 px-2 py-0.5 rounded border border-gray-200 hover:border-orange-300 transition-colors">Format</button>
+            <button onclick="doApplyCode()" class="text-xs text-white bg-orange-500 hover:bg-orange-600 px-2 py-0.5 rounded transition-colors">Apply ↵</button>
+            <i id="code-chevron" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200 pointer-events-none"></i>
+          </div>
+        </button>
+        <div id="code-panel" class="hidden border-t border-gray-100">
+          <div id="code-error" class="hidden px-4 py-2 bg-red-50 border-b border-red-100 text-xs text-red-600 font-mono"></div>
+          <div id="cm-host"></div>
+        </div>
+      </div>
+    </div><!-- end workspace -->
+  </div><!-- end max-w container -->
+
+  <!-- PNG Modal -->
+  <div id="png-modal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 w-72">
+      <h3 class="font-bold text-base mb-4 font-['Outfit']">Export as PNG</h3>
+      <p class="text-xs text-gray-500 mb-3">Scale factor</p>
+      <div class="flex gap-2 mb-5">
+        <button onclick="setPNGScale(1)" data-scale="1" class="scale-btn flex-1 py-2 rounded-lg border text-sm text-gray-600 hover:bg-orange-50">1×</button>
+        <button onclick="setPNGScale(2)" data-scale="2" class="scale-btn flex-1 py-2 rounded-lg border text-sm bg-orange-50 border-orange-300 text-orange-700 font-semibold">2×</button>
+        <button onclick="setPNGScale(4)" data-scale="4" class="scale-btn flex-1 py-2 rounded-lg border text-sm text-gray-600 hover:bg-orange-50">4×</button>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="closePNGModal()" class="flex-1 py-2 rounded-lg border text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
+        <button onclick="doExportPNG()" class="flex-1 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium transition-colors">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clean SVG Modal -->
+  <div id="clean-modal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 w-96 max-w-full">
+      <h3 class="font-bold text-base mb-1 flex items-center gap-2" style="font-family:'Outfit',sans-serif">
+        <i class="fa-solid fa-broom text-orange-500"></i> SVG Cleaned
+      </h3>
+      <p class="text-xs text-gray-400 mb-4">The following were removed from your SVG:</p>
+      <ul id="clean-report-list" class="space-y-2 mb-5 max-h-52 overflow-y-auto"></ul>
+      <button onclick="closeCleanModal()"
+        class="w-full py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium transition-colors">Done</button>
+    </div>
+  </div>
+
+  <script type="module" src="svg_edit.js"></script>
+</body>
