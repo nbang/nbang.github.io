@@ -10,71 +10,47 @@
 // --- Constants & Data ---
 
 // List of Vietnamese provinces and their central meridians (VN-2000)
-// Format based on standard TT 26/2024/TT-BTNMT or similar regulations.
-// Standard zone width is typically 3 degrees (local) or 6 degrees (national). 
-// For CAD/Surveying at provincial level, it's usually 3-degree zones (zone 3).
+// Updated to reflect the 34 provincial-level units after the 2025 administrative
+// merger (effective June 12, 2025, per National Assembly Resolution – 15th session).
+// CMs are estimated from constituent province geographic centers; await official
+// MONRE/TT-BTNMT update for final authoritative zone assignments.
 const PROVINCE_MERIDIANS = [
-    { name: "Cao Bằng", cm: 105.5 },
-    { name: "Lạng Sơn", cm: 107.25 },
-    { name: "Lào Cai", cm: 104.75 },
-    { name: "Lai Châu", cm: 103 },
-    { name: "Điện Biên", cm: 103 },
-    { name: "Sơn La", cm: 104 },
-    { name: "Bắc Kạn", cm: 106.5 },
-    { name: "Thái Nguyên", cm: 106.25 },
-    { name: "Yên Bái", cm: 104.75 },
-    { name: "Tuyên Quang", cm: 106 },
-    { name: "Phú Thọ", cm: 105.5 },
-    { name: "Vĩnh Phúc", cm: 105.5 },
-    { name: "Bắc Giang", cm: 107 },
-    { name: "Bắc Ninh", cm: 105.5 },
-    { name: "Quảng Ninh", cm: 107.75 },
-    { name: "Hà Nội", cm: 105 },
-    { name: "Hải Phòng", cm: 105.75 },
-    { name: "Hải Dương", cm: 105.5 },
-    { name: "Hưng Yên", cm: 105.5 },
-    { name: "Hà Nam", cm: 105 },
-    { name: "Nam Định", cm: 105.5 },
-    { name: "Thái Bình", cm: 105.5 },
-    { name: "Ninh Bình", cm: 105 },
-    { name: "Thanh Hóa", cm: 105 },
-    { name: "Nghệ An", cm: 104.75 },
-    { name: "Hà Tĩnh", cm: 105.5 },
-    { name: "Quảng Bình", cm: 106 },
-    { name: "Quảng Trị", cm: 106.25 },
-    { name: "Thừa Thiên Huế", cm: 107 },
-    { name: "Đà Nẵng", cm: 107.75 },
-    { name: "Quảng Nam", cm: 107.75 },
-    { name: "Quảng Ngãi", cm: 108.5 },
-    { name: "Bình Định", cm: 108.25 },
-    { name: "Phú Yên", cm: 108.5 },
-    { name: "Khánh Hòa", cm: 108.25 },
-    { name: "Ninh Thuận", cm: 108.25 },
-    { name: "Bình Thuận", cm: 108.5 },
-    { name: "Kon Tum", cm: 107.5 },
-    { name: "Gia Lai", cm: 108.25 },
-    { name: "Đắk Lắk", cm: 108.5 },
-    { name: "Đắk Nông", cm: 108.5 },
-    { name: "Lâm Đồng", cm: 107.75 },
-    { name: "Bình Phước", cm: 106.25 },
-    { name: "Tây Ninh", cm: 105.5 },
-    { name: "Bình Dương", cm: 106 },
-    { name: "Đồng Nai", cm: 107.75 },
-    { name: "Bà Rịa - Vũng Tàu", cm: 107.75 },
-    { name: "TP. Hồ Chí Minh", cm: 105.75 },
-    { name: "Long An", cm: 105.75 },
-    { name: "Tiền Giang", cm: 105.75 },
-    { name: "Bến Tre", cm: 105.75 },
-    { name: "Trà Vinh", cm: 105.75 },
-    { name: "Vĩnh Long", cm: 105.75 },
-    { name: "Đồng Tháp", cm: 105 },
-    { name: "An Giang", cm: 105 },
-    { name: "Kiên Giang", cm: 104.5 },
-    { name: "Cần Thơ", cm: 105 },
-    { name: "Hậu Giang", cm: 105 },
-    { name: "Sóc Trăng", cm: 105.5 },
-    { name: "Bạc Liêu", cm: 105 },
-    { name: "Cà Mau", cm: 104.5 }
+    // 6 Centrally Governed Cities
+    { name: "Hà Nội", cm: 105 },                    // unchanged
+    { name: "Hải Phòng", cm: 105.75 },              // + Hải Dương
+    { name: "Đà Nẵng", cm: 107.75 },                // + Quảng Nam
+    { name: "Huế", cm: 107 },                        // formerly Thừa Thiên Huế, unchanged
+    { name: "TP. Hồ Chí Minh", cm: 106.5 },         // + Bình Dương + Bà Rịa - Vũng Tàu
+    { name: "Cần Thơ", cm: 105 },                    // + Hậu Giang + Sóc Trăng
+    // 28 Provinces
+    { name: "Cao Bằng", cm: 105.5 },                // unchanged
+    { name: "Lạng Sơn", cm: 107.25 },               // unchanged
+    { name: "Quảng Ninh", cm: 107.75 },             // unchanged
+    { name: "Lai Châu", cm: 103 },                   // unchanged
+    { name: "Điện Biên", cm: 103 },                  // unchanged
+    { name: "Sơn La", cm: 104 },                     // unchanged
+    { name: "Tuyên Quang", cm: 105 },                // + Hà Giang
+    { name: "Lào Cai", cm: 104.75 },                 // + Yên Bái
+    { name: "Thái Nguyên", cm: 106.25 },             // + Bắc Kạn
+    { name: "Phú Thọ", cm: 105.5 },                  // + Vĩnh Phúc + Hòa Bình
+    { name: "Bắc Ninh", cm: 106.5 },                 // + Bắc Giang
+    { name: "Hưng Yên", cm: 105.5 },                 // + Thái Bình
+    { name: "Thanh Hóa", cm: 105 },                  // unchanged
+    { name: "Nghệ An", cm: 104.75 },                 // unchanged
+    { name: "Hà Tĩnh", cm: 105.5 },                  // unchanged
+    { name: "Ninh Bình", cm: 105 },                  // + Hà Nam + Nam Định
+    { name: "Quảng Trị", cm: 106.25 },               // + Quảng Bình
+    { name: "Quảng Ngãi", cm: 108 },                 // + Kon Tum
+    { name: "Gia Lai", cm: 108.25 },                 // + Bình Định
+    { name: "Đắk Lắk", cm: 108.5 },                 // + Phú Yên
+    { name: "Khánh Hòa", cm: 108.25 },              // + Ninh Thuận
+    { name: "Lâm Đồng", cm: 108.25 },               // + Bình Thuận + Đắk Nông
+    { name: "Đồng Nai", cm: 107 },                   // + Bình Phước
+    { name: "Tây Ninh", cm: 105.75 },                // + Long An
+    { name: "An Giang", cm: 104.5 },                 // + Kiên Giang
+    { name: "Đồng Tháp", cm: 105.5 },               // + Tiền Giang
+    { name: "Vĩnh Long", cm: 105.75 },               // + Bến Tre + Trà Vinh
+    { name: "Cà Mau", cm: 104.75 },                  // + Bạc Liêu
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 // --- State Management ---

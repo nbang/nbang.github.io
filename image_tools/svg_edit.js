@@ -1,6 +1,8 @@
-import { EditorView, basicSetup } from 'https://esm.sh/codemirror@6';
-import { xml } from 'https://esm.sh/@codemirror/lang-xml@6';
+import { EditorView, lineNumbers, highlightActiveLine, keymap } from 'https://esm.sh/@codemirror/view@6';
 import { EditorState } from 'https://esm.sh/@codemirror/state@6';
+import { defaultKeymap, history, historyKeymap, indentWithTab } from 'https://esm.sh/@codemirror/commands@6';
+import { syntaxHighlighting, defaultHighlightStyle, foldGutter, foldKeymap } from 'https://esm.sh/@codemirror/language@6';
+import { xml } from 'https://esm.sh/@codemirror/lang-xml@6';
 
 // ─── State ───────────────────────────────────────────────────────────────────
 const S = {
@@ -41,13 +43,24 @@ const NS = 'http://www.w3.org/2000/svg';
 let cm = null;
 let cmSyncTimer = null;
 
+// All imports are @6 packages — they share the same @codemirror/state peer dep
+// and are deduplicated correctly by the browser module cache.
+const editorSetup = [
+  lineNumbers(),
+  highlightActiveLine(),
+  history(),
+  foldGutter(),
+  syntaxHighlighting(defaultHighlightStyle),
+  keymap.of([...defaultKeymap, ...historyKeymap, ...foldKeymap, indentWithTab]),
+];
+
 function initCM(content) {
   if (cm) cm.destroy();
   cm = new EditorView({
     state: EditorState.create({
       doc: content,
       extensions: [
-        basicSetup,
+        editorSetup,
         xml(),
         EditorView.theme({
           '&': { background: '#fafafa' },
@@ -90,6 +103,8 @@ function loadSVG(text, name) {
   S.selectedEl = null;
   S.undoStack  = [];
   S.redoStack  = [];
+  collapsedEls  = new WeakSet();
+  layerElements = [];
 
   // Ensure explicit dimensions so PNG export knows the size
   if (!svg.getAttribute('width') && !svg.getAttribute('height')) {
@@ -217,10 +232,10 @@ function onMouseUp(e) {
 }
 
 function pickElement(target) {
-  if (!S.svgEl || target === $canvas || target === $wrapper || target === S.svgEl) return null;
-  let el = target;
-  while (el && el.parentNode !== S.svgEl && el !== S.svgEl) el = el.parentNode;
-  return (el && el !== S.svgEl) ? el : (target !== S.svgEl ? target : null);
+  if (!target || !S.svgEl) return null;
+  if (target === S.svgEl || target === $canvas || target === $wrapper) return null;
+  if (target instanceof SVGElement && S.svgEl.contains(target)) return target;
+  return null;
 }
 
 // ─── Move ─────────────────────────────────────────────────────────────────────
@@ -248,7 +263,15 @@ function selectEl(el) {
   S.selectedEl = el;
   refreshOverlay();
   refreshProps();
-  refreshLayersHighlight();
+  // Expand any collapsed ancestor groups so the element is visible in the layers panel
+  if (el) {
+    let parent = el.parentNode;
+    while (parent && parent !== S.svgEl) {
+      if (collapsedEls.has(parent)) collapsedEls.delete(parent);
+      parent = parent.parentNode;
+    }
+  }
+  refreshLayers(); // always re-render — inline attr editor is part of the tree
 }
 
 function refreshOverlay() {
@@ -558,64 +581,188 @@ window.doDeleteSelected = () => {
 };
 
 // ─── Layers ───────────────────────────────────────────────────────────────────
+let layerElements = [];
+let collapsedEls  = new WeakSet();
+let dragFrom      = null;
+
 function refreshLayers() {
   if (!S.svgEl) return;
-  const kids = [...S.svgEl.children];
-  $layCount.textContent = kids.length + ' elements';
+  layerElements = [];
+  const total = S.svgEl.querySelectorAll('*').length;
+  $layCount.textContent = total + ' element' + (total !== 1 ? 's' : '');
   refreshElemCount();
-  $layList.innerHTML = [...kids].reverse().map((el, ri) => {
-    const tag = el.tagName.toLowerCase();
-    const id  = el.getAttribute('id') ? `#${el.getAttribute('id')}` : '';
-    const txt = el.textContent?.trim().slice(0, 18);
-    return `<div class="layer-item px-3 py-1.5 flex items-center gap-2 text-xs" data-ri="${ri}"
-      onclick="doSelectLayer(${ri})"
-      draggable="true"
-      ondragstart="layDragStart(event,${ri})"
-      ondragover="event.preventDefault()"
-      ondrop="layDrop(event,${ri})">
-      <i class="${layIcon(tag)} text-gray-300 w-3.5 text-center text-xs"></i>
-      <span class="font-mono text-gray-500">&lt;${tag}&gt;</span>
-      ${id  ? `<span class="text-orange-400 font-mono">${id}</span>` : ''}
-      ${txt ? `<span class="text-gray-300 truncate">${txt}</span>` : ''}
-    </div>`;
-  }).join('');
+
+  const rows = [];
+
+  function renderNode(el, depth) {
+    const li        = layerElements.length;
+    layerElements.push(el);
+    const tag       = el.tagName.toLowerCase();
+    const id        = el.getAttribute('id') ? `#${el.getAttribute('id')}` : '';
+    const hasKids   = el.children.length > 0;
+    const isGroup   = hasKids;
+    const collapsed = collapsedEls.has(el);
+    const indent    = 8 + depth * 14;
+    const txt       = !isGroup ? (el.textContent?.trim().slice(0, 16) || '') : '';
+    const draggable = depth === 0;
+    const isSel     = el === S.selectedEl;
+
+    rows.push(
+      `<div class="layer-item flex items-center gap-1 text-xs" data-li="${li}"
+        style="padding:4px 6px 4px ${indent}px"
+        onclick="doSelectLayer(${li})"
+        ${draggable ? `draggable="true" ondragstart="layDragStart(event,${li})" ondragover="event.preventDefault()" ondrop="layDrop(event,${li})"` : ''}>
+        <span class="shrink-0 w-3 flex items-center justify-center">${
+          isGroup
+            ? `<i class="fa-solid ${collapsed ? 'fa-chevron-right' : 'fa-chevron-down'} text-[8px] text-gray-400 hover:text-orange-500 cursor-pointer"
+                onclick="event.stopPropagation();doToggleLayerNode(${li})"></i>`
+            : ''
+        }</span>
+        <i class="${layIcon(tag)} text-gray-400 w-3 text-center text-[10px] shrink-0"></i>
+        <span class="font-mono text-gray-500 shrink-0">&lt;${htmlEsc(tag)}&gt;</span>
+        ${id  ? `<span class="text-orange-400 font-mono text-[10px] truncate">${htmlEsc(id)}</span>` : ''}
+        ${txt ? `<span class="text-gray-400 text-[10px] truncate">${htmlEsc(txt)}</span>` : ''}
+      </div>`
+    );
+
+    // Inline attribute editor — rendered right after the selected element row
+    if (isSel) rows.push(renderInlineAttrs(el, depth));
+
+    if (isGroup && !collapsed) {
+      [...el.children].reverse().forEach(child => renderNode(child, depth + 1));
+    }
+  }
+
+  [...S.svgEl.children].reverse().forEach(el => renderNode(el, 0));
+  $layList.innerHTML = rows.join('');
   refreshLayersHighlight();
 }
 
+// ─── Inline attribute editor (rendered as part of the layers tree) ────────────
+function renderInlineAttrs(el, depth) {
+  const attrs  = [...el.attributes];
+  const indent = 8 + (depth + 1) * 14; // one level deeper than the element row
+
+  const attrRows = attrs.map(attr => {
+    const n = htmlEsc(attr.name);
+    const v = htmlEsc(attr.value);
+    return `<div class="flex items-center gap-1 min-w-0">
+      <span class="font-mono text-orange-500 shrink-0 truncate text-[10px]"
+        style="width:72px;min-width:72px" title="${n}">${n}</span>
+      <input type="text" class="attr-val-input flex-1 min-w-0 px-1.5 py-0.5 text-[11px] font-mono
+        border border-gray-200 bg-white rounded-md
+        focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-200/60"
+        data-attr="${n}" value="${v}" />
+      <button class="attr-del-btn shrink-0 w-5 h-5 flex items-center justify-center
+        rounded hover:bg-red-50 text-gray-300 hover:text-red-400 transition-colors"
+        data-attr="${n}" title="Remove attribute">
+        <i class="fa-solid fa-xmark text-[9px] pointer-events-none"></i>
+      </button>
+    </div>`;
+  }).join('');
+
+  return `<div class="attr-editor" style="padding:0 6px 6px ${indent}px" onclick="event.stopPropagation()">
+    <div class="bg-white border border-orange-100 rounded-lg p-2 space-y-1.5 shadow-sm">
+      ${attrRows || '<div class="text-[10px] text-gray-400 italic py-0.5 px-1">No attributes</div>'}
+      <div class="flex items-center gap-1 pt-1.5 border-t border-gray-100">
+        <input id="new-attr-name" type="text" placeholder="name"
+          class="flex-1 min-w-0 px-1.5 py-0.5 text-[10px] font-mono border border-dashed border-gray-300
+          bg-gray-50/80 rounded-md focus:outline-none focus:border-orange-400 w-0" />
+        <span class="text-gray-300 text-[10px] shrink-0 select-none">=</span>
+        <input id="new-attr-val" type="text" placeholder="value"
+          class="flex-1 min-w-0 px-1.5 py-0.5 text-[10px] font-mono border border-dashed border-gray-300
+          bg-gray-50/80 rounded-md focus:outline-none focus:border-orange-400 w-0" />
+        <button onclick="doAddAttr()"
+          class="shrink-0 px-2 h-5 bg-orange-400 hover:bg-orange-500 text-white rounded-md
+          text-[10px] font-bold flex items-center justify-center transition-colors leading-none">+</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// Delegated events for the inline attr editor (change, delete, add, keyboard)
+$layList.addEventListener('change', e => {
+  const input = e.target.closest('.attr-val-input');
+  if (!input || !S.selectedEl) return;
+  S.selectedEl.setAttribute(input.dataset.attr, input.value);
+  refreshOverlay(); saveSnap(); scheduleCMSync();
+  // Do NOT call refreshLayers() — would destroy the focused input
+});
+
+$layList.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (e.target.closest('.attr-val-input')) { e.target.blur(); return; } // triggers change
+  if (e.target.id === 'new-attr-name')     { document.getElementById('new-attr-val')?.focus(); return; }
+  if (e.target.id === 'new-attr-val')      { doAddAttr(); return; }
+});
+
+$layList.addEventListener('click', e => {
+  const btn = e.target.closest('.attr-del-btn');
+  if (!btn || !S.selectedEl) return;
+  e.stopPropagation();
+  S.selectedEl.removeAttribute(btn.dataset.attr);
+  refreshLayers(); refreshOverlay(); saveSnap(); scheduleCMSync();
+});
+
+window.doAddAttr = () => {
+  if (!S.selectedEl) return;
+  const nameInput = document.getElementById('new-attr-name');
+  const valInput  = document.getElementById('new-attr-val');
+  const name = nameInput?.value.trim();
+  if (!name) { nameInput?.focus(); showToast('Attribute name is required', 'error'); return; }
+  S.selectedEl.setAttribute(name, valInput?.value ?? '');
+  nameInput.value = ''; if (valInput) valInput.value = '';
+  refreshLayers(); refreshOverlay(); saveSnap(); scheduleCMSync();
+};
+
 function layIcon(tag) {
-  return ({ rect:'fa-regular fa-square', circle:'fa-regular fa-circle', ellipse:'fa-regular fa-circle',
-    line:'fa-solid fa-minus', text:'fa-solid fa-t', path:'fa-solid fa-bezier-curve',
-    g:'fa-solid fa-layer-group', image:'fa-regular fa-image',
-    polygon:'fa-solid fa-draw-polygon', polyline:'fa-solid fa-draw-polygon' }[tag] || 'fa-solid fa-code');
+  return ({
+    rect: 'fa-regular fa-square', circle: 'fa-regular fa-circle', ellipse: 'fa-regular fa-circle',
+    line: 'fa-solid fa-minus', text: 'fa-solid fa-t', path: 'fa-solid fa-bezier-curve',
+    g: 'fa-solid fa-layer-group', image: 'fa-regular fa-image',
+    polygon: 'fa-solid fa-draw-polygon', polyline: 'fa-solid fa-draw-polygon',
+    defs: 'fa-solid fa-box-archive', symbol: 'fa-solid fa-shapes',
+    clippath: 'fa-solid fa-crop-simple', mask: 'fa-solid fa-masks-theater',
+    lineargradient: 'fa-solid fa-swatchbook', radialgradient: 'fa-solid fa-swatchbook',
+    pattern: 'fa-solid fa-border-all', filter: 'fa-solid fa-filter',
+  }[tag] || 'fa-solid fa-code');
 }
 
 function refreshLayersHighlight() {
-  if (!S.svgEl) return;
   document.querySelectorAll('.layer-item').forEach(el => el.classList.remove('selected'));
   if (!S.selectedEl) return;
-  const kids = [...S.svgEl.children];
-  const idx  = kids.indexOf(S.selectedEl);
-  if (idx < 0) return;
-  const ri = kids.length - 1 - idx;
-  document.querySelector(`.layer-item[data-ri="${ri}"]`)?.classList.add('selected');
+  const li = layerElements.indexOf(S.selectedEl);
+  if (li < 0) return;
+  document.querySelector(`.layer-item[data-li="${li}"]`)?.classList.add('selected');
 }
 
-window.doSelectLayer = ri => {
-  if (!S.svgEl) return;
-  selectEl([...S.svgEl.children][S.svgEl.children.length - 1 - ri]);
+window.doSelectLayer = li => {
+  const el = layerElements[li];
+  if (el) selectEl(el);
 };
 
-let dragFrom = null;
-window.layDragStart = (e, ri) => { dragFrom = ri; };
-window.layDrop = (e, toRi) => {
+window.doToggleLayerNode = li => {
+  const el = layerElements[li];
+  if (!el) return;
+  if (collapsedEls.has(el)) collapsedEls.delete(el);
+  else collapsedEls.add(el);
+  refreshLayers();
+};
+
+window.layDragStart = (e, li) => { dragFrom = li; };
+window.layDrop = (e, toLi) => {
   e.preventDefault();
-  if (dragFrom === null || dragFrom === toRi) { dragFrom = null; return; }
-  const kids   = [...S.svgEl.children];
-  const n      = kids.length;
-  const fromEl = kids[n - 1 - dragFrom];
-  const toEl   = kids[n - 1 - toRi];
-  if (dragFrom > toRi) S.svgEl.insertBefore(fromEl, toEl);
-  else                 S.svgEl.insertBefore(fromEl, toEl.nextSibling);
+  if (dragFrom === null || dragFrom === toLi) { dragFrom = null; return; }
+  const fromEl = layerElements[dragFrom];
+  const toEl   = layerElements[toLi];
+  if (!fromEl || !toEl) { dragFrom = null; return; }
+  // Only reorder direct SVG children — nested reordering not supported via drag
+  if (fromEl.parentNode !== S.svgEl || toEl.parentNode !== S.svgEl) { dragFrom = null; return; }
+  const kids    = [...S.svgEl.children];
+  const fromIdx = kids.indexOf(fromEl);
+  const toIdx   = kids.indexOf(toEl);
+  if (fromIdx < toIdx) S.svgEl.insertBefore(fromEl, toEl.nextSibling);
+  else                 S.svgEl.insertBefore(fromEl, toEl);
   dragFrom = null;
   refreshLayers(); saveSnap(); scheduleCMSync();
 };
@@ -635,6 +782,8 @@ function restoreSnap(xml) {
   if (!svg) return;
   $wrapper.innerHTML = ''; $wrapper.appendChild(svg);
   S.svgEl = svg; S.selectedEl = null;
+  collapsedEls  = new WeakSet();
+  layerElements = [];
   refreshOverlay(); refreshProps(); refreshLayers(); refreshElemCount(); scheduleCMSync();
 }
 
@@ -851,6 +1000,8 @@ window.showTab = name => {
   const off = 'flex-1 py-2.5 text-xs font-semibold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors';
   document.getElementById('tab-properties').className = name === 'properties' ? on : off;
   document.getElementById('tab-layers').className     = name === 'layers'     ? on : off;
+  // Re-render layers tree when switching to it — keeps inline attr editor in sync
+  if (name === 'layers') refreshLayers();
 };
 
 // ─── Export ───────────────────────────────────────────────────────────────────
@@ -960,6 +1111,10 @@ document.getElementById('cm-host').addEventListener('keydown', e => {
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+function htmlEsc(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function mkSVG(tag) { return document.createElementNS(NS, tag); }
 
 function setAttrs(el, attrs) {
@@ -1012,5 +1167,7 @@ function showToast(msg, type = 'success') {
 }
 
 function refreshElemCount() {
-  $elemCount.textContent = S.svgEl ? S.svgEl.children.length + ' elements' : '';
+  if (!S.svgEl) { $elemCount.textContent = ''; return; }
+  const n = S.svgEl.querySelectorAll('*').length;
+  $elemCount.textContent = n + ' element' + (n !== 1 ? 's' : '');
 }
