@@ -2,19 +2,35 @@ let data = [];
 let filteredData = [];
 let currentSortKey = 'code';
 let currentSortDirection = 'asc';
+let itemsToShow = 100;
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('vietnam-data.json')
-        .then(response => response.json())
-        .then(jsonData => {
-            processData(jsonData);
-            populateFilters();
-            setupEventListeners();
-            sortAndRender();
-        })
-        .catch(error => {
-            console.error('Error fetching vietnam-data.json:', error);
+    // Setup Load More button listener
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            itemsToShow += 100;
+            renderTable();
         });
+    }
+
+    // Fetch and cache vietnam-data.json, auto-updating in background
+    window.BangUtils.fetchJSONWithCache('vietnam-data.json', {
+        onUpdate: (updatedData) => {
+            console.log('[Cache] vietnam-data.json updated on server. Reloading data dynamically...');
+            processData(updatedData);
+            filterTable();
+        }
+    })
+    .then(jsonData => {
+        processData(jsonData);
+        populateFilters();
+        setupEventListeners();
+        sortAndRender();
+    })
+    .catch(error => {
+        console.error('Error fetching vietnam-data.json:', error);
+    });
 });
 
 /**
@@ -101,6 +117,7 @@ function setSortKey(key) {
         currentSortKey = key;
         currentSortDirection = 'asc';
     }
+    itemsToShow = 100;
     sortAndRender();
 }
 
@@ -174,6 +191,7 @@ function filterTable() {
         return matchProvince && matchWardType;
     });
 
+    itemsToShow = 100;
     renderTable();
 }
 
@@ -184,26 +202,22 @@ function renderTable() {
     const tableBody = document.getElementById('dataTableBody');
     tableBody.innerHTML = '';
 
-    // Optimization: Render only first 200 rows if dataset is huge, or map all.
-    // Given 3000+ rows, rendering all might be slow but acceptable for modern browsers.
-    // Let's cap at 1000 or paginate? For now, render all but be mindful.
-    // Actually, user experience might suffer with 3000 rows.
-    // But requirement was "similar to hcm-admin", which renders all.
-    // HCM admin likely had fewer rows.
-    // Let's implement a simple limit for now or just render all.
-    // Rendering 3000 rows is usually 50-100ms. Browsers handle it.
-
     if (filteredData.length === 0) {
         const row = tableBody.insertRow();
         const cell = row.insertCell();
         cell.colSpan = 6;
         cell.textContent = 'Không tìm thấy dữ liệu phù hợp.';
         cell.className = 'px-6 py-4 text-center text-gray-500';
+        const container = document.getElementById('loadMoreContainer');
+        if (container) container.classList.add('hidden');
     } else {
         // Use documentFragment for performance
         const fragment = document.createDocumentFragment();
 
-        filteredData.forEach(item => {
+        // Render only visible slice
+        const visibleData = filteredData.slice(0, itemsToShow);
+
+        visibleData.forEach(item => {
             const row = document.createElement('tr');
             row.className = 'hover:bg-gray-50 transition-colors duration-150';
 
@@ -225,6 +239,16 @@ function renderTable() {
             fragment.appendChild(row);
         });
         tableBody.appendChild(fragment);
+
+        // Show/hide Load More button
+        const container = document.getElementById('loadMoreContainer');
+        if (container) {
+            if (filteredData.length > itemsToShow) {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
     }
 
     document.getElementById('recordCount').textContent = filteredData.length.toLocaleString('vi-VN');

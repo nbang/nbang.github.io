@@ -148,5 +148,15 @@
         "color": "rose",
         "icon": "fa-solid fa-flask",
         "cta": "Run Benchmarks"
+    },
+    {
+        "id": "public-corp",
+        "title": "Vietnam Public Corps",
+        "description": "Tra cứu thông tin doanh nghiệp niêm yết tại Việt Nam (Data auto-crawled monthly).",
+        "url": "public-corp.html",
+        "category": "data",
+        "color": "emerald",
+        "icon": "fa-solid fa-building",
+        "cta": "Open Dashboard"
     }
 ]

@@ -185,11 +185,20 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Load More Container -->
+            <div id="loadMoreContainer" class="hidden py-6 text-center border-t border-gray-200 bg-gray-50/50 rounded-b-xl">
+                <button id="loadMoreBtn" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all shadow-sm shadow-green-600/10 cursor-pointer text-sm">
+                    <i class="fa-solid fa-arrow-down mr-1.5"></i> Xem thêm (Hiển thị tiếp)
+                </button>
+            </div>
             <p class="text-xs text-gray-400 mt-4 text-right">Tổng số bản ghi: <span id="recordCount"
                     class="font-medium text-gray-600">0</span></p>
         </div>
     </main>
 
+    <!-- Shared utilities -->
+    <script src="/js/utils/common.js"></script>
+    <script src="/js/utils/nav.js"></script>
     <script src="vietnam-admin.js" defer></script>
     <footer class="text-center py-8 text-gray-500 text-sm relative z-10">
         <div>&copy; 2026 Bang's Tools. All rights reserved.</div>

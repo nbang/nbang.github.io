@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="View and filter data of large Vietnamese corporations (crawled from dn.aizia.info)." />
+    <title>Vietnam Public Corporations - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: "Outfit", sans-serif; }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Dynamic background blobs -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-40">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-emerald-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-teal-200/40 blur-[100px]"></div>
+    </div>
+
+    <!-- ── Navigation ── -->
+    <main class="flex-grow container mx-auto px-4 py-10 max-w-6xl">
+
+        <!-- ── Hero ── -->
+        <header class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-2xl mb-4">
+                <i class="fa-solid fa-building text-3xl text-emerald-600"></i>
+            </div>
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-2">Vietnam Public Corporations</h1>
+            <p class="text-lg text-gray-500">Tra cứu doanh nghiệp niêm yết (Data auto-crawled monthly).</p>
+        </header>
+
+        <!-- Filters Section -->
+        <section class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-sm p-6 mb-6">
+            <div class="flex flex-wrap gap-4 items-end">
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-sm font-medium text-gray-600 mb-1"><i class="fa-solid fa-magnifying-glass mr-1"></i> Search (Code or Name)</label>
+                    <input type="text" id="searchInput" placeholder="VD: VNM, ACB..." class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/50" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Exchange (Sàn)</label>
+                    <select id="filterExchange" class="px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/50 min-w-[120px]">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Sector (Ngành)</label>
+                    <select id="filterSector" class="px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white/50 min-w-[160px]">
+                        <option value="">All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between items-center text-sm text-gray-500">
+                <div>Total records: <strong id="recordCount" class="text-gray-900">0</strong></div>
+                <div class="text-xs">
+                    <span class="inline-block w-3 h-3 bg-green-100 rounded-full mr-1"></span> Profit &gt; 0
+                    <span class="inline-block w-3 h-3 bg-red-100 rounded-full ml-3 mr-1"></span> Profit &lt; 0
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse whitespace-nowrap">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 text-sm">
+                            <th class="py-4 px-6 font-semibold cursor-pointer select-none hover:bg-gray-100 transition-colors" id="sortCode">Code <span class="sort-indicator text-gray-400"></span></th>
+                            <th class="py-4 px-6 font-semibold cursor-pointer select-none hover:bg-gray-100 transition-colors" id="sortName">Name <span class="sort-indicator text-gray-400"></span></th>
+                            <th class="py-4 px-6 font-semibold cursor-pointer select-none hover:bg-gray-100 transition-colors" id="sortExchange">Exchange <span class="sort-indicator text-gray-400"></span></th>
+                            <th class="py-4 px-6 font-semibold cursor-pointer select-none hover:bg-gray-100 transition-colors" id="sortSector">Sector <span class="sort-indicator text-gray-400"></span></th>
+                            <th class="py-4 px-6 font-semibold text-right cursor-pointer select-none hover:bg-gray-100 transition-colors" id="sortRevenue">Revenue (Tỷ) <span class="sort-indicator text-gray-400"></span></th>
+                            <th class="py-4 px-6 font-semibold text-right cursor-pointer select-none hover:bg-gray-100 transition-colors" id="sortProfit">Net Profit (Tỷ) <span class="sort-indicator text-gray-400"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody" class="divide-y divide-gray-100 text-sm">
+                        <tr>
+                            <td colspan="6" class="py-12 text-center text-gray-400">
+                                <i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading data...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Load More Container -->
+            <div id="loadMoreContainer" class="hidden py-6 text-center border-t border-gray-100 bg-gray-50/50">
+                <button id="loadMoreBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all shadow-sm shadow-emerald-600/10 cursor-pointer text-sm">
+                    <i class="fa-solid fa-arrow-down mr-1.5"></i> Xem thêm (Hiển thị tiếp)
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10">
+        <div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+        <div class="mt-2">
+            Data sourced from public records.
+        </div>
+    </footer>
+
+    <!-- Shared utilities -->
+    <script src="/js/utils/common.js"></script>
+    <script src="/js/utils/nav.js"></script>
+    
+    <!-- Tool logic -->
+    <script src="public-corp.js"></script>
+</body>
+</html>

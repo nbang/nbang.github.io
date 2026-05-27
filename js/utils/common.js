@@ -156,6 +156,125 @@ const UIManager = {
     },
 };
 
+// ─── Caching and Fetching ────────────────────────────────────────────────────
+
+/**
+ * Fetches JSON with automatic Cache API support and update-awareness.
+ * Immediately returns cached data if available, then runs a background check (HEAD or conditional GET)
+ * to verify if the server's version has changed. If changed, updates cache and triggers callback.
+ * 
+ * @param {string} url - The URL of the JSON file to fetch.
+ * @param {object} options - Options object
+ * @param {string} options.cacheName - Name of the Cache container (defaults to 'bang-tools-data-v1')
+ * @param {function} options.onUpdate - Callback invoked when a newer version is fetched and parsed.
+ * @returns {Promise<any>} The cached or newly fetched data.
+ */
+async function fetchJSONWithCache(url, options = {}) {
+    const cacheName = options.cacheName || 'bang-tools-data-v1';
+    
+    try {
+        const cache = await caches.open(cacheName);
+        const cachedResponse = await cache.match(url);
+        
+        let cachedData = null;
+        if (cachedResponse) {
+            try {
+                // Parse cloned cached response so the response body stream is preserved in cache
+                cachedData = await cachedResponse.clone().json();
+            } catch (e) {
+                console.warn(`[Cache] Failed parsing cached JSON for ${url}, clearing cache entry`, e);
+                await cache.delete(url);
+            }
+        }
+
+        // Trigger a background checking function that runs after returning cached data
+        const checkBackgroundUpdate = async () => {
+            try {
+                // If there's no cached response, we need to fetch the file anyway
+                if (!cachedResponse) {
+                    const freshRes = await fetch(url, { cache: 'no-cache' });
+                    if (freshRes.ok) {
+                        await cache.put(url, freshRes.clone());
+                        const freshData = await freshRes.json();
+                        if (options.onUpdate) options.onUpdate(freshData);
+                    }
+                    return;
+                }
+
+                // If cached response exists, do a quick validation
+                // We use a HEAD request first to save bandwidth
+                let needsUpdate = false;
+                let etagServer = null;
+                let lmServer = null;
+                
+                try {
+                    const headRes = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+                    if (headRes.ok) {
+                        etagServer = headRes.headers.get('etag');
+                        lmServer = headRes.headers.get('last-modified');
+                        
+                        const etagCached = cachedResponse.headers.get('etag');
+                        const lmCached = cachedResponse.headers.get('last-modified');
+                        
+                        if (etagServer && etagCached && etagServer !== etagCached) {
+                            needsUpdate = true;
+                        } else if (lmServer && lmCached && lmServer !== lmCached) {
+                            needsUpdate = true;
+                        } else if (!etagServer && !lmServer) {
+                            // Fallback if no validation headers found in HEAD response: 
+                            // check Content-Length as a basic heuristic
+                            const lenServer = headRes.headers.get('content-length');
+                            const lenCached = cachedResponse.headers.get('content-length');
+                            if (lenServer && lenCached && lenServer !== lenCached) {
+                                needsUpdate = true;
+                            }
+                        }
+                    } else {
+                        // If HEAD failed or is not 200 OK, re-fetch
+                        needsUpdate = true;
+                    }
+                } catch (headErr) {
+                    console.warn(`[Cache] HEAD request failed for ${url}, falling back to GET check`, headErr);
+                    needsUpdate = true;
+                }
+
+                if (needsUpdate) {
+                    console.log(`[Cache] Update detected for ${url}. Fetching fresh copy...`);
+                    const freshRes = await fetch(url, { cache: 'no-cache' });
+                    if (freshRes.ok) {
+                        await cache.put(url, freshRes.clone());
+                        const freshData = await freshRes.json();
+                        if (options.onUpdate) {
+                            options.onUpdate(freshData);
+                        }
+                    }
+                } else {
+                    console.log(`[Cache] ${url} is up to date.`);
+                }
+            } catch (err) {
+                console.warn(`[Cache] Background update check failed for ${url}:`, err);
+            }
+        };
+
+        if (cachedData) {
+            // Return cached data immediately, check for updates asynchronously
+            setTimeout(checkBackgroundUpdate, 100);
+            return cachedData;
+        } else {
+            // Cache miss: Fetch synchronously
+            const response = await fetch(url, { cache: 'no-cache' });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            await cache.put(url, response.clone());
+            const data = await response.json();
+            return data;
+        }
+    } catch (error) {
+        console.warn(`[Cache] Cache system failed, falling back to network-only for ${url}`, error);
+        const res = await fetch(url);
+        return await res.json();
+    }
+}
+
 // ─── Exports (global) ────────────────────────────────────────────────────────
 
-window.BangUtils = { loadScript, loadStylesheet, formatBytes, UIManager };
+window.BangUtils = { loadScript, loadStylesheet, formatBytes, UIManager, fetchJSONWithCache };

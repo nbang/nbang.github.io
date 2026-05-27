@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Detailed information of Vietnamese public corporations." />
+    <title>Enterprise Details - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: "Outfit", sans-serif; }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Dynamic background blobs -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-40">
+        <div class="absolute top-[10%] left-[10%] w-[40%] h-[40%] rounded-full bg-emerald-200/40 blur-[100px]"></div>
+        <div class="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] rounded-full bg-teal-200/40 blur-[100px]"></div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow container mx-auto px-4 py-10 max-w-5xl">
+
+        <!-- ── Navigation breadcrumb & Back Button ── -->
+        <nav class="mb-8 flex items-center justify-between">
+            <a href="public-corp.html" class="inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-800 transition-colors group">
+                <i class="fa-solid fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
+                Back to Dashboard
+            </a>
+            <span class="text-xs text-gray-400 font-mono">CODE: <span id="companyCodeHeader" class="font-bold text-gray-600">-</span></span>
+        </nav>
+
+        <!-- Loading State Indicator -->
+        <div id="loadingState" class="py-24 text-center text-gray-400">
+            <i class="fa-solid fa-spinner fa-spin text-4xl text-emerald-500 mb-4"></i>
+            <p class="text-lg">Fetching enterprise details...</p>
+        </div>
+
+        <!-- Error State Indicator -->
+        <div id="errorState" class="hidden py-16 text-center text-gray-500 max-w-md mx-auto bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+            <i class="fa-solid fa-circle-exclamation text-5xl text-red-400 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Enterprise Not Found</h3>
+            <p class="text-sm text-gray-500 mb-6" id="errorMessage">We couldn't retrieve the details for this enterprise. It might not be in our database yet.</p>
+            <a href="public-corp.html" class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors text-sm font-medium">
+                Return to Dashboard
+            </a>
+        </div>
+
+        <!-- Enterprise Detail View -->
+        <div id="detailView" class="hidden">
+            <!-- ── Company Header Card ── -->
+            <section class="bg-gradient-to-br from-emerald-900 to-teal-950 text-white rounded-3xl shadow-xl overflow-hidden mb-6 p-6 md:p-8 relative">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-2xl -mr-20 -mt-20"></div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                    <div class="flex items-start gap-4">
+                        <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl font-black font-mono border border-white/20 shadow-inner flex-shrink-0" id="avatarBlock">
+                            -
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <span class="px-3 py-0.5 bg-emerald-500/25 border border-emerald-400/30 rounded-full text-xs font-bold font-mono text-emerald-300 uppercase" id="companyExchangeBadge">-</span>
+                                <span class="text-emerald-400 text-sm font-semibold" id="companySectorText">-</span>
+                            </div>
+                            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-1" id="companyFullNameHeader">-</h1>
+                            <p class="text-white/70 text-sm mt-1" id="companyShortNameText">-</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap md:flex-col gap-2 items-start md:items-end flex-shrink-0">
+                        <div class="text-xs text-white/50">Market Capitalization (Vốn hóa)</div>
+                        <div class="text-2xl font-black text-emerald-300 font-mono"><span id="companyMarketCapText">-</span> <span class="text-sm font-medium">Tỷ VNĐ</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Financial Performance Grid ── -->
+            <section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <!-- Revenue Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Revenue (Doanh thu)</div>
+                        <div class="text-2xl font-bold text-gray-800 font-mono"><span id="companyRevenueText">-</span> <span class="text-xs font-medium text-gray-500">Tỷ</span></div>
+                        <div class="text-[10px] text-gray-400 mt-1" id="companyPeriodText">-</div>
+                    </div>
+                    <div class="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center text-sky-600">
+                        <i class="fa-solid fa-chart-line text-xl"></i>
+                    </div>
+                </div>
+                <!-- Net Profit Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Net Profit (Lợi nhuận)</div>
+                        <div class="text-2xl font-bold font-mono" id="companyProfitValueText"><span id="companyProfitText">-</span> <span class="text-xs font-medium text-gray-500">Tỷ</span></div>
+                        <div class="text-[10px] text-gray-400 mt-1">Lợi nhuận ròng sau thuế</div>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600" id="profitIconContainer">
+                        <i class="fa-solid fa-dollar-sign text-xl"></i>
+                    </div>
+                </div>
+                <!-- Profit Margin Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Net Margin (Biên LN)</div>
+                        <div class="text-2xl font-bold text-gray-800 font-mono" id="companyMarginText">-</div>
+                        <div class="text-[10px] text-gray-400 mt-1">Doanh thu / Lợi nhuận</div>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600">
+                        <i class="fa-solid fa-percent text-xl"></i>
+                    </div>
+                </div>
+                <!-- ROE Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Return on Equity (ROE)</div>
+                        <div class="text-2xl font-bold text-gray-800 font-mono" id="companyRoeText">-</div>
+                        <div class="text-[10px] text-gray-400 mt-1">Hiệu quả sử dụng vốn</div>
+                    </div>
+                    <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
+                        <i class="fa-solid fa-vault text-xl"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── Details Tabs/Sections ── -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Details Side (Overview) -->
+                <section class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 lg:col-span-2 flex flex-col gap-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                            <i class="fa-solid fa-circle-info text-emerald-600 mr-2"></i>
+                            Giới thiệu chung (Company Overview)
+                        </h2>
+                        <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line" id="companyDescriptionText">
+                            -
+                        </p>
+                    </div>
+
+                    <hr class="border-gray-100" />
+
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <i class="fa-solid fa-network-wired text-emerald-600 mr-2"></i>
+                            Thông tin niêm yết & Tổ chức
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div class="flex justify-between py-2 border-b border-gray-50">
+                                <span class="text-gray-500">Năm thành lập:</span>
+                                <strong class="text-gray-800" id="companyEstablishedText">-</strong>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-gray-50">
+                                <span class="text-gray-500">Ngày lên sàn:</span>
+                                <strong class="text-gray-800" id="companyListingDateText">-</strong>
+                            </div>
+                            <div id="leadershipContainer">
+                                <!-- Dynamic leadership roles will be injected here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-100" />
+
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <i class="fa-solid fa-map-location-dot text-emerald-600 mr-2"></i>
+                            Liên hệ (Contact Information)
+                        </h2>
+                        <div class="flex flex-col gap-3 text-sm text-gray-600">
+                            <div class="flex items-start gap-3">
+                                <i class="fa-solid fa-location-dot text-gray-400 mt-1 flex-shrink-0"></i>
+                                <span><strong class="text-gray-700">Trụ sở:</strong> <span id="companyAddressText">-</span></span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-phone text-gray-400 flex-shrink-0"></i>
+                                <span><strong class="text-gray-700">Điện thoại:</strong> <span id="companyPhoneText">-</span></span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-globe text-emerald-600 flex-shrink-0"></i>
+                                <span><strong class="text-gray-700">Website:</strong> <a id="companyWebsiteLink" href="#" target="_blank" class="text-emerald-600 hover:text-emerald-800 hover:underline transition-colors font-medium">-</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Right Sidebar (Financial Metrics & Ratios) -->
+                <section class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 flex flex-col gap-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <i class="fa-solid fa-calculator text-emerald-600 mr-2"></i>
+                            Chỉ số Tài chính
+                        </h2>
+                        <div class="flex flex-col gap-3 text-sm">
+                            <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
+                                <div class="text-gray-500">EPS (Lợi nhuận/CP)</div>
+                                <div class="font-bold text-gray-800 font-mono"><span id="companyEpsText">-</span> <span class="text-xs text-gray-400 font-sans">đ</span></div>
+                            </div>
+                            <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
+                                <div class="text-gray-500">Hệ số P/E</div>
+                                <div class="font-bold text-gray-800 font-mono" id="companyPeText">-</div>
+                            </div>
+                            <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
+                                <div class="text-gray-500">Hệ số P/B</div>
+                                <div class="font-bold text-gray-800 font-mono" id="companyPbText">-</div>
+                            </div>
+                            <div class="flex justify-between items-center py-2.5 border-b border-gray-50">
+                                <div class="text-gray-500">Tỷ lệ ROA</div>
+                                <div class="font-bold text-gray-800 font-mono" id="companyRoaText">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mini Visual Chart/Gauge -->
+                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                        <div class="flex justify-between text-xs font-semibold text-gray-500 mb-2">
+                            <span>Sức mạnh tài chính</span>
+                            <span class="text-emerald-600">Khỏe mạnh</span>
+                        </div>
+                        <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-500 rounded-full" style="width: 85%"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-2 leading-relaxed">
+                            Doanh nghiệp có cơ cấu vốn tối ưu, chỉ số sinh lời xuất sắc và biên lợi nhuận ròng ổn định so với trung bình ngành.
+                        </p>
+                    </div>
+
+                    <!-- Quick Action -->
+                    <button onclick="window.print()" class="w-full py-2.5 border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 text-gray-600 rounded-xl transition-all text-sm font-medium flex items-center justify-center gap-2 cursor-pointer bg-white">
+                        <i class="fa-solid fa-print"></i>
+                        In báo cáo doanh nghiệp
+                    </button>
+                </section>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-8 text-gray-500 text-sm relative z-10">
+        <div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+        <div class="mt-2">
+            Data sourced from public records.
+        </div>
+    </footer>
+
+    <!-- Shared utilities -->
+    <script src="/js/utils/common.js"></script>
+    <script src="/js/utils/nav.js"></script>
+    
+    <!-- Tool Logic -->
+    <script src="public-corp-detail.js"></script>
+</body>
+</html>
