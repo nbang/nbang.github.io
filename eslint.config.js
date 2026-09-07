@@ -66,6 +66,7 @@ module.exports = [
                 ...globals.node,
                 ...globals.browser,
                 L: "readonly",
+                d3: "readonly",
                 DxfParser: "readonly",
                 proj4: "readonly",
                 tokml: "readonly",

@@ -24,6 +24,7 @@ A collection of utilities and dashboards for data management, translation, AI ta
 | **Utility** | Translation Workflow | Manage your book translation pipeline, scrape chapters, translate content, and edit files. | [Open Dashboard](https://github.bangndd.qzz.io/translation.html) |
 | **Utility** | Markdown Viewer | Render Markdown files with Mermaid diagrams support and export to PNG. | [Open Tool](https://github.bangndd.qzz.io/md_viewer.html) |
 | **Data** | Free For Dev | A curated list of software (SaaS, PaaS, IaaS) with free tiers for developers. | [Open Resources](https://github.bangndd.qzz.io/freefordev.html) |
+| **Data** | Mercator vs Equal Earth | Compare how big every country looks on the old Mercator map versus the Equal Earth projection the UN endorsed in 2026. | [Open Comparison](https://github.bangndd.qzz.io/map-projection.html) |
 | **Data** | HCM Merger Data | View and filter detailed data regarding the merger of administrative units in Ho Chi Minh City. | [Open Dashboard](https://github.bangndd.qzz.io/hcm-admin.html) |
 | **Data** | Vietnam Admin Data | Comprehensive dataset of administrative units across all provinces in Vietnam. | [Open Dashboard](https://github.bangndd.qzz.io/vietnam-admin.html) |
 | **Guide** | Stremio Guide | The ultimate guide to setting up Stremio for seamless movie & TV streaming. | [Read Guide](https://github.bangndd.qzz.io/stremio-guide.html) |
@@ -75,6 +76,8 @@ nbang.github.io/
 ├── vram-data.json               # JSON metadata for GPUs and Models
 ├── md_viewer.html               # Markdown Viewer
 ├── cat2map.html                 # AutoCAD DXF → KML/GeoJSON converter
+├── map-projection.html          # Mercator vs Equal Earth country size comparison
+├── map-projection-data.json     # Per-country true vs Mercator areas (built by scripts/)
 ├── calendar-converter.html      # Lunar ↔ Solar calendar converter
 ├── freefordev.html              # Free-for-dev resources browser
 ├── stremio-guide.html           # Stremio setup guide

@@ -152,11 +152,21 @@
     {
         "id": "public-corp",
         "title": "Vietnam Public Corps",
-        "description": "Tra cứu thông tin doanh nghiệp niêm yết tại Việt Nam (Data auto-crawled monthly).",
+        "description": "Tra c\u1ee9u th\u00f4ng tin doanh nghi\u1ec7p ni\u00eam y\u1ebft t\u1ea1i Vi\u1ec7t Nam (Data auto-crawled monthly).",
         "url": "public-corp.html",
         "category": "data",
         "color": "emerald",
         "icon": "fa-solid fa-building",
         "cta": "Open Dashboard"
+    },
+    {
+        "id": "map-projection",
+        "title": "Mercator vs Equal Earth",
+        "description": "Compare how big every country looks on the old Mercator map versus the Equal Earth projection the UN endorsed in 2026.",
+        "url": "map-projection.html",
+        "category": "data",
+        "color": "blue",
+        "icon": "fa-solid fa-earth-africa",
+        "cta": "Open Comparison"
     }
 ]
