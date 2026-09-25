@@ -31,15 +31,15 @@ const els = {
 
 // Models
 const MODEL_CONFIGS = {
-    'Xenova/distilbart-cnn-6-6':                       { task: 'summarization',   dtype: 'quantized', device: 'wasm'   },
-    'onnx-community/LFM2.5-350M-ONNX':                 { task: 'text-generation', dtype: 'q4',        device: 'webgpu' },
-    'HuggingFaceTB/SmolLM2-360M-Instruct':             { task: 'text-generation', dtype: 'q4f16',     device: 'webgpu' },
-    'onnx-community/Falcon-H1-Tiny-90M-Instruct-ONNX': { task: 'text-generation', dtype: 'q4f16',     device: 'webgpu' },
-    'onnx-community/Bonsai-1.7B-ONNX':                 { task: 'text-generation', dtype: 'q1',        device: 'webgpu' },
-    'Xenova/LaMini-Flan-T5-248M':                      { task: 'summarization',   dtype: 'q4f16',     device: 'wasm'   },
+    'Xenova/distilbart-cnn-6-6':                       { task: 'summarization',   dtype: 'q8',    device: 'wasm'   },
+    'onnx-community/LFM2.5-350M-ONNX':                 { task: 'text-generation', dtype: 'q4',    device: 'webgpu' },
+    'HuggingFaceTB/SmolLM2-360M-Instruct':             { task: 'text-generation', dtype: 'q4f16', device: 'webgpu' },
+    'onnx-community/Falcon-H1-Tiny-90M-Instruct-ONNX': { task: 'text-generation', dtype: 'q4f16', device: 'webgpu' },
+    'onnx-community/Bonsai-1.7B-ONNX':                 { task: 'text-generation', dtype: 'q1',    device: 'webgpu' },
+    'Xenova/LaMini-Flan-T5-248M':                      { task: 'summarization',   dtype: 'q4f16', device: 'wasm'   },
 };
 
-const DEFAULT_MODEL_CONFIG = { task: 'summarization', dtype: 'quantized', device: 'wasm' };
+const DEFAULT_MODEL_CONFIG = { task: 'summarization', dtype: 'q8', device: 'wasm' };
 
 // Summary length presets (new tokens generated per summary)
 const LENGTH_PRESETS = {
@@ -251,7 +251,7 @@ async function extractTextFromPDF(file) {
 
     try {
         const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
         let fullText = '';
         const numPages = pdf.numPages;

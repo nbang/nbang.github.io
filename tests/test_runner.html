@@ -513,7 +513,7 @@
                     
                     STATE.pipeline = await transformers.pipeline(meta.task, selectedModelId, {
                         device: STATE.currentDevice,
-                        dtype: key === 'distilbart' ? 'quantized' : 'q4',
+                        dtype: key === 'distilbart' ? 'q8' : 'q4',
                         progress_callback: (data) => {
                             if (data.status === 'progress') {
                                 updateProgress(data.progress);
