@@ -29,6 +29,7 @@ A collection of utilities and dashboards for data management, translation, AI ta
 | **Data** | Vietnam Admin Data | Comprehensive dataset of administrative units across all provinces in Vietnam. | [Open Dashboard](https://github.bangndd.qzz.io/vietnam-admin.html) |
 | **Guide** | Stremio Guide | The ultimate guide to setting up Stremio for seamless movie & TV streaming. | [Read Guide](https://github.bangndd.qzz.io/stremio-guide.html) |
 | **Guide** | Aniyomi Guide | The complete guide to setting up Aniyomi for your manga and anime needs. | [Read Guide](https://github.bangndd.qzz.io/aniyomi-guide.html) |
+| **Game** | Brick Breaker | A classic paddle-and-ball arcade game. Clear every brick with mouse, touch or keyboard. | [Play Game](https://github.bangndd.qzz.io/brick-breaker.html) |
 
 ## Project Structure
 
@@ -79,6 +80,7 @@ nbang.github.io/
 ├── map-projection.html          # Mercator vs Equal Earth country size comparison
 ├── map-projection-data.json     # Per-country true vs Mercator areas (built by scripts/)
 ├── calendar-converter.html      # Lunar ↔ Solar calendar converter
+├── brick-breaker.html           # Brick Breaker arcade game (logic in brick-breaker.js)
 ├── freefordev.html              # Free-for-dev resources browser
 ├── stremio-guide.html           # Stremio setup guide
 └── aniyomi-guide.html           # Aniyomi setup guide

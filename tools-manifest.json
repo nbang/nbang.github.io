@@ -168,5 +168,15 @@
         "color": "blue",
         "icon": "fa-solid fa-earth-africa",
         "cta": "Open Comparison"
+    },
+    {
+        "id": "brick-breaker",
+        "title": "Brick Breaker",
+        "description": "A classic paddle-and-ball arcade game. Clear every brick with mouse, touch or keyboard.",
+        "url": "brick-breaker.html",
+        "category": "game",
+        "color": "red",
+        "icon": "fa-solid fa-gamepad",
+        "cta": "Play Game"
     }
 ]

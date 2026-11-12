@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Brick Breaker - a classic paddle-and-ball arcade game in HTML5. Play with mouse, touch or keyboard, right in your browser." />
+    <title>Brick Breaker - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Outfit", sans-serif;
+        }
+
+        /* Keep the 4:3 playfield inside the viewport on short screens. */
+        #game-wrap {
+            width: min(100%, max(320px, calc((100dvh - 20rem) * 4 / 3)));
+            aspect-ratio: 4 / 3;
+        }
+
+        #game {
+            touch-action: none;
+            cursor: none;
+        }
+
+        .stat-value {
+            font-family: "Outfit", sans-serif;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .game-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        /* js/utils/nav.js maps the common gray/white utilities for dark mode; these fill the gaps. */
+        .dark .bg-gray-100 {
+            background-color: rgb(55 65 81);
+        }
+
+        .dark .hover\:bg-gray-200:hover {
+            background-color: rgb(75 85 99);
+        }
+
+        .dark .border-gray-200 {
+            border-color: rgb(75 85 99);
+        }
+    </style>
+    <script>
+        if (localStorage.getItem('bang-dark-mode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+
+<body class="relative flex min-h-screen flex-col overflow-x-hidden bg-gray-50 text-gray-800" data-nav-accent="rose">
+
+    <div class="pointer-events-none fixed inset-0 z-[-1] overflow-hidden opacity-40">
+        <div class="absolute top-[10%] left-[10%] h-[40%] w-[40%] rounded-full bg-rose-200/40 blur-[100px]"></div>
+        <div class="absolute right-[10%] bottom-[20%] h-[30%] w-[30%] rounded-full bg-sky-200/40 blur-[100px]"></div>
+    </div>
+
+    <main class="container mx-auto max-w-5xl flex-grow px-4 py-6">
+
+        <header class="mb-5 text-center">
+            <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">Brick Breaker</h1>
+            <p class="text-gray-500">Move the paddle, keep the ball in play, clear every brick.</p>
+        </header>
+
+        <div class="mx-auto flex flex-col items-center">
+
+            <!-- Score board -->
+            <dl class="mb-3 grid w-full max-w-xl grid-cols-4 gap-2 text-center">
+                <div class="rounded-2xl border border-white/50 bg-white/80 px-2 py-2 shadow-sm backdrop-blur-xl">
+                    <dt class="text-xs font-semibold tracking-wide text-gray-500 uppercase">Score</dt>
+                    <dd id="hud-score" class="stat-value text-xl font-bold text-gray-900">0</dd>
+                </div>
+                <div class="rounded-2xl border border-white/50 bg-white/80 px-2 py-2 shadow-sm backdrop-blur-xl">
+                    <dt class="text-xs font-semibold tracking-wide text-gray-500 uppercase">Best</dt>
+                    <dd id="hud-best" class="stat-value text-xl font-bold text-gray-900">0</dd>
+                </div>
+                <div class="rounded-2xl border border-white/50 bg-white/80 px-2 py-2 shadow-sm backdrop-blur-xl">
+                    <dt class="text-xs font-semibold tracking-wide text-gray-500 uppercase">Level</dt>
+                    <dd id="hud-level" class="stat-value text-xl font-bold text-gray-900">1</dd>
+                </div>
+                <div class="rounded-2xl border border-white/50 bg-white/80 px-2 py-2 shadow-sm backdrop-blur-xl">
+                    <dt class="text-xs font-semibold tracking-wide text-gray-500 uppercase">Lives</dt>
+                    <dd class="stat-value text-xl font-bold text-gray-900">
+                        <i class="fa-solid fa-heart text-base text-rose-500" aria-hidden="true"></i>
+                        <span id="hud-lives">3</span>
+                    </dd>
+                </div>
+            </dl>
+
+            <!-- Playfield -->
+            <div id="game-wrap" class="relative overflow-hidden rounded-2xl bg-slate-950 shadow-xl ring-1 ring-slate-900/10">
+                <canvas id="game" class="block h-full w-full outline-none" width="800" height="600" tabindex="0" role="img" aria-label="Brick Breaker playfield"></canvas>
+
+                <div id="overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/75 p-6 text-center backdrop-blur-sm">
+                    <h2 id="overlay-title" class="mb-2 text-3xl font-extrabold text-white md:text-4xl" aria-live="polite">Ready?</h2>
+                    <p id="overlay-text" class="mb-6 max-w-sm text-sm text-slate-300 md:text-base"></p>
+                    <button id="overlay-btn" type="button" class="rounded-xl bg-rose-500 px-7 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-rose-600 focus:ring-4 focus:ring-rose-300 focus:outline-none">
+                        Start game
+                    </button>
+                    <p class="mt-4 hidden text-xs text-slate-400 sm:block">Space or Enter also works</p>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="mt-3 flex flex-wrap justify-center gap-2">
+                <button id="pause-btn" type="button" class="game-btn flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-200" disabled>
+                    <i class="fa-solid fa-pause"></i><span>Pause</span>
+                </button>
+                <button id="mute-btn" type="button" class="game-btn flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-200" aria-pressed="true">
+                    <i class="fa-solid fa-volume-high"></i><span>Sound on</span>
+                </button>
+                <button id="restart-btn" type="button" class="game-btn flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-200">
+                    <i class="fa-solid fa-rotate-right"></i><span>Restart</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- How to play -->
+        <section class="mx-auto mt-8 grid max-w-3xl gap-4 md:grid-cols-2">
+            <div class="rounded-3xl border border-white/50 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+                <h2 class="mb-3 text-lg font-semibold text-gray-800">Controls</h2>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li><strong class="text-gray-800">Move:</strong> mouse, finger, or the Left / Right arrow keys (A / D)</li>
+                    <li><strong class="text-gray-800">Launch:</strong> click, tap, or press Space</li>
+                    <li><strong class="text-gray-800">Pause:</strong> P or Esc</li>
+                    <li><strong class="text-gray-800">Sound:</strong> M</li>
+                </ul>
+                <p class="mt-3 text-sm text-gray-600">Where the ball lands on the paddle sets its angle: hit it near the edge for a sharper shot.</p>
+            </div>
+            <div class="rounded-3xl border border-white/50 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+                <h2 class="mb-3 text-lg font-semibold text-gray-800">Bricks and power-ups</h2>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li><strong class="text-gray-800">Coloured bricks</strong> break in one hit. Higher rows score more.</li>
+                    <li><strong class="text-gray-800">Silver bricks</strong> take two or three hits.</li>
+                    <li><strong class="text-gray-800">Dark steel bricks</strong> never break.</li>
+                    <li>
+                        <span class="inline-block rounded-full bg-sky-400 px-2 text-xs font-bold text-slate-900">W</span> wider paddle
+                        <span class="ml-2 inline-block rounded-full bg-violet-400 px-2 text-xs font-bold text-slate-900">M</span> multi-ball
+                    </li>
+                    <li>
+                        <span class="inline-block rounded-full bg-emerald-400 px-2 text-xs font-bold text-slate-900">S</span> slower ball
+                        <span class="ml-2 inline-block rounded-full bg-rose-400 px-2 text-xs font-bold text-slate-900">+1</span> extra life
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="relative z-10 py-8 text-center text-sm text-gray-500">
+        <div>&copy; 2026 Bang's Tools. All rights reserved.</div>
+        <div class="mt-2">
+            Contact: <a href="mailto:bangndd@gmail.com" class="font-medium transition-colors hover:text-gray-900">bangndd@gmail.com</a>
+        </div>
+    </footer>
+
+    <script src="/js/utils/common.js"></script>
+    <script src="/js/utils/nav.js"></script>
+    <script src="brick-breaker.js"></script>
+</body>
+
+</html>
