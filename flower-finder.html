@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QJTEKK89H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "G-2QJTEKK89H");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Flower Finder - search a flower by name and see which accounts own it." />
+    <title>Flower Finder - Bang's Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Outfit", sans-serif;
+        }
+
+        mark {
+            border-radius: 0.25rem;
+            background-color: rgb(253 230 138);
+            color: inherit;
+        }
+
+        .pill {
+            border: 1px solid rgb(229 231 235);
+            background-color: rgb(255 255 255);
+            color: rgb(75 85 99);
+        }
+
+        .pill:hover {
+            border-color: rgb(244 114 182);
+            color: rgb(190 24 93);
+        }
+
+        .pill[aria-pressed="true"] {
+            border-color: rgb(219 39 119);
+            background-color: rgb(219 39 119);
+            color: rgb(255 255 255);
+        }
+
+        .chip {
+            border: 1px solid rgb(251 207 232);
+            background-color: rgb(253 242 248);
+            color: rgb(157 23 77);
+        }
+
+        .chip:hover, .chip[aria-pressed="true"] {
+            border-color: rgb(219 39 119);
+            background-color: rgb(219 39 119);
+            color: rgb(255 255 255);
+        }
+
+        .level-badge {
+            background-color: rgb(243 244 246);
+            color: rgb(75 85 99);
+        }
+
+        .field {
+            border: 1px solid rgb(229 231 235);
+            background-color: rgb(249 250 251);
+            color: rgb(31 41 55);
+        }
+
+        .field:focus {
+            border-color: rgb(236 72 153);
+            outline: 2px solid rgb(236 72 153 / 0.25);
+        }
+
+        /* js/utils/nav.js maps the common gray/white utilities for dark mode; these fill the gaps. */
+        .dark mark {
+            background-color: rgb(161 98 7);
+        }
+
+        .dark .pill, .dark .field {
+            border-color: rgb(75 85 99);
+            background-color: rgb(31 41 55);
+            color: rgb(229 231 235);
+        }
+
+        .dark .pill[aria-pressed="true"] {
+            border-color: rgb(236 72 153);
+            background-color: rgb(219 39 119);
+            color: rgb(255 255 255);
+        }
+
+        .dark .chip {
+            border-color: rgb(131 24 67);
+            background-color: rgb(80 7 36 / 0.6);
+            color: rgb(251 207 232);
+        }
+
+        .dark .chip:hover, .dark .chip[aria-pressed="true"] {
+            border-color: rgb(236 72 153);
+            background-color: rgb(219 39 119);
+            color: rgb(255 255 255);
+        }
+
+        .dark .level-badge {
+            background-color: rgb(55 65 81);
+            color: rgb(209 213 219);
+        }
+    </style>
+    <script>
+        if (localStorage.getItem('bang-dark-mode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</head>
+
+<body class="relative flex min-h-screen flex-col overflow-x-hidden bg-gray-50 text-gray-800" data-nav-accent="pink">
+
+    <div class="pointer-events-none fixed inset-0 z-[-1] overflow-hidden opacity-40">
+        <div class="absolute top-[10%] left-[10%] h-[40%] w-[40%] rounded-full bg-pink-200/40 blur-[100px]"></div>
+        <div class="absolute right-[10%] bottom-[20%] h-[30%] w-[30%] rounded-full bg-emerald-200/40 blur-[100px]"></div>
+    </div>
+
+    <main class="container mx-auto max-w-6xl flex-grow px-4 py-6">
+
+        <header class="mb-5 text-center">
+            <h1 class="mb-1 text-3xl font-extrabold tracking-tight text-gray-900 md:text-4xl">Flower Finder</h1>
+            <p class="text-gray-500">Search a flower and see which accounts have it.</p>
+            <p class="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-white/50 bg-white/80 px-4 py-1.5 text-sm text-gray-500 shadow-sm">
+                <span><span id="stat-flowers" class="font-bold text-pink-600">0</span> flowers</span>
+                <span aria-hidden="true">&middot;</span>
+                <span><span id="stat-accounts" class="font-bold text-pink-600">0</span> accounts</span>
+                <span aria-hidden="true">&middot;</span>
+                <span id="data-status">Loading&hellip;</span>
+                <button id="refresh" type="button" class="text-gray-500 transition-colors hover:text-pink-600" aria-label="Sync with the sheet now" title="Sync with the sheet now">
+                    <i id="refresh-icon" class="fa-solid fa-rotate" aria-hidden="true"></i>
+                </button>
+            </p>
+        </header>
+
+        <!-- Search and filters -->
+        <section class="md:sticky md:top-2 md:z-40 mb-5 rounded-2xl border border-white/50 bg-white/80 p-4 shadow-sm backdrop-blur-xl" aria-label="Search and filters">
+            <div class="flex flex-col gap-3 md:flex-row">
+                <div class="relative flex-grow">
+                    <label for="search" class="sr-only">Search flowers</label>
+                    <i class="fa-solid fa-magnifying-glass pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-gray-400" aria-hidden="true"></i>
+                    <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search flowers, e.g. mau don (accents optional)" class="field w-full rounded-xl py-3 pr-4 pl-10" />
+                </div>
+                <div class="md:w-64">
+                    <label for="account" class="sr-only">Filter by account</label>
+                    <select id="account" class="field h-full w-full rounded-xl px-3 py-3">
+                        <option value="">Any account</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                <div id="levels" class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter by flower level">
+                    <span class="mr-1 text-sm text-gray-500">Level</span>
+                </div>
+                <label class="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
+                    <input id="owned-only" type="checkbox" class="h-4 w-4 accent-pink-600" />
+                    Hide flowers nobody has
+                </label>
+                <button id="reset" type="button" class="ml-auto hidden text-sm font-medium text-pink-600 hover:underline">Clear filters</button>
+            </div>
+        </section>
+
+        <p id="summary" class="mb-3 text-sm text-gray-500" aria-live="polite"></p>
+
+        <div id="results" class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+        <div id="empty" class="hidden py-16 text-center">
+            <h2 class="mb-1 text-xl font-semibold text-gray-700">No flowers match</h2>
+            <p class="text-gray-500">Try a shorter name, or clear the filters.</p>
+        </div>
+
+    </main>
+
+    <footer class="relative z-10 py-8 text-center text-sm text-gray-500">
+        <div>
+            Data: <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1njBGo2sLzM2vopRqqeu_ee7ndUV7XCuUGLzDOKAQTC4/edit?gid=1615032156" target="_blank" rel="noopener" class="font-medium transition-colors hover:text-gray-900">Google Sheet</a>
+        </div>
+        <div class="mt-2">&copy; 2026 Bang's Tools. All rights reserved.</div>
+        <div class="mt-2">
+            Contact: <a href="mailto:bangndd@gmail.com" class="font-medium transition-colors hover:text-gray-900">bangndd@gmail.com</a>
+        </div>
+    </footer>
+
+    <script src="/js/utils/common.js"></script>
+    <script src="/js/utils/nav.js"></script>
+    <script src="flower-finder.js"></script>
+</body>
+
+</html>

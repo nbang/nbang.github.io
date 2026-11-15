@@ -178,5 +178,15 @@
         "color": "red",
         "icon": "fa-solid fa-gamepad",
         "cta": "Play Game"
+    },
+    {
+        "id": "flower-finder",
+        "title": "Flower Finder",
+        "description": "Search a flower by name and see which accounts have it, with live data from a shared Google Sheet.",
+        "url": "flower-finder.html",
+        "category": "game",
+        "color": "pink",
+        "icon": "fa-solid fa-seedling",
+        "cta": "Find Flowers"
     }
 ]

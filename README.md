@@ -30,6 +30,7 @@ A collection of utilities and dashboards for data management, translation, AI ta
 | **Guide** | Stremio Guide | The ultimate guide to setting up Stremio for seamless movie & TV streaming. | [Read Guide](https://github.bangndd.qzz.io/stremio-guide.html) |
 | **Guide** | Aniyomi Guide | The complete guide to setting up Aniyomi for your manga and anime needs. | [Read Guide](https://github.bangndd.qzz.io/aniyomi-guide.html) |
 | **Game** | Brick Breaker | A classic paddle-and-ball arcade game. Clear every brick with mouse, touch or keyboard. | [Play Game](https://github.bangndd.qzz.io/brick-breaker.html) |
+| **Game** | Flower Finder | Search a flower by name and see which accounts have it, with live data from a shared Google Sheet. | [Find Flowers](https://github.bangndd.qzz.io/flower-finder.html) |
 
 ## Project Structure
 
@@ -81,6 +82,8 @@ nbang.github.io/
 ├── map-projection-data.json     # Per-country true vs Mercator areas (built by scripts/)
 ├── calendar-converter.html      # Lunar ↔ Solar calendar converter
 ├── brick-breaker.html           # Brick Breaker arcade game (logic in brick-breaker.js)
+├── flower-finder.html           # Flower ownership search (logic in flower-finder.js)
+├── flower-finder-data.csv       # Snapshot of the flower sheet, used until the live sheet loads
 ├── freefordev.html              # Free-for-dev resources browser
 ├── stremio-guide.html           # Stremio setup guide
 └── aniyomi-guide.html           # Aniyomi setup guide
