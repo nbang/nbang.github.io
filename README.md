@@ -83,7 +83,6 @@ nbang.github.io/
 ├── calendar-converter.html      # Lunar ↔ Solar calendar converter
 ├── brick-breaker.html           # Brick Breaker arcade game (logic in brick-breaker.js)
 ├── flower-finder.html           # Flower ownership search (logic in flower-finder.js)
-├── flower-finder-data.csv       # Snapshot of the flower sheet, used until the live sheet loads
 ├── freefordev.html              # Free-for-dev resources browser
 ├── stremio-guide.html           # Stremio setup guide
 └── aniyomi-guide.html           # Aniyomi setup guide

@@ -20,6 +20,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
+        /* Background syncs keep the view steady themselves (keepScrollPosition in flower-finder.js). */
+        html {
+            overflow-anchor: none;
+        }
+
         body {
             font-family: "Inter", sans-serif;
         }
@@ -160,8 +165,8 @@
                 </div>
             </div>
             <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <div id="levels" class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter by flower level">
-                    <span class="mr-1 text-sm text-gray-500">Level</span>
+                <div id="levels" class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter by flower points">
+                    <span class="mr-1 text-sm text-gray-500">Points</span>
                 </div>
                 <label class="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
                     <input id="owned-only" type="checkbox" class="h-4 w-4 accent-pink-600" />
@@ -184,7 +189,7 @@
 
     <footer class="relative z-10 py-8 text-center text-sm text-gray-500">
         <div>
-            Data: <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1njBGo2sLzM2vopRqqeu_ee7ndUV7XCuUGLzDOKAQTC4/edit?gid=1615032156" target="_blank" rel="noopener" class="font-medium transition-colors hover:text-gray-900">Google Sheet</a>
+            Data: <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1W7iGsHbr7eeqvhdPvQ4prgpGgOkLuCNkV1lZUBwPUIE/edit?gid=1615032156" target="_blank" rel="noopener" class="font-medium transition-colors hover:text-gray-900">Google Sheet</a>
         </div>
         <div class="mt-2">&copy; 2026 Bang's Tools. All rights reserved.</div>
         <div class="mt-2">
